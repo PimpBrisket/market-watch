@@ -1,0 +1,13 @@
+{
+  "name": "tornpda-market-watcher",
+  "private": true,
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace backend",
+    "start": "npm run start --workspace backend",
+    "check": "npm run check --workspace backend",
+    "build:tornpda-export": "node scripts/build-tornpda-export.js"
+  }
+}

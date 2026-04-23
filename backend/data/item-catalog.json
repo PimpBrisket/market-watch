@@ -1,0 +1,5370 @@
+{
+  "source": {
+    "label": "Community gist: All items in Torn and their IDs",
+    "url": "https://gist.githubusercontent.com/dssecret/e7d7ae8a765a36ef9afd33ba52ee6a84/raw/items.csv",
+    "fetchedAt": "2026-04-22T02:01:02.182Z"
+  },
+  "itemCount": 1072,
+  "items": [
+    {
+      "itemId": 1,
+      "itemName": "Hammer",
+      "normalizedName": "hammer"
+    },
+    {
+      "itemId": 2,
+      "itemName": "Baseball Bat",
+      "normalizedName": "baseball bat"
+    },
+    {
+      "itemId": 3,
+      "itemName": "Crowbar",
+      "normalizedName": "crowbar"
+    },
+    {
+      "itemId": 4,
+      "itemName": "Knuckle Dusters",
+      "normalizedName": "knuckle dusters"
+    },
+    {
+      "itemId": 5,
+      "itemName": "Pen Knife",
+      "normalizedName": "pen knife"
+    },
+    {
+      "itemId": 6,
+      "itemName": "Kitchen Knife",
+      "normalizedName": "kitchen knife"
+    },
+    {
+      "itemId": 7,
+      "itemName": "Dagger",
+      "normalizedName": "dagger"
+    },
+    {
+      "itemId": 8,
+      "itemName": "Axe",
+      "normalizedName": "axe"
+    },
+    {
+      "itemId": 9,
+      "itemName": "Scimitar",
+      "normalizedName": "scimitar"
+    },
+    {
+      "itemId": 10,
+      "itemName": "Chainsaw",
+      "normalizedName": "chainsaw"
+    },
+    {
+      "itemId": 11,
+      "itemName": "Samurai Sword",
+      "normalizedName": "samurai sword"
+    },
+    {
+      "itemId": 12,
+      "itemName": "Glock 17",
+      "normalizedName": "glock 17"
+    },
+    {
+      "itemId": 13,
+      "itemName": "Raven MP25",
+      "normalizedName": "raven mp25"
+    },
+    {
+      "itemId": 14,
+      "itemName": "Ruger 22/45",
+      "normalizedName": "ruger 22/45"
+    },
+    {
+      "itemId": 15,
+      "itemName": "Beretta M9",
+      "normalizedName": "beretta m9"
+    },
+    {
+      "itemId": 16,
+      "itemName": "USP",
+      "normalizedName": "usp"
+    },
+    {
+      "itemId": 17,
+      "itemName": "Beretta 92FS",
+      "normalizedName": "beretta 92fs"
+    },
+    {
+      "itemId": 18,
+      "itemName": "Fiveseven",
+      "normalizedName": "fiveseven"
+    },
+    {
+      "itemId": 19,
+      "itemName": "Magnum",
+      "normalizedName": "magnum"
+    },
+    {
+      "itemId": 20,
+      "itemName": "Desert Eagle",
+      "normalizedName": "desert eagle"
+    },
+    {
+      "itemId": 21,
+      "itemName": "Dual 92G Berettas",
+      "normalizedName": "dual 92g berettas"
+    },
+    {
+      "itemId": 22,
+      "itemName": "Sawed-Off Shotgun",
+      "normalizedName": "sawed off shotgun"
+    },
+    {
+      "itemId": 23,
+      "itemName": "Benelli M1 Tactical",
+      "normalizedName": "benelli m1 tactical"
+    },
+    {
+      "itemId": 24,
+      "itemName": "MP5 Navy",
+      "normalizedName": "mp5 navy"
+    },
+    {
+      "itemId": 25,
+      "itemName": "P90",
+      "normalizedName": "p90"
+    },
+    {
+      "itemId": 26,
+      "itemName": "AK-47",
+      "normalizedName": "ak 47"
+    },
+    {
+      "itemId": 27,
+      "itemName": "M4A1 Colt Carbine",
+      "normalizedName": "m4a1 colt carbine"
+    },
+    {
+      "itemId": 28,
+      "itemName": "Benelli M4 Super",
+      "normalizedName": "benelli m4 super"
+    },
+    {
+      "itemId": 29,
+      "itemName": "M16 A2 Rifle",
+      "normalizedName": "m16 a2 rifle"
+    },
+    {
+      "itemId": 30,
+      "itemName": "Steyr AUG",
+      "normalizedName": "steyr aug"
+    },
+    {
+      "itemId": 31,
+      "itemName": "M249 PARA LMG",
+      "normalizedName": "m249 para lmg"
+    },
+    {
+      "itemId": 32,
+      "itemName": "Leather Vest",
+      "normalizedName": "leather vest"
+    },
+    {
+      "itemId": 33,
+      "itemName": "Police Vest",
+      "normalizedName": "police vest"
+    },
+    {
+      "itemId": 34,
+      "itemName": "Bulletproof Vest",
+      "normalizedName": "bulletproof vest"
+    },
+    {
+      "itemId": 35,
+      "itemName": "Box of Chocolate Bars",
+      "normalizedName": "box of chocolate bars"
+    },
+    {
+      "itemId": 36,
+      "itemName": "Big Box of Chocolate Bars",
+      "normalizedName": "big box of chocolate bars"
+    },
+    {
+      "itemId": 37,
+      "itemName": "Bag of Bon Bons",
+      "normalizedName": "bag of bon bons"
+    },
+    {
+      "itemId": 38,
+      "itemName": "Box of Bon Bons",
+      "normalizedName": "box of bon bons"
+    },
+    {
+      "itemId": 39,
+      "itemName": "Box of Extra Strong Mints",
+      "normalizedName": "box of extra strong mints"
+    },
+    {
+      "itemId": 40,
+      "itemName": "Pack of Music CDs",
+      "normalizedName": "pack of music cds"
+    },
+    {
+      "itemId": 41,
+      "itemName": "DVD Player",
+      "normalizedName": "dvd player"
+    },
+    {
+      "itemId": 42,
+      "itemName": "MP3 Player",
+      "normalizedName": "mp3 player"
+    },
+    {
+      "itemId": 43,
+      "itemName": "CD Player",
+      "normalizedName": "cd player"
+    },
+    {
+      "itemId": 44,
+      "itemName": "Pack of Blank CDs : 100",
+      "normalizedName": "pack of blank cds : 100"
+    },
+    {
+      "itemId": 45,
+      "itemName": "Hard Drive",
+      "normalizedName": "hard drive"
+    },
+    {
+      "itemId": 46,
+      "itemName": "Tank Top",
+      "normalizedName": "tank top"
+    },
+    {
+      "itemId": 47,
+      "itemName": "Trainers",
+      "normalizedName": "trainers"
+    },
+    {
+      "itemId": 48,
+      "itemName": "Jacket",
+      "normalizedName": "jacket"
+    },
+    {
+      "itemId": 49,
+      "itemName": "Full Body Armor",
+      "normalizedName": "full body armor"
+    },
+    {
+      "itemId": 50,
+      "itemName": "Outer Tactical Vest",
+      "normalizedName": "outer tactical vest"
+    },
+    {
+      "itemId": 51,
+      "itemName": "Plain Silver Ring",
+      "normalizedName": "plain silver ring"
+    },
+    {
+      "itemId": 52,
+      "itemName": "Sapphire Ring",
+      "normalizedName": "sapphire ring"
+    },
+    {
+      "itemId": 53,
+      "itemName": "Gold Ring",
+      "normalizedName": "gold ring"
+    },
+    {
+      "itemId": 54,
+      "itemName": "Diamond Ring",
+      "normalizedName": "diamond ring"
+    },
+    {
+      "itemId": 55,
+      "itemName": "Pearl Necklace",
+      "normalizedName": "pearl necklace"
+    },
+    {
+      "itemId": 56,
+      "itemName": "Silver Necklace",
+      "normalizedName": "silver necklace"
+    },
+    {
+      "itemId": 57,
+      "itemName": "Gold Necklace",
+      "normalizedName": "gold necklace"
+    },
+    {
+      "itemId": 58,
+      "itemName": "Plastic Watch",
+      "normalizedName": "plastic watch"
+    },
+    {
+      "itemId": 59,
+      "itemName": "Stainless Steel Watch",
+      "normalizedName": "stainless steel watch"
+    },
+    {
+      "itemId": 60,
+      "itemName": "Gold Watch",
+      "normalizedName": "gold watch"
+    },
+    {
+      "itemId": 61,
+      "itemName": "Personal Computer",
+      "normalizedName": "personal computer"
+    },
+    {
+      "itemId": 62,
+      "itemName": "Microwave",
+      "normalizedName": "microwave"
+    },
+    {
+      "itemId": 63,
+      "itemName": "Minigun",
+      "normalizedName": "minigun"
+    },
+    {
+      "itemId": 64,
+      "itemName": "Pack of Cuban Cigars",
+      "normalizedName": "pack of cuban cigars"
+    },
+    {
+      "itemId": 65,
+      "itemName": "Big TV Screen",
+      "normalizedName": "big tv screen"
+    },
+    {
+      "itemId": 66,
+      "itemName": "Morphine",
+      "normalizedName": "morphine"
+    },
+    {
+      "itemId": 67,
+      "itemName": "First Aid Kit",
+      "normalizedName": "first aid kit"
+    },
+    {
+      "itemId": 68,
+      "itemName": "Small First Aid Kit",
+      "normalizedName": "small first aid kit"
+    },
+    {
+      "itemId": 69,
+      "itemName": "Simple Virus",
+      "normalizedName": "simple virus"
+    },
+    {
+      "itemId": 70,
+      "itemName": "Polymorphic Virus",
+      "normalizedName": "polymorphic virus"
+    },
+    {
+      "itemId": 71,
+      "itemName": "Tunneling Virus",
+      "normalizedName": "tunneling virus"
+    },
+    {
+      "itemId": 72,
+      "itemName": "Armored Virus",
+      "normalizedName": "armored virus"
+    },
+    {
+      "itemId": 73,
+      "itemName": "Stealth Virus",
+      "normalizedName": "stealth virus"
+    },
+    {
+      "itemId": 74,
+      "itemName": "Santa Hat '04",
+      "normalizedName": "santa hat '04"
+    },
+    {
+      "itemId": 75,
+      "itemName": "Christmas Cracker '04",
+      "normalizedName": "christmas cracker '04"
+    },
+    {
+      "itemId": 76,
+      "itemName": "Snow Cannon",
+      "normalizedName": "snow cannon"
+    },
+    {
+      "itemId": 77,
+      "itemName": "Toyota MR2",
+      "normalizedName": "toyota mr2"
+    },
+    {
+      "itemId": 78,
+      "itemName": "Honda NSX",
+      "normalizedName": "honda nsx"
+    },
+    {
+      "itemId": 79,
+      "itemName": "Audi TT Quattro",
+      "normalizedName": "audi tt quattro"
+    },
+    {
+      "itemId": 80,
+      "itemName": "BMW M5",
+      "normalizedName": "bmw m5"
+    },
+    {
+      "itemId": 81,
+      "itemName": "BMW Z8",
+      "normalizedName": "bmw z8"
+    },
+    {
+      "itemId": 82,
+      "itemName": "Chevrolet Corvette Z06",
+      "normalizedName": "chevrolet corvette z06"
+    },
+    {
+      "itemId": 83,
+      "itemName": "Dodge Charger",
+      "normalizedName": "dodge charger"
+    },
+    {
+      "itemId": 84,
+      "itemName": "Pontiac Firebird",
+      "normalizedName": "pontiac firebird"
+    },
+    {
+      "itemId": 85,
+      "itemName": "Ford GT40",
+      "normalizedName": "ford gt40"
+    },
+    {
+      "itemId": 86,
+      "itemName": "Hummer H3",
+      "normalizedName": "hummer h3"
+    },
+    {
+      "itemId": 87,
+      "itemName": "Audi S4",
+      "normalizedName": "audi s4"
+    },
+    {
+      "itemId": 88,
+      "itemName": "Honda Integra R",
+      "normalizedName": "honda integra r"
+    },
+    {
+      "itemId": 89,
+      "itemName": "Honda Accord",
+      "normalizedName": "honda accord"
+    },
+    {
+      "itemId": 90,
+      "itemName": "Honda Civic",
+      "normalizedName": "honda civic"
+    },
+    {
+      "itemId": 91,
+      "itemName": "Volkswagen Beetle",
+      "normalizedName": "volkswagen beetle"
+    },
+    {
+      "itemId": 92,
+      "itemName": "Chevrolet Cavalier",
+      "normalizedName": "chevrolet cavalier"
+    },
+    {
+      "itemId": 93,
+      "itemName": "Ford Mustang",
+      "normalizedName": "ford mustang"
+    },
+    {
+      "itemId": 94,
+      "itemName": "Reliant Robin",
+      "normalizedName": "reliant robin"
+    },
+    {
+      "itemId": 95,
+      "itemName": "Holden SS",
+      "normalizedName": "holden ss"
+    },
+    {
+      "itemId": 96,
+      "itemName": "Coat Hanger",
+      "normalizedName": "coat hanger"
+    },
+    {
+      "itemId": 97,
+      "itemName": "Bunch of Flowers",
+      "normalizedName": "bunch of flowers"
+    },
+    {
+      "itemId": 98,
+      "itemName": "Neutrilux 2000",
+      "normalizedName": "neutrilux 2000"
+    },
+    {
+      "itemId": 99,
+      "itemName": "Springfield 1911",
+      "normalizedName": "springfield 1911"
+    },
+    {
+      "itemId": 100,
+      "itemName": "Egg Propelled Launcher",
+      "normalizedName": "egg propelled launcher"
+    },
+    {
+      "itemId": 101,
+      "itemName": "Bunny Suit",
+      "normalizedName": "bunny suit"
+    },
+    {
+      "itemId": 102,
+      "itemName": "Chocolate Egg '05",
+      "normalizedName": "chocolate egg '05"
+    },
+    {
+      "itemId": 103,
+      "itemName": "Firewalk Virus",
+      "normalizedName": "firewalk virus"
+    },
+    {
+      "itemId": 104,
+      "itemName": "Playstation",
+      "normalizedName": "playstation"
+    },
+    {
+      "itemId": 105,
+      "itemName": "Xbox",
+      "normalizedName": "xbox"
+    },
+    {
+      "itemId": 106,
+      "itemName": "Parachute",
+      "normalizedName": "parachute"
+    },
+    {
+      "itemId": 107,
+      "itemName": "Trench Coat",
+      "normalizedName": "trench coat"
+    },
+    {
+      "itemId": 108,
+      "itemName": "9mm Uzi",
+      "normalizedName": "9mm uzi"
+    },
+    {
+      "itemId": 109,
+      "itemName": "RPG Launcher",
+      "normalizedName": "rpg launcher"
+    },
+    {
+      "itemId": 110,
+      "itemName": "Leather Bullwhip",
+      "normalizedName": "leather bullwhip"
+    },
+    {
+      "itemId": 111,
+      "itemName": "Ninja Claws",
+      "normalizedName": "ninja claws"
+    },
+    {
+      "itemId": 112,
+      "itemName": "Test Trophy",
+      "normalizedName": "test trophy"
+    },
+    {
+      "itemId": 113,
+      "itemName": "Pet Rock",
+      "normalizedName": "pet rock"
+    },
+    {
+      "itemId": 114,
+      "itemName": "Non-Anon Doll",
+      "normalizedName": "non anon doll"
+    },
+    {
+      "itemId": 115,
+      "itemName": "Poker Doll",
+      "normalizedName": "poker doll"
+    },
+    {
+      "itemId": 116,
+      "itemName": "Yoda Figurine",
+      "normalizedName": "yoda figurine"
+    },
+    {
+      "itemId": 117,
+      "itemName": "Trojan Horse",
+      "normalizedName": "trojan horse"
+    },
+    {
+      "itemId": 118,
+      "itemName": "Evil Doll",
+      "normalizedName": "evil doll"
+    },
+    {
+      "itemId": 119,
+      "itemName": "Rubber Ducky of Doom",
+      "normalizedName": "rubber ducky of doom"
+    },
+    {
+      "itemId": 120,
+      "itemName": "Teppic Bear",
+      "normalizedName": "teppic bear"
+    },
+    {
+      "itemId": 121,
+      "itemName": "RockerHead Doll",
+      "normalizedName": "rockerhead doll"
+    },
+    {
+      "itemId": 122,
+      "itemName": "Mouser Doll",
+      "normalizedName": "mouser doll"
+    },
+    {
+      "itemId": 123,
+      "itemName": "Elite Action Man",
+      "normalizedName": "elite action man"
+    },
+    {
+      "itemId": 124,
+      "itemName": "Toy Reactor",
+      "normalizedName": "toy reactor"
+    },
+    {
+      "itemId": 125,
+      "itemName": "Royal Doll",
+      "normalizedName": "royal doll"
+    },
+    {
+      "itemId": 126,
+      "itemName": "Blue Dragon",
+      "normalizedName": "blue dragon"
+    },
+    {
+      "itemId": 127,
+      "itemName": "China Tea Set",
+      "normalizedName": "china tea set"
+    },
+    {
+      "itemId": 128,
+      "itemName": "Mufasa Toy",
+      "normalizedName": "mufasa toy"
+    },
+    {
+      "itemId": 129,
+      "itemName": "Dozen Roses",
+      "normalizedName": "dozen roses"
+    },
+    {
+      "itemId": 130,
+      "itemName": "Skanky Doll",
+      "normalizedName": "skanky doll"
+    },
+    {
+      "itemId": 131,
+      "itemName": "Lego Hurin",
+      "normalizedName": "lego hurin"
+    },
+    {
+      "itemId": 132,
+      "itemName": "Mystical Sphere",
+      "normalizedName": "mystical sphere"
+    },
+    {
+      "itemId": 133,
+      "itemName": "10 Ton Pacifier",
+      "normalizedName": "10 ton pacifier"
+    },
+    {
+      "itemId": 134,
+      "itemName": "Horse",
+      "normalizedName": "horse"
+    },
+    {
+      "itemId": 135,
+      "itemName": "Uriel's Speakers",
+      "normalizedName": "uriel's speakers"
+    },
+    {
+      "itemId": 136,
+      "itemName": "Strife Clown",
+      "normalizedName": "strife clown"
+    },
+    {
+      "itemId": 137,
+      "itemName": "Locked Teddy",
+      "normalizedName": "locked teddy"
+    },
+    {
+      "itemId": 138,
+      "itemName": "Riddle's Bat",
+      "normalizedName": "riddle's bat"
+    },
+    {
+      "itemId": 139,
+      "itemName": "Soup Nazi Doll",
+      "normalizedName": "soup nazi doll"
+    },
+    {
+      "itemId": 140,
+      "itemName": "Pouncer Doll",
+      "normalizedName": "pouncer doll"
+    },
+    {
+      "itemId": 141,
+      "itemName": "Spammer Doll",
+      "normalizedName": "spammer doll"
+    },
+    {
+      "itemId": 142,
+      "itemName": "Cookie Jar",
+      "normalizedName": "cookie jar"
+    },
+    {
+      "itemId": 143,
+      "itemName": "Vanity Mirror",
+      "normalizedName": "vanity mirror"
+    },
+    {
+      "itemId": 144,
+      "itemName": "Banana Phone",
+      "normalizedName": "banana phone"
+    },
+    {
+      "itemId": 145,
+      "itemName": "Xbox 360",
+      "normalizedName": "xbox 360"
+    },
+    {
+      "itemId": 146,
+      "itemName": "Yasukuni Sword",
+      "normalizedName": "yasukuni sword"
+    },
+    {
+      "itemId": 147,
+      "itemName": "Rusty Sword",
+      "normalizedName": "rusty sword"
+    },
+    {
+      "itemId": 148,
+      "itemName": "Dance Toy",
+      "normalizedName": "dance toy"
+    },
+    {
+      "itemId": 149,
+      "itemName": "Lucky Dime",
+      "normalizedName": "lucky dime"
+    },
+    {
+      "itemId": 150,
+      "itemName": "Crystal Carousel",
+      "normalizedName": "crystal carousel"
+    },
+    {
+      "itemId": 151,
+      "itemName": "Pixie Sticks",
+      "normalizedName": "pixie sticks"
+    },
+    {
+      "itemId": 152,
+      "itemName": "Ice Sculpture",
+      "normalizedName": "ice sculpture"
+    },
+    {
+      "itemId": 153,
+      "itemName": "Case of Whiskey",
+      "normalizedName": "case of whiskey"
+    },
+    {
+      "itemId": 154,
+      "itemName": "Laptop",
+      "normalizedName": "laptop"
+    },
+    {
+      "itemId": 155,
+      "itemName": "Purple Frog Doll",
+      "normalizedName": "purple frog doll"
+    },
+    {
+      "itemId": 156,
+      "itemName": "Skeleton Key",
+      "normalizedName": "skeleton key"
+    },
+    {
+      "itemId": 157,
+      "itemName": "Patriot Whip",
+      "normalizedName": "patriot whip"
+    },
+    {
+      "itemId": 158,
+      "itemName": "Statue Of Aeolus",
+      "normalizedName": "statue of aeolus"
+    },
+    {
+      "itemId": 159,
+      "itemName": "Bolt Cutters",
+      "normalizedName": "bolt cutters"
+    },
+    {
+      "itemId": 160,
+      "itemName": "Photographs",
+      "normalizedName": "photographs"
+    },
+    {
+      "itemId": 161,
+      "itemName": "Black Unicorn",
+      "normalizedName": "black unicorn"
+    },
+    {
+      "itemId": 162,
+      "itemName": "WarPaint Kit",
+      "normalizedName": "warpaint kit"
+    },
+    {
+      "itemId": 163,
+      "itemName": "Official Ninja Kit",
+      "normalizedName": "official ninja kit"
+    },
+    {
+      "itemId": 164,
+      "itemName": "Leukaemia TeddyBear",
+      "normalizedName": "leukaemia teddybear"
+    },
+    {
+      "itemId": 165,
+      "itemName": "Chocobo Flute",
+      "normalizedName": "chocobo flute"
+    },
+    {
+      "itemId": 166,
+      "itemName": "Annoying Man",
+      "normalizedName": "annoying man"
+    },
+    {
+      "itemId": 167,
+      "itemName": "Article on Crime",
+      "normalizedName": "article on crime"
+    },
+    {
+      "itemId": 168,
+      "itemName": "Unknown",
+      "normalizedName": "unknown"
+    },
+    {
+      "itemId": 169,
+      "itemName": "Barbie Doll",
+      "normalizedName": "barbie doll"
+    },
+    {
+      "itemId": 170,
+      "itemName": "Wand of Destruction",
+      "normalizedName": "wand of destruction"
+    },
+    {
+      "itemId": 171,
+      "itemName": "Jack-O-Lantern '05",
+      "normalizedName": "jack o lantern '05"
+    },
+    {
+      "itemId": 172,
+      "itemName": "Gas Can",
+      "normalizedName": "gas can"
+    },
+    {
+      "itemId": 173,
+      "itemName": "Butterfly Knife",
+      "normalizedName": "butterfly knife"
+    },
+    {
+      "itemId": 174,
+      "itemName": "XM8 Rifle",
+      "normalizedName": "xm8 rifle"
+    },
+    {
+      "itemId": 175,
+      "itemName": "Taser",
+      "normalizedName": "taser"
+    },
+    {
+      "itemId": 176,
+      "itemName": "Chain Mail",
+      "normalizedName": "chain mail"
+    },
+    {
+      "itemId": 177,
+      "itemName": "Cobra Derringer",
+      "normalizedName": "cobra derringer"
+    },
+    {
+      "itemId": 178,
+      "itemName": "Flak Jacket",
+      "normalizedName": "flak jacket"
+    },
+    {
+      "itemId": 179,
+      "itemName": "Birthday Cake '05",
+      "normalizedName": "birthday cake '05"
+    },
+    {
+      "itemId": 180,
+      "itemName": "Bottle of Beer",
+      "normalizedName": "bottle of beer"
+    },
+    {
+      "itemId": 181,
+      "itemName": "Bottle of Champagne",
+      "normalizedName": "bottle of champagne"
+    },
+    {
+      "itemId": 182,
+      "itemName": "Soap on a Rope",
+      "normalizedName": "soap on a rope"
+    },
+    {
+      "itemId": 183,
+      "itemName": "Single Red Rose",
+      "normalizedName": "single red rose"
+    },
+    {
+      "itemId": 184,
+      "itemName": "Bunch of Black Roses",
+      "normalizedName": "bunch of black roses"
+    },
+    {
+      "itemId": 185,
+      "itemName": "Bunch of Balloons '05",
+      "normalizedName": "bunch of balloons '05"
+    },
+    {
+      "itemId": 186,
+      "itemName": "Sheep Plushie",
+      "normalizedName": "sheep plushie"
+    },
+    {
+      "itemId": 187,
+      "itemName": "Teddy Bear Plushie",
+      "normalizedName": "teddy bear plushie"
+    },
+    {
+      "itemId": 188,
+      "itemName": "Cracked Crystal Ball",
+      "normalizedName": "cracked crystal ball"
+    },
+    {
+      "itemId": 189,
+      "itemName": "S&W Revolver",
+      "normalizedName": "s&w revolver"
+    },
+    {
+      "itemId": 190,
+      "itemName": "C4 Explosive",
+      "normalizedName": "c4 explosive"
+    },
+    {
+      "itemId": 191,
+      "itemName": "Memory Locket",
+      "normalizedName": "memory locket"
+    },
+    {
+      "itemId": 192,
+      "itemName": "Rainbow Stud Earring",
+      "normalizedName": "rainbow stud earring"
+    },
+    {
+      "itemId": 193,
+      "itemName": "Hamster Toy",
+      "normalizedName": "hamster toy"
+    },
+    {
+      "itemId": 194,
+      "itemName": "Snowflake '05",
+      "normalizedName": "snowflake '05"
+    },
+    {
+      "itemId": 195,
+      "itemName": "Christmas Tree '05",
+      "normalizedName": "christmas tree '05"
+    },
+    {
+      "itemId": 196,
+      "itemName": "Cannabis",
+      "normalizedName": "cannabis"
+    },
+    {
+      "itemId": 197,
+      "itemName": "Ecstasy",
+      "normalizedName": "ecstasy"
+    },
+    {
+      "itemId": 198,
+      "itemName": "Ketamine",
+      "normalizedName": "ketamine"
+    },
+    {
+      "itemId": 199,
+      "itemName": "LSD",
+      "normalizedName": "lsd"
+    },
+    {
+      "itemId": 200,
+      "itemName": "Opium",
+      "normalizedName": "opium"
+    },
+    {
+      "itemId": 201,
+      "itemName": "PCP",
+      "normalizedName": "pcp"
+    },
+    {
+      "itemId": 202,
+      "itemName": "Mr Torn Crown '07",
+      "normalizedName": "mr torn crown '07"
+    },
+    {
+      "itemId": 203,
+      "itemName": "Shrooms",
+      "normalizedName": "shrooms"
+    },
+    {
+      "itemId": 204,
+      "itemName": "Speed",
+      "normalizedName": "speed"
+    },
+    {
+      "itemId": 205,
+      "itemName": "Vicodin",
+      "normalizedName": "vicodin"
+    },
+    {
+      "itemId": 206,
+      "itemName": "Xanax",
+      "normalizedName": "xanax"
+    },
+    {
+      "itemId": 207,
+      "itemName": "Ms Torn Crown '07",
+      "normalizedName": "ms torn crown '07"
+    },
+    {
+      "itemId": 208,
+      "itemName": "Unknown",
+      "normalizedName": "unknown"
+    },
+    {
+      "itemId": 209,
+      "itemName": "Box of Sweet Hearts",
+      "normalizedName": "box of sweet hearts"
+    },
+    {
+      "itemId": 210,
+      "itemName": "Bag of Chocolate Kisses",
+      "normalizedName": "bag of chocolate kisses"
+    },
+    {
+      "itemId": 211,
+      "itemName": "Crazy Cow",
+      "normalizedName": "crazy cow"
+    },
+    {
+      "itemId": 212,
+      "itemName": "Legend's Urn",
+      "normalizedName": "legend's urn"
+    },
+    {
+      "itemId": 213,
+      "itemName": "Dreamcatcher",
+      "normalizedName": "dreamcatcher"
+    },
+    {
+      "itemId": 214,
+      "itemName": "Brutus Keychain",
+      "normalizedName": "brutus keychain"
+    },
+    {
+      "itemId": 215,
+      "itemName": "Kitten Plushie",
+      "normalizedName": "kitten plushie"
+    },
+    {
+      "itemId": 216,
+      "itemName": "Single White Rose",
+      "normalizedName": "single white rose"
+    },
+    {
+      "itemId": 217,
+      "itemName": "Claymore Sword",
+      "normalizedName": "claymore sword"
+    },
+    {
+      "itemId": 218,
+      "itemName": "Crossbow",
+      "normalizedName": "crossbow"
+    },
+    {
+      "itemId": 219,
+      "itemName": "Enfield SA-80",
+      "normalizedName": "enfield sa 80"
+    },
+    {
+      "itemId": 220,
+      "itemName": "Grenade",
+      "normalizedName": "grenade"
+    },
+    {
+      "itemId": 221,
+      "itemName": "Stick Grenade",
+      "normalizedName": "stick grenade"
+    },
+    {
+      "itemId": 222,
+      "itemName": "Flash Grenade",
+      "normalizedName": "flash grenade"
+    },
+    {
+      "itemId": 223,
+      "itemName": "Jackhammer",
+      "normalizedName": "jackhammer"
+    },
+    {
+      "itemId": 224,
+      "itemName": "Swiss Army Knife",
+      "normalizedName": "swiss army knife"
+    },
+    {
+      "itemId": 225,
+      "itemName": "Mag 7",
+      "normalizedName": "mag 7"
+    },
+    {
+      "itemId": 226,
+      "itemName": "Smoke Grenade",
+      "normalizedName": "smoke grenade"
+    },
+    {
+      "itemId": 227,
+      "itemName": "Spear",
+      "normalizedName": "spear"
+    },
+    {
+      "itemId": 228,
+      "itemName": "Vektor CR-21",
+      "normalizedName": "vektor cr 21"
+    },
+    {
+      "itemId": 229,
+      "itemName": "Claymore Mine",
+      "normalizedName": "claymore mine"
+    },
+    {
+      "itemId": 230,
+      "itemName": "Flare Gun",
+      "normalizedName": "flare gun"
+    },
+    {
+      "itemId": 231,
+      "itemName": "Heckler & Koch SL8",
+      "normalizedName": "heckler & koch sl8"
+    },
+    {
+      "itemId": 232,
+      "itemName": "SIG 550",
+      "normalizedName": "sig 550"
+    },
+    {
+      "itemId": 233,
+      "itemName": "BT MP9",
+      "normalizedName": "bt mp9"
+    },
+    {
+      "itemId": 234,
+      "itemName": "Chain Whip",
+      "normalizedName": "chain whip"
+    },
+    {
+      "itemId": 235,
+      "itemName": "Wooden Nunchakus",
+      "normalizedName": "wooden nunchakus"
+    },
+    {
+      "itemId": 236,
+      "itemName": "Kama",
+      "normalizedName": "kama"
+    },
+    {
+      "itemId": 237,
+      "itemName": "Kodachi",
+      "normalizedName": "kodachi"
+    },
+    {
+      "itemId": 238,
+      "itemName": "Sai",
+      "normalizedName": "sai"
+    },
+    {
+      "itemId": 239,
+      "itemName": "Ninja Stars",
+      "normalizedName": "ninja stars"
+    },
+    {
+      "itemId": 240,
+      "itemName": "Anti Tank",
+      "normalizedName": "anti tank"
+    },
+    {
+      "itemId": 241,
+      "itemName": "Bushmaster Carbon 15",
+      "normalizedName": "bushmaster carbon 15"
+    },
+    {
+      "itemId": 242,
+      "itemName": "HEG",
+      "normalizedName": "heg"
+    },
+    {
+      "itemId": 243,
+      "itemName": "Taurus",
+      "normalizedName": "taurus"
+    },
+    {
+      "itemId": 244,
+      "itemName": "Blowgun",
+      "normalizedName": "blowgun"
+    },
+    {
+      "itemId": 245,
+      "itemName": "Bo Staff",
+      "normalizedName": "bo staff"
+    },
+    {
+      "itemId": 246,
+      "itemName": "Fireworks",
+      "normalizedName": "fireworks"
+    },
+    {
+      "itemId": 247,
+      "itemName": "Katana",
+      "normalizedName": "katana"
+    },
+    {
+      "itemId": 248,
+      "itemName": "Qsz-92",
+      "normalizedName": "qsz 92"
+    },
+    {
+      "itemId": 249,
+      "itemName": "SKS Carbine",
+      "normalizedName": "sks carbine"
+    },
+    {
+      "itemId": 250,
+      "itemName": "Twin Tiger Hooks",
+      "normalizedName": "twin tiger hooks"
+    },
+    {
+      "itemId": 251,
+      "itemName": "Wushu Double Axes",
+      "normalizedName": "wushu double axes"
+    },
+    {
+      "itemId": 252,
+      "itemName": "Ithaca 37",
+      "normalizedName": "ithaca 37"
+    },
+    {
+      "itemId": 253,
+      "itemName": "Lorcin 380",
+      "normalizedName": "lorcin 380"
+    },
+    {
+      "itemId": 254,
+      "itemName": "S&W M29",
+      "normalizedName": "s&w m29"
+    },
+    {
+      "itemId": 255,
+      "itemName": "Flamethrower",
+      "normalizedName": "flamethrower"
+    },
+    {
+      "itemId": 256,
+      "itemName": "Tear Gas",
+      "normalizedName": "tear gas"
+    },
+    {
+      "itemId": 257,
+      "itemName": "Throwing Knife",
+      "normalizedName": "throwing knife"
+    },
+    {
+      "itemId": 258,
+      "itemName": "Jaguar Plushie",
+      "normalizedName": "jaguar plushie"
+    },
+    {
+      "itemId": 259,
+      "itemName": "Mayan Statue",
+      "normalizedName": "mayan statue"
+    },
+    {
+      "itemId": 260,
+      "itemName": "Dahlia",
+      "normalizedName": "dahlia"
+    },
+    {
+      "itemId": 261,
+      "itemName": "Wolverine Plushie",
+      "normalizedName": "wolverine plushie"
+    },
+    {
+      "itemId": 262,
+      "itemName": "Hockey Stick",
+      "normalizedName": "hockey stick"
+    },
+    {
+      "itemId": 263,
+      "itemName": "Crocus",
+      "normalizedName": "crocus"
+    },
+    {
+      "itemId": 264,
+      "itemName": "Orchid",
+      "normalizedName": "orchid"
+    },
+    {
+      "itemId": 265,
+      "itemName": "Pele Charm",
+      "normalizedName": "pele charm"
+    },
+    {
+      "itemId": 266,
+      "itemName": "Nessie Plushie",
+      "normalizedName": "nessie plushie"
+    },
+    {
+      "itemId": 267,
+      "itemName": "Heather",
+      "normalizedName": "heather"
+    },
+    {
+      "itemId": 268,
+      "itemName": "Red Fox Plushie",
+      "normalizedName": "red fox plushie"
+    },
+    {
+      "itemId": 269,
+      "itemName": "Monkey Plushie",
+      "normalizedName": "monkey plushie"
+    },
+    {
+      "itemId": 270,
+      "itemName": "Soccer Ball",
+      "normalizedName": "soccer ball"
+    },
+    {
+      "itemId": 271,
+      "itemName": "Ceibo Flower",
+      "normalizedName": "ceibo flower"
+    },
+    {
+      "itemId": 272,
+      "itemName": "Edelweiss",
+      "normalizedName": "edelweiss"
+    },
+    {
+      "itemId": 273,
+      "itemName": "Chamois Plushie",
+      "normalizedName": "chamois plushie"
+    },
+    {
+      "itemId": 274,
+      "itemName": "Panda Plushie",
+      "normalizedName": "panda plushie"
+    },
+    {
+      "itemId": 275,
+      "itemName": "Jade Buddha",
+      "normalizedName": "jade buddha"
+    },
+    {
+      "itemId": 276,
+      "itemName": "Peony",
+      "normalizedName": "peony"
+    },
+    {
+      "itemId": 277,
+      "itemName": "Cherry Blossom",
+      "normalizedName": "cherry blossom"
+    },
+    {
+      "itemId": 278,
+      "itemName": "Kabuki Mask",
+      "normalizedName": "kabuki mask"
+    },
+    {
+      "itemId": 279,
+      "itemName": "Maneki Neko",
+      "normalizedName": "maneki neko"
+    },
+    {
+      "itemId": 280,
+      "itemName": "Elephant Statue",
+      "normalizedName": "elephant statue"
+    },
+    {
+      "itemId": 281,
+      "itemName": "Lion Plushie",
+      "normalizedName": "lion plushie"
+    },
+    {
+      "itemId": 282,
+      "itemName": "African Violet",
+      "normalizedName": "african violet"
+    },
+    {
+      "itemId": 283,
+      "itemName": "Donator Pack",
+      "normalizedName": "donator pack"
+    },
+    {
+      "itemId": 284,
+      "itemName": "Bronze Paint Brush",
+      "normalizedName": "bronze paint brush"
+    },
+    {
+      "itemId": 285,
+      "itemName": "Silver Paint Brush",
+      "normalizedName": "silver paint brush"
+    },
+    {
+      "itemId": 286,
+      "itemName": "Gold Paint Brush",
+      "normalizedName": "gold paint brush"
+    },
+    {
+      "itemId": 287,
+      "itemName": "Pand0ra's Box",
+      "normalizedName": "pand0ra's box"
+    },
+    {
+      "itemId": 288,
+      "itemName": "Mr Brownstone Doll",
+      "normalizedName": "mr brownstone doll"
+    },
+    {
+      "itemId": 289,
+      "itemName": "Dual Axes",
+      "normalizedName": "dual axes"
+    },
+    {
+      "itemId": 290,
+      "itemName": "Dual Hammers",
+      "normalizedName": "dual hammers"
+    },
+    {
+      "itemId": 291,
+      "itemName": "Dual Scimitars",
+      "normalizedName": "dual scimitars"
+    },
+    {
+      "itemId": 292,
+      "itemName": "Dual Samurai Swords",
+      "normalizedName": "dual samurai swords"
+    },
+    {
+      "itemId": 293,
+      "itemName": "Japanese/English Dictionary",
+      "normalizedName": "japanese/english dictionary"
+    },
+    {
+      "itemId": 294,
+      "itemName": "Bottle of Sak�",
+      "normalizedName": "bottle of sak�"
+    },
+    {
+      "itemId": 295,
+      "itemName": "Oriental Log",
+      "normalizedName": "oriental log"
+    },
+    {
+      "itemId": 296,
+      "itemName": "Oriental Log Translation",
+      "normalizedName": "oriental log translation"
+    },
+    {
+      "itemId": 297,
+      "itemName": "YouYou Yo Yo",
+      "normalizedName": "youyou yo yo"
+    },
+    {
+      "itemId": 298,
+      "itemName": "Monkey Cuffs",
+      "normalizedName": "monkey cuffs"
+    },
+    {
+      "itemId": 299,
+      "itemName": "Jester's Cap",
+      "normalizedName": "jester's cap"
+    },
+    {
+      "itemId": 300,
+      "itemName": "Gibal's Dragonfly",
+      "normalizedName": "gibal's dragonfly"
+    },
+    {
+      "itemId": 301,
+      "itemName": "Green Ornament",
+      "normalizedName": "green ornament"
+    },
+    {
+      "itemId": 302,
+      "itemName": "Purple Ornament",
+      "normalizedName": "purple ornament"
+    },
+    {
+      "itemId": 303,
+      "itemName": "Blue Ornament",
+      "normalizedName": "blue ornament"
+    },
+    {
+      "itemId": 304,
+      "itemName": "Purple Bell",
+      "normalizedName": "purple bell"
+    },
+    {
+      "itemId": 305,
+      "itemName": "Mistletoe",
+      "normalizedName": "mistletoe"
+    },
+    {
+      "itemId": 306,
+      "itemName": "Mini Sleigh",
+      "normalizedName": "mini sleigh"
+    },
+    {
+      "itemId": 307,
+      "itemName": "Snowman",
+      "normalizedName": "snowman"
+    },
+    {
+      "itemId": 308,
+      "itemName": "Christmas Gnome",
+      "normalizedName": "christmas gnome"
+    },
+    {
+      "itemId": 309,
+      "itemName": "Gingerbread House",
+      "normalizedName": "gingerbread house"
+    },
+    {
+      "itemId": 310,
+      "itemName": "Lollipop",
+      "normalizedName": "lollipop"
+    },
+    {
+      "itemId": 311,
+      "itemName": "Mardi Gras Beads",
+      "normalizedName": "mardi gras beads"
+    },
+    {
+      "itemId": 312,
+      "itemName": "Devil Toy",
+      "normalizedName": "devil toy"
+    },
+    {
+      "itemId": 313,
+      "itemName": "Cookie Launcher",
+      "normalizedName": "cookie launcher"
+    },
+    {
+      "itemId": 314,
+      "itemName": "Cursed Moon Pendant",
+      "normalizedName": "cursed moon pendant"
+    },
+    {
+      "itemId": 315,
+      "itemName": "Apartment Blueprint",
+      "normalizedName": "apartment blueprint"
+    },
+    {
+      "itemId": 316,
+      "itemName": "Semi-Detached House Blueprint",
+      "normalizedName": "semi detached house blueprint"
+    },
+    {
+      "itemId": 317,
+      "itemName": "Detached House Blueprint",
+      "normalizedName": "detached house blueprint"
+    },
+    {
+      "itemId": 318,
+      "itemName": "Beach House Blueprint",
+      "normalizedName": "beach house blueprint"
+    },
+    {
+      "itemId": 319,
+      "itemName": "Chalet Blueprint",
+      "normalizedName": "chalet blueprint"
+    },
+    {
+      "itemId": 320,
+      "itemName": "Villa Blueprint",
+      "normalizedName": "villa blueprint"
+    },
+    {
+      "itemId": 321,
+      "itemName": "Penthouse Blueprint",
+      "normalizedName": "penthouse blueprint"
+    },
+    {
+      "itemId": 322,
+      "itemName": "Mansion Blueprint",
+      "normalizedName": "mansion blueprint"
+    },
+    {
+      "itemId": 323,
+      "itemName": "Ranch Blueprint",
+      "normalizedName": "ranch blueprint"
+    },
+    {
+      "itemId": 324,
+      "itemName": "Palace Blueprint",
+      "normalizedName": "palace blueprint"
+    },
+    {
+      "itemId": 325,
+      "itemName": "Castle Blueprint",
+      "normalizedName": "castle blueprint"
+    },
+    {
+      "itemId": 326,
+      "itemName": "Printing Paper",
+      "normalizedName": "printing paper"
+    },
+    {
+      "itemId": 327,
+      "itemName": "Blank Tokens",
+      "normalizedName": "blank tokens"
+    },
+    {
+      "itemId": 328,
+      "itemName": "Blank Credit Cards",
+      "normalizedName": "blank credit cards"
+    },
+    {
+      "itemId": 329,
+      "itemName": "Skateboard",
+      "normalizedName": "skateboard"
+    },
+    {
+      "itemId": 330,
+      "itemName": "Boxing Gloves",
+      "normalizedName": "boxing gloves"
+    },
+    {
+      "itemId": 331,
+      "itemName": "Dumbbells",
+      "normalizedName": "dumbbells"
+    },
+    {
+      "itemId": 332,
+      "itemName": "Combat Vest",
+      "normalizedName": "combat vest"
+    },
+    {
+      "itemId": 333,
+      "itemName": "Liquid Body Armor",
+      "normalizedName": "liquid body armor"
+    },
+    {
+      "itemId": 334,
+      "itemName": "Flexible Body Armor",
+      "normalizedName": "flexible body armor"
+    },
+    {
+      "itemId": 335,
+      "itemName": "Stick of Dynamite",
+      "normalizedName": "stick of dynamite"
+    },
+    {
+      "itemId": 336,
+      "itemName": "Cesium-137",
+      "normalizedName": "cesium 137"
+    },
+    {
+      "itemId": 337,
+      "itemName": "Dirty Bomb",
+      "normalizedName": "dirty bomb"
+    },
+    {
+      "itemId": 338,
+      "itemName": "Sh0rty's Surfboard",
+      "normalizedName": "sh0rty's surfboard"
+    },
+    {
+      "itemId": 339,
+      "itemName": "Puzzle piece",
+      "normalizedName": "puzzle piece"
+    },
+    {
+      "itemId": 340,
+      "itemName": "Hunny Pot",
+      "normalizedName": "hunny pot"
+    },
+    {
+      "itemId": 341,
+      "itemName": "Seductive Stethoscope",
+      "normalizedName": "seductive stethoscope"
+    },
+    {
+      "itemId": 342,
+      "itemName": "Dollar Bill Collectible",
+      "normalizedName": "dollar bill collectible"
+    },
+    {
+      "itemId": 343,
+      "itemName": "Backstage Pass",
+      "normalizedName": "backstage pass"
+    },
+    {
+      "itemId": 344,
+      "itemName": "Chemi's Magic Potion",
+      "normalizedName": "chemi's magic potion"
+    },
+    {
+      "itemId": 345,
+      "itemName": "Pack of Trojans",
+      "normalizedName": "pack of trojans"
+    },
+    {
+      "itemId": 346,
+      "itemName": "Pair of High Heels",
+      "normalizedName": "pair of high heels"
+    },
+    {
+      "itemId": 347,
+      "itemName": "Thong",
+      "normalizedName": "thong"
+    },
+    {
+      "itemId": 348,
+      "itemName": "Hazmat Suit",
+      "normalizedName": "hazmat suit"
+    },
+    {
+      "itemId": 349,
+      "itemName": "Flea Collar",
+      "normalizedName": "flea collar"
+    },
+    {
+      "itemId": 350,
+      "itemName": "Dunkin's Donut",
+      "normalizedName": "dunkin's donut"
+    },
+    {
+      "itemId": 351,
+      "itemName": "Amazon Doll",
+      "normalizedName": "amazon doll"
+    },
+    {
+      "itemId": 352,
+      "itemName": "BBQ Smoker",
+      "normalizedName": "bbq smoker"
+    },
+    {
+      "itemId": 353,
+      "itemName": "Bag of Cheetos",
+      "normalizedName": "bag of cheetos"
+    },
+    {
+      "itemId": 354,
+      "itemName": "Motorbike",
+      "normalizedName": "motorbike"
+    },
+    {
+      "itemId": 355,
+      "itemName": "Citrus Squeezer",
+      "normalizedName": "citrus squeezer"
+    },
+    {
+      "itemId": 356,
+      "itemName": "Superman Shades",
+      "normalizedName": "superman shades"
+    },
+    {
+      "itemId": 357,
+      "itemName": "Kevlar Helmet",
+      "normalizedName": "kevlar helmet"
+    },
+    {
+      "itemId": 358,
+      "itemName": "Raw Ivory",
+      "normalizedName": "raw ivory"
+    },
+    {
+      "itemId": 359,
+      "itemName": "Fine Chisel",
+      "normalizedName": "fine chisel"
+    },
+    {
+      "itemId": 360,
+      "itemName": "Ivory Walking Cane",
+      "normalizedName": "ivory walking cane"
+    },
+    {
+      "itemId": 361,
+      "itemName": "Neumune Tablet",
+      "normalizedName": "neumune tablet"
+    },
+    {
+      "itemId": 362,
+      "itemName": "Mr Torn Crown '08",
+      "normalizedName": "mr torn crown '08"
+    },
+    {
+      "itemId": 363,
+      "itemName": "Ms Torn Crown '08",
+      "normalizedName": "ms torn crown '08"
+    },
+    {
+      "itemId": 364,
+      "itemName": "Box of Grenades",
+      "normalizedName": "box of grenades"
+    },
+    {
+      "itemId": 365,
+      "itemName": "Box of Medical Supplies",
+      "normalizedName": "box of medical supplies"
+    },
+    {
+      "itemId": 366,
+      "itemName": "Erotic DVD",
+      "normalizedName": "erotic dvd"
+    },
+    {
+      "itemId": 367,
+      "itemName": "Feathery Hotel Coupon",
+      "normalizedName": "feathery hotel coupon"
+    },
+    {
+      "itemId": 368,
+      "itemName": "Lawyer Business Card",
+      "normalizedName": "lawyer business card"
+    },
+    {
+      "itemId": 369,
+      "itemName": "Lottery Voucher",
+      "normalizedName": "lottery voucher"
+    },
+    {
+      "itemId": 370,
+      "itemName": "Drug Pack",
+      "normalizedName": "drug pack"
+    },
+    {
+      "itemId": 371,
+      "itemName": "Dark Doll",
+      "normalizedName": "dark doll"
+    },
+    {
+      "itemId": 372,
+      "itemName": "Empty Box",
+      "normalizedName": "empty box"
+    },
+    {
+      "itemId": 373,
+      "itemName": "Parcel",
+      "normalizedName": "parcel"
+    },
+    {
+      "itemId": 374,
+      "itemName": "Birthday Present",
+      "normalizedName": "birthday present"
+    },
+    {
+      "itemId": 375,
+      "itemName": "Present",
+      "normalizedName": "present"
+    },
+    {
+      "itemId": 376,
+      "itemName": "Christmas Present",
+      "normalizedName": "christmas present"
+    },
+    {
+      "itemId": 377,
+      "itemName": "Birthday Wrapping Paper",
+      "normalizedName": "birthday wrapping paper"
+    },
+    {
+      "itemId": 378,
+      "itemName": "Generic Wrapping Paper",
+      "normalizedName": "generic wrapping paper"
+    },
+    {
+      "itemId": 379,
+      "itemName": "Christmas Wrapping Paper",
+      "normalizedName": "christmas wrapping paper"
+    },
+    {
+      "itemId": 380,
+      "itemName": "Small Explosive Device",
+      "normalizedName": "small explosive device"
+    },
+    {
+      "itemId": 381,
+      "itemName": "Gold Laptop",
+      "normalizedName": "gold laptop"
+    },
+    {
+      "itemId": 382,
+      "itemName": "Gold Plated AK-47",
+      "normalizedName": "gold plated ak 47"
+    },
+    {
+      "itemId": 383,
+      "itemName": "Platinum PDA",
+      "normalizedName": "platinum pda"
+    },
+    {
+      "itemId": 384,
+      "itemName": "Camel Plushie",
+      "normalizedName": "camel plushie"
+    },
+    {
+      "itemId": 385,
+      "itemName": "Tribulus Omanense",
+      "normalizedName": "tribulus omanense"
+    },
+    {
+      "itemId": 386,
+      "itemName": "Sports Sneakers",
+      "normalizedName": "sports sneakers"
+    },
+    {
+      "itemId": 387,
+      "itemName": "Handbag",
+      "normalizedName": "handbag"
+    },
+    {
+      "itemId": 388,
+      "itemName": "Pink Mac-10",
+      "normalizedName": "pink mac 10"
+    },
+    {
+      "itemId": 389,
+      "itemName": "Mr Torn Crown '09",
+      "normalizedName": "mr torn crown '09"
+    },
+    {
+      "itemId": 390,
+      "itemName": "Ms Torn Crown '09",
+      "normalizedName": "ms torn crown '09"
+    },
+    {
+      "itemId": 391,
+      "itemName": "Macana",
+      "normalizedName": "macana"
+    },
+    {
+      "itemId": 392,
+      "itemName": "Pepper Spray",
+      "normalizedName": "pepper spray"
+    },
+    {
+      "itemId": 393,
+      "itemName": "Slingshot",
+      "normalizedName": "slingshot"
+    },
+    {
+      "itemId": 394,
+      "itemName": "Brick",
+      "normalizedName": "brick"
+    },
+    {
+      "itemId": 395,
+      "itemName": "Metal Nunchakus",
+      "normalizedName": "metal nunchakus"
+    },
+    {
+      "itemId": 396,
+      "itemName": "Business Class Ticket",
+      "normalizedName": "business class ticket"
+    },
+    {
+      "itemId": 397,
+      "itemName": "Flail",
+      "normalizedName": "flail"
+    },
+    {
+      "itemId": 398,
+      "itemName": "SIG 552",
+      "normalizedName": "sig 552"
+    },
+    {
+      "itemId": 399,
+      "itemName": "ArmaLite M-15A4",
+      "normalizedName": "armalite m 15a4"
+    },
+    {
+      "itemId": 400,
+      "itemName": "Guandao",
+      "normalizedName": "guandao"
+    },
+    {
+      "itemId": 401,
+      "itemName": "Lead Pipe",
+      "normalizedName": "lead pipe"
+    },
+    {
+      "itemId": 402,
+      "itemName": "Ice Pick",
+      "normalizedName": "ice pick"
+    },
+    {
+      "itemId": 403,
+      "itemName": "Box of Tissues",
+      "normalizedName": "box of tissues"
+    },
+    {
+      "itemId": 404,
+      "itemName": "Bandana",
+      "normalizedName": "bandana"
+    },
+    {
+      "itemId": 405,
+      "itemName": "Loaf of Bread",
+      "normalizedName": "loaf of bread"
+    },
+    {
+      "itemId": 406,
+      "itemName": "Afro Comb",
+      "normalizedName": "afro comb"
+    },
+    {
+      "itemId": 407,
+      "itemName": "Compass",
+      "normalizedName": "compass"
+    },
+    {
+      "itemId": 408,
+      "itemName": "Sextant",
+      "normalizedName": "sextant"
+    },
+    {
+      "itemId": 409,
+      "itemName": "Yucca Plant",
+      "normalizedName": "yucca plant"
+    },
+    {
+      "itemId": 410,
+      "itemName": "Fire Hydrant",
+      "normalizedName": "fire hydrant"
+    },
+    {
+      "itemId": 411,
+      "itemName": "Model Space Ship",
+      "normalizedName": "model space ship"
+    },
+    {
+      "itemId": 412,
+      "itemName": "Sports Shades",
+      "normalizedName": "sports shades"
+    },
+    {
+      "itemId": 413,
+      "itemName": "Mountie Hat",
+      "normalizedName": "mountie hat"
+    },
+    {
+      "itemId": 414,
+      "itemName": "Proda Sunglasses",
+      "normalizedName": "proda sunglasses"
+    },
+    {
+      "itemId": 415,
+      "itemName": "Ship in a Bottle",
+      "normalizedName": "ship in a bottle"
+    },
+    {
+      "itemId": 416,
+      "itemName": "Paper Weight",
+      "normalizedName": "paper weight"
+    },
+    {
+      "itemId": 417,
+      "itemName": "RS232 Cable",
+      "normalizedName": "rs232 cable"
+    },
+    {
+      "itemId": 418,
+      "itemName": "Tailors Dummy",
+      "normalizedName": "tailors dummy"
+    },
+    {
+      "itemId": 419,
+      "itemName": "Small Suitcase",
+      "normalizedName": "small suitcase"
+    },
+    {
+      "itemId": 420,
+      "itemName": "Medium Suitcase",
+      "normalizedName": "medium suitcase"
+    },
+    {
+      "itemId": 421,
+      "itemName": "Large Suitcase",
+      "normalizedName": "large suitcase"
+    },
+    {
+      "itemId": 422,
+      "itemName": "Vanity Hand Mirror",
+      "normalizedName": "vanity hand mirror"
+    },
+    {
+      "itemId": 423,
+      "itemName": "Poker Chip",
+      "normalizedName": "poker chip"
+    },
+    {
+      "itemId": 424,
+      "itemName": "Rabbit Foot",
+      "normalizedName": "rabbit foot"
+    },
+    {
+      "itemId": 425,
+      "itemName": "Voodoo Doll",
+      "normalizedName": "voodoo doll"
+    },
+    {
+      "itemId": 426,
+      "itemName": "Bottle of Tequila",
+      "normalizedName": "bottle of tequila"
+    },
+    {
+      "itemId": 427,
+      "itemName": "Sumo Doll",
+      "normalizedName": "sumo doll"
+    },
+    {
+      "itemId": 428,
+      "itemName": "Casino Pass",
+      "normalizedName": "casino pass"
+    },
+    {
+      "itemId": 429,
+      "itemName": "Chopsticks",
+      "normalizedName": "chopsticks"
+    },
+    {
+      "itemId": 430,
+      "itemName": "Coconut Bra",
+      "normalizedName": "coconut bra"
+    },
+    {
+      "itemId": 431,
+      "itemName": "Dart Board",
+      "normalizedName": "dart board"
+    },
+    {
+      "itemId": 432,
+      "itemName": "Crazy Straw",
+      "normalizedName": "crazy straw"
+    },
+    {
+      "itemId": 433,
+      "itemName": "Sensu",
+      "normalizedName": "sensu"
+    },
+    {
+      "itemId": 434,
+      "itemName": "Yakitori Lantern",
+      "normalizedName": "yakitori lantern"
+    },
+    {
+      "itemId": 435,
+      "itemName": "Dozen White Roses",
+      "normalizedName": "dozen white roses"
+    },
+    {
+      "itemId": 436,
+      "itemName": "Snowboard",
+      "normalizedName": "snowboard"
+    },
+    {
+      "itemId": 437,
+      "itemName": "Glow Stick",
+      "normalizedName": "glow stick"
+    },
+    {
+      "itemId": 438,
+      "itemName": "Cricket Bat",
+      "normalizedName": "cricket bat"
+    },
+    {
+      "itemId": 439,
+      "itemName": "Frying Pan",
+      "normalizedName": "frying pan"
+    },
+    {
+      "itemId": 440,
+      "itemName": "Pillow",
+      "normalizedName": "pillow"
+    },
+    {
+      "itemId": 441,
+      "itemName": "Khinkeh P0rnStar Doll",
+      "normalizedName": "khinkeh p0rnstar doll"
+    },
+    {
+      "itemId": 442,
+      "itemName": "Blow-Up Doll",
+      "normalizedName": "blow up doll"
+    },
+    {
+      "itemId": 443,
+      "itemName": "Strawberry Milkshake",
+      "normalizedName": "strawberry milkshake"
+    },
+    {
+      "itemId": 444,
+      "itemName": "Breadfan Doll",
+      "normalizedName": "breadfan doll"
+    },
+    {
+      "itemId": 445,
+      "itemName": "Chaos Man",
+      "normalizedName": "chaos man"
+    },
+    {
+      "itemId": 446,
+      "itemName": "Karate Man",
+      "normalizedName": "karate man"
+    },
+    {
+      "itemId": 447,
+      "itemName": "Burmese Flag",
+      "normalizedName": "burmese flag"
+    },
+    {
+      "itemId": 448,
+      "itemName": "Bl0ndie's Dictionary",
+      "normalizedName": "bl0ndie's dictionary"
+    },
+    {
+      "itemId": 449,
+      "itemName": "Hydroponic Grow Tent",
+      "normalizedName": "hydroponic grow tent"
+    },
+    {
+      "itemId": 450,
+      "itemName": "Leopard Coin",
+      "normalizedName": "leopard coin"
+    },
+    {
+      "itemId": 451,
+      "itemName": "Florin Coin",
+      "normalizedName": "florin coin"
+    },
+    {
+      "itemId": 452,
+      "itemName": "Gold Noble Coin",
+      "normalizedName": "gold noble coin"
+    },
+    {
+      "itemId": 453,
+      "itemName": "Ganesha Sculpture",
+      "normalizedName": "ganesha sculpture"
+    },
+    {
+      "itemId": 454,
+      "itemName": "Vairocana Buddha Sculpture",
+      "normalizedName": "vairocana buddha sculpture"
+    },
+    {
+      "itemId": 455,
+      "itemName": "Quran Script : Ibn Masud",
+      "normalizedName": "quran script : ibn masud"
+    },
+    {
+      "itemId": 456,
+      "itemName": "Quran Script : Ubay Ibn Kab",
+      "normalizedName": "quran script : ubay ibn kab"
+    },
+    {
+      "itemId": 457,
+      "itemName": "Quran Script : Ali",
+      "normalizedName": "quran script : ali"
+    },
+    {
+      "itemId": 458,
+      "itemName": "Shabti Sculpture",
+      "normalizedName": "shabti sculpture"
+    },
+    {
+      "itemId": 459,
+      "itemName": "Egyptian Amulet",
+      "normalizedName": "egyptian amulet"
+    },
+    {
+      "itemId": 460,
+      "itemName": "White Senet Pawn",
+      "normalizedName": "white senet pawn"
+    },
+    {
+      "itemId": 461,
+      "itemName": "Black Senet Pawn",
+      "normalizedName": "black senet pawn"
+    },
+    {
+      "itemId": 462,
+      "itemName": "Senet Board",
+      "normalizedName": "senet board"
+    },
+    {
+      "itemId": 463,
+      "itemName": "Epinephrine",
+      "normalizedName": "epinephrine"
+    },
+    {
+      "itemId": 464,
+      "itemName": "Melatonin",
+      "normalizedName": "melatonin"
+    },
+    {
+      "itemId": 465,
+      "itemName": "Serotonin",
+      "normalizedName": "serotonin"
+    },
+    {
+      "itemId": 466,
+      "itemName": "Snow Globe '09",
+      "normalizedName": "snow globe '09"
+    },
+    {
+      "itemId": 467,
+      "itemName": "Dancing Santa Claus '09",
+      "normalizedName": "dancing santa claus '09"
+    },
+    {
+      "itemId": 468,
+      "itemName": "Christmas Stocking '09",
+      "normalizedName": "christmas stocking '09"
+    },
+    {
+      "itemId": 469,
+      "itemName": "Santa's Elf '09",
+      "normalizedName": "santa's elf '09"
+    },
+    {
+      "itemId": 470,
+      "itemName": "Christmas Card '09",
+      "normalizedName": "christmas card '09"
+    },
+    {
+      "itemId": 471,
+      "itemName": "Admin Portrait '09",
+      "normalizedName": "admin portrait '09"
+    },
+    {
+      "itemId": 472,
+      "itemName": "Blue Easter Egg",
+      "normalizedName": "blue easter egg"
+    },
+    {
+      "itemId": 473,
+      "itemName": "Green Easter Egg",
+      "normalizedName": "green easter egg"
+    },
+    {
+      "itemId": 474,
+      "itemName": "Red Easter Egg",
+      "normalizedName": "red easter egg"
+    },
+    {
+      "itemId": 475,
+      "itemName": "Yellow Easter Egg",
+      "normalizedName": "yellow easter egg"
+    },
+    {
+      "itemId": 476,
+      "itemName": "White Easter Egg",
+      "normalizedName": "white easter egg"
+    },
+    {
+      "itemId": 477,
+      "itemName": "Black Easter Egg",
+      "normalizedName": "black easter egg"
+    },
+    {
+      "itemId": 478,
+      "itemName": "Gold Easter Egg",
+      "normalizedName": "gold easter egg"
+    },
+    {
+      "itemId": 479,
+      "itemName": "Metal Dog Tag",
+      "normalizedName": "metal dog tag"
+    },
+    {
+      "itemId": 480,
+      "itemName": "Bronze Dog Tag",
+      "normalizedName": "bronze dog tag"
+    },
+    {
+      "itemId": 481,
+      "itemName": "Silver Dog Tag",
+      "normalizedName": "silver dog tag"
+    },
+    {
+      "itemId": 482,
+      "itemName": "Gold Dog Tag",
+      "normalizedName": "gold dog tag"
+    },
+    {
+      "itemId": 483,
+      "itemName": "MP5k",
+      "normalizedName": "mp5k"
+    },
+    {
+      "itemId": 484,
+      "itemName": "AK74U",
+      "normalizedName": "ak74u"
+    },
+    {
+      "itemId": 485,
+      "itemName": "Skorpion",
+      "normalizedName": "skorpion"
+    },
+    {
+      "itemId": 486,
+      "itemName": "TMP",
+      "normalizedName": "tmp"
+    },
+    {
+      "itemId": 487,
+      "itemName": "Thompson",
+      "normalizedName": "thompson"
+    },
+    {
+      "itemId": 488,
+      "itemName": "MP 40",
+      "normalizedName": "mp 40"
+    },
+    {
+      "itemId": 489,
+      "itemName": "Luger",
+      "normalizedName": "luger"
+    },
+    {
+      "itemId": 490,
+      "itemName": "Blunderbuss",
+      "normalizedName": "blunderbuss"
+    },
+    {
+      "itemId": 491,
+      "itemName": "Zombie Brain",
+      "normalizedName": "zombie brain"
+    },
+    {
+      "itemId": 492,
+      "itemName": "Human Head",
+      "normalizedName": "human head"
+    },
+    {
+      "itemId": 493,
+      "itemName": "Medal of Honor",
+      "normalizedName": "medal of honor"
+    },
+    {
+      "itemId": 494,
+      "itemName": "Citroen Saxo",
+      "normalizedName": "citroen saxo"
+    },
+    {
+      "itemId": 495,
+      "itemName": "Classic Mini",
+      "normalizedName": "classic mini"
+    },
+    {
+      "itemId": 496,
+      "itemName": "Fiat Punto",
+      "normalizedName": "fiat punto"
+    },
+    {
+      "itemId": 497,
+      "itemName": "Nissan Micra",
+      "normalizedName": "nissan micra"
+    },
+    {
+      "itemId": 498,
+      "itemName": "Peugeot 106",
+      "normalizedName": "peugeot 106"
+    },
+    {
+      "itemId": 499,
+      "itemName": "Renault Clio",
+      "normalizedName": "renault clio"
+    },
+    {
+      "itemId": 500,
+      "itemName": "Vauxhall Corsa",
+      "normalizedName": "vauxhall corsa"
+    },
+    {
+      "itemId": 501,
+      "itemName": "Volvo 850",
+      "normalizedName": "volvo 850"
+    },
+    {
+      "itemId": 502,
+      "itemName": "Alfa Romeo 156",
+      "normalizedName": "alfa romeo 156"
+    },
+    {
+      "itemId": 503,
+      "itemName": "BMW X5",
+      "normalizedName": "bmw x5"
+    },
+    {
+      "itemId": 504,
+      "itemName": "Seat Leon Cupra",
+      "normalizedName": "seat leon cupra"
+    },
+    {
+      "itemId": 505,
+      "itemName": "Vauxhall Astra GSI",
+      "normalizedName": "vauxhall astra gsi"
+    },
+    {
+      "itemId": 506,
+      "itemName": "Volkswagen Golf GTI",
+      "normalizedName": "volkswagen golf gti"
+    },
+    {
+      "itemId": 507,
+      "itemName": "Audi S3",
+      "normalizedName": "audi s3"
+    },
+    {
+      "itemId": 508,
+      "itemName": "Ford Focus RS",
+      "normalizedName": "ford focus rs"
+    },
+    {
+      "itemId": 509,
+      "itemName": "Honda S2000",
+      "normalizedName": "honda s2000"
+    },
+    {
+      "itemId": 510,
+      "itemName": "Mini Cooper S",
+      "normalizedName": "mini cooper s"
+    },
+    {
+      "itemId": 511,
+      "itemName": "Sierra Cosworth",
+      "normalizedName": "sierra cosworth"
+    },
+    {
+      "itemId": 512,
+      "itemName": "Lotus Exige",
+      "normalizedName": "lotus exige"
+    },
+    {
+      "itemId": 513,
+      "itemName": "Mitsubishi Evo X",
+      "normalizedName": "mitsubishi evo x"
+    },
+    {
+      "itemId": 514,
+      "itemName": "Porsche 911 GT3",
+      "normalizedName": "porsche 911 gt3"
+    },
+    {
+      "itemId": 515,
+      "itemName": "Subaru Impreza STI",
+      "normalizedName": "subaru impreza sti"
+    },
+    {
+      "itemId": 516,
+      "itemName": "TVR Sagaris",
+      "normalizedName": "tvr sagaris"
+    },
+    {
+      "itemId": 517,
+      "itemName": "Aston Martin One-77",
+      "normalizedName": "aston martin one 77"
+    },
+    {
+      "itemId": 518,
+      "itemName": "Audi R8",
+      "normalizedName": "audi r8"
+    },
+    {
+      "itemId": 519,
+      "itemName": "Bugatti Veyron",
+      "normalizedName": "bugatti veyron"
+    },
+    {
+      "itemId": 520,
+      "itemName": "Ferrari 458",
+      "normalizedName": "ferrari 458"
+    },
+    {
+      "itemId": 521,
+      "itemName": "Lamborghini Gallardo",
+      "normalizedName": "lamborghini gallardo"
+    },
+    {
+      "itemId": 522,
+      "itemName": "Lexus LFA",
+      "normalizedName": "lexus lfa"
+    },
+    {
+      "itemId": 523,
+      "itemName": "Mercedes SLR",
+      "normalizedName": "mercedes slr"
+    },
+    {
+      "itemId": 524,
+      "itemName": "Nissan GT-R",
+      "normalizedName": "nissan gt r"
+    },
+    {
+      "itemId": 525,
+      "itemName": "Mr Torn Crown '10",
+      "normalizedName": "mr torn crown '10"
+    },
+    {
+      "itemId": 526,
+      "itemName": "Ms Torn Crown '10",
+      "normalizedName": "ms torn crown '10"
+    },
+    {
+      "itemId": 527,
+      "itemName": "Bag of Candy Kisses",
+      "normalizedName": "bag of candy kisses"
+    },
+    {
+      "itemId": 528,
+      "itemName": "Bag of Tootsie Rolls",
+      "normalizedName": "bag of tootsie rolls"
+    },
+    {
+      "itemId": 529,
+      "itemName": "Bag of Chocolate Truffles",
+      "normalizedName": "bag of chocolate truffles"
+    },
+    {
+      "itemId": 530,
+      "itemName": "Can of Munster",
+      "normalizedName": "can of munster"
+    },
+    {
+      "itemId": 531,
+      "itemName": "Bottle of Pumpkin Brew",
+      "normalizedName": "bottle of pumpkin brew"
+    },
+    {
+      "itemId": 532,
+      "itemName": "Can of Red Cow",
+      "normalizedName": "can of red cow"
+    },
+    {
+      "itemId": 533,
+      "itemName": "Can of Taurine Elite",
+      "normalizedName": "can of taurine elite"
+    },
+    {
+      "itemId": 534,
+      "itemName": "Witch's Cauldron",
+      "normalizedName": "witch's cauldron"
+    },
+    {
+      "itemId": 535,
+      "itemName": "Electronic Pumpkin",
+      "normalizedName": "electronic pumpkin"
+    },
+    {
+      "itemId": 536,
+      "itemName": "Jack O Lantern Lamp",
+      "normalizedName": "jack o lantern lamp"
+    },
+    {
+      "itemId": 537,
+      "itemName": "Spooky Paper Weight",
+      "normalizedName": "spooky paper weight"
+    },
+    {
+      "itemId": 538,
+      "itemName": "Medieval Helmet",
+      "normalizedName": "medieval helmet"
+    },
+    {
+      "itemId": 539,
+      "itemName": "Blood Spattered Sickle",
+      "normalizedName": "blood spattered sickle"
+    },
+    {
+      "itemId": 540,
+      "itemName": "Cauldron",
+      "normalizedName": "cauldron"
+    },
+    {
+      "itemId": 541,
+      "itemName": "Bottle of Stinky Swamp Punch",
+      "normalizedName": "bottle of stinky swamp punch"
+    },
+    {
+      "itemId": 542,
+      "itemName": "Bottle of Wicked Witch",
+      "normalizedName": "bottle of wicked witch"
+    },
+    {
+      "itemId": 543,
+      "itemName": "Deputy Star",
+      "normalizedName": "deputy star"
+    },
+    {
+      "itemId": 544,
+      "itemName": "Wind Proof Lighter",
+      "normalizedName": "wind proof lighter"
+    },
+    {
+      "itemId": 545,
+      "itemName": "Dual TMPs",
+      "normalizedName": "dual tmps"
+    },
+    {
+      "itemId": 546,
+      "itemName": "Dual Bushmasters",
+      "normalizedName": "dual bushmasters"
+    },
+    {
+      "itemId": 547,
+      "itemName": "Dual MP5s",
+      "normalizedName": "dual mp5s"
+    },
+    {
+      "itemId": 548,
+      "itemName": "Dual P90s",
+      "normalizedName": "dual p90s"
+    },
+    {
+      "itemId": 549,
+      "itemName": "Dual Uzis",
+      "normalizedName": "dual uzis"
+    },
+    {
+      "itemId": 550,
+      "itemName": "Bottle of Kandy Kane",
+      "normalizedName": "bottle of kandy kane"
+    },
+    {
+      "itemId": 551,
+      "itemName": "Bottle of Minty Mayhem",
+      "normalizedName": "bottle of minty mayhem"
+    },
+    {
+      "itemId": 552,
+      "itemName": "Bottle of Mistletoe Madness",
+      "normalizedName": "bottle of mistletoe madness"
+    },
+    {
+      "itemId": 553,
+      "itemName": "Can of Santa Shooters",
+      "normalizedName": "can of santa shooters"
+    },
+    {
+      "itemId": 554,
+      "itemName": "Can of Rockstar Rudolph",
+      "normalizedName": "can of rockstar rudolph"
+    },
+    {
+      "itemId": 555,
+      "itemName": "Can of X-MASS",
+      "normalizedName": "can of x mass"
+    },
+    {
+      "itemId": 556,
+      "itemName": "Bag of Reindeer Droppings",
+      "normalizedName": "bag of reindeer droppings"
+    },
+    {
+      "itemId": 557,
+      "itemName": "Advent Calendar",
+      "normalizedName": "advent calendar"
+    },
+    {
+      "itemId": 558,
+      "itemName": "Santa's Snot",
+      "normalizedName": "santa's snot"
+    },
+    {
+      "itemId": 559,
+      "itemName": "Polar Bear Toy",
+      "normalizedName": "polar bear toy"
+    },
+    {
+      "itemId": 560,
+      "itemName": "Fruitcake",
+      "normalizedName": "fruitcake"
+    },
+    {
+      "itemId": 561,
+      "itemName": "Book of Carols",
+      "normalizedName": "book of carols"
+    },
+    {
+      "itemId": 562,
+      "itemName": "Sweater",
+      "normalizedName": "sweater"
+    },
+    {
+      "itemId": 563,
+      "itemName": "Gift Card",
+      "normalizedName": "gift card"
+    },
+    {
+      "itemId": 564,
+      "itemName": "Glasses",
+      "normalizedName": "glasses"
+    },
+    {
+      "itemId": 565,
+      "itemName": "High-Speed Drive",
+      "normalizedName": "high speed drive"
+    },
+    {
+      "itemId": 566,
+      "itemName": "Mountain Bike",
+      "normalizedName": "mountain bike"
+    },
+    {
+      "itemId": 567,
+      "itemName": "Cut-Throat Razor",
+      "normalizedName": "cut throat razor"
+    },
+    {
+      "itemId": 568,
+      "itemName": "Slim Crowbar",
+      "normalizedName": "slim crowbar"
+    },
+    {
+      "itemId": 569,
+      "itemName": "Balaclava",
+      "normalizedName": "balaclava"
+    },
+    {
+      "itemId": 570,
+      "itemName": "Advanced Driving Tactics Manual",
+      "normalizedName": "advanced driving tactics manual"
+    },
+    {
+      "itemId": 571,
+      "itemName": "Ergonomic Keyboard",
+      "normalizedName": "ergonomic keyboard"
+    },
+    {
+      "itemId": 572,
+      "itemName": "Tracking Device",
+      "normalizedName": "tracking device"
+    },
+    {
+      "itemId": 573,
+      "itemName": "Screwdriver",
+      "normalizedName": "screwdriver"
+    },
+    {
+      "itemId": 574,
+      "itemName": "Fanny Pack",
+      "normalizedName": "fanny pack"
+    },
+    {
+      "itemId": 575,
+      "itemName": "Tumble Dryer",
+      "normalizedName": "tumble dryer"
+    },
+    {
+      "itemId": 576,
+      "itemName": "Chloroform",
+      "normalizedName": "chloroform"
+    },
+    {
+      "itemId": 577,
+      "itemName": "Heavy Duty Padlock",
+      "normalizedName": "heavy duty padlock"
+    },
+    {
+      "itemId": 578,
+      "itemName": "Duct Tape",
+      "normalizedName": "duct tape"
+    },
+    {
+      "itemId": 579,
+      "itemName": "Wireless Dongle",
+      "normalizedName": "wireless dongle"
+    },
+    {
+      "itemId": 580,
+      "itemName": "Horse's Head",
+      "normalizedName": "horse's head"
+    },
+    {
+      "itemId": 581,
+      "itemName": "Book",
+      "normalizedName": "book"
+    },
+    {
+      "itemId": 582,
+      "itemName": "Tin Foil Hat",
+      "normalizedName": "tin foil hat"
+    },
+    {
+      "itemId": 583,
+      "itemName": "Brown Easter Egg",
+      "normalizedName": "brown easter egg"
+    },
+    {
+      "itemId": 584,
+      "itemName": "Orange Easter Egg",
+      "normalizedName": "orange easter egg"
+    },
+    {
+      "itemId": 585,
+      "itemName": "Pink Easter Egg",
+      "normalizedName": "pink easter egg"
+    },
+    {
+      "itemId": 586,
+      "itemName": "Jawbreaker",
+      "normalizedName": "jawbreaker"
+    },
+    {
+      "itemId": 587,
+      "itemName": "Bag of Sherbet",
+      "normalizedName": "bag of sherbet"
+    },
+    {
+      "itemId": 588,
+      "itemName": "Goodie Bag",
+      "normalizedName": "goodie bag"
+    },
+    {
+      "itemId": 589,
+      "itemName": "Undefined",
+      "normalizedName": "undefined"
+    },
+    {
+      "itemId": 590,
+      "itemName": "Undefined 2",
+      "normalizedName": "undefined 2"
+    },
+    {
+      "itemId": 591,
+      "itemName": "Undefined 3",
+      "normalizedName": "undefined 3"
+    },
+    {
+      "itemId": 592,
+      "itemName": "Undefined 4",
+      "normalizedName": "undefined 4"
+    },
+    {
+      "itemId": 593,
+      "itemName": "Mr Torn Crown '11",
+      "normalizedName": "mr torn crown '11"
+    },
+    {
+      "itemId": 594,
+      "itemName": "Ms Torn Crown '11",
+      "normalizedName": "ms torn crown '11"
+    },
+    {
+      "itemId": 595,
+      "itemName": "Pile of Vomit",
+      "normalizedName": "pile of vomit"
+    },
+    {
+      "itemId": 596,
+      "itemName": "Rusty Dog Tag",
+      "normalizedName": "rusty dog tag"
+    },
+    {
+      "itemId": 597,
+      "itemName": "Gold Nugget",
+      "normalizedName": "gold nugget"
+    },
+    {
+      "itemId": 598,
+      "itemName": "Witch's Hat",
+      "normalizedName": "witch's hat"
+    },
+    {
+      "itemId": 599,
+      "itemName": "Golden Broomstick",
+      "normalizedName": "golden broomstick"
+    },
+    {
+      "itemId": 600,
+      "itemName": "Devil's Pitchfork",
+      "normalizedName": "devil's pitchfork"
+    },
+    {
+      "itemId": 601,
+      "itemName": "Christmas Lights",
+      "normalizedName": "christmas lights"
+    },
+    {
+      "itemId": 602,
+      "itemName": "Gingerbread Man",
+      "normalizedName": "gingerbread man"
+    },
+    {
+      "itemId": 603,
+      "itemName": "Golden Wreath",
+      "normalizedName": "golden wreath"
+    },
+    {
+      "itemId": 604,
+      "itemName": "Pair of Ice Skates",
+      "normalizedName": "pair of ice skates"
+    },
+    {
+      "itemId": 605,
+      "itemName": "Diamond Icicle",
+      "normalizedName": "diamond icicle"
+    },
+    {
+      "itemId": 606,
+      "itemName": "Santa Boots",
+      "normalizedName": "santa boots"
+    },
+    {
+      "itemId": 607,
+      "itemName": "Santa Gloves",
+      "normalizedName": "santa gloves"
+    },
+    {
+      "itemId": 608,
+      "itemName": "Santa Hat",
+      "normalizedName": "santa hat"
+    },
+    {
+      "itemId": 609,
+      "itemName": "Santa Jacket",
+      "normalizedName": "santa jacket"
+    },
+    {
+      "itemId": 610,
+      "itemName": "Santa Trousers",
+      "normalizedName": "santa trousers"
+    },
+    {
+      "itemId": 611,
+      "itemName": "Snowball",
+      "normalizedName": "snowball"
+    },
+    {
+      "itemId": 612,
+      "itemName": "Tavor TAR-21",
+      "normalizedName": "tavor tar 21"
+    },
+    {
+      "itemId": 613,
+      "itemName": "Harpoon",
+      "normalizedName": "harpoon"
+    },
+    {
+      "itemId": 614,
+      "itemName": "Diamond Bladed Knife",
+      "normalizedName": "diamond bladed knife"
+    },
+    {
+      "itemId": 615,
+      "itemName": "Naval Cutlass",
+      "normalizedName": "naval cutlass"
+    },
+    {
+      "itemId": 616,
+      "itemName": "Trout",
+      "normalizedName": "trout"
+    },
+    {
+      "itemId": 617,
+      "itemName": "Banana Orchid",
+      "normalizedName": "banana orchid"
+    },
+    {
+      "itemId": 618,
+      "itemName": "Stingray Plushie",
+      "normalizedName": "stingray plushie"
+    },
+    {
+      "itemId": 619,
+      "itemName": "Steel Drum",
+      "normalizedName": "steel drum"
+    },
+    {
+      "itemId": 620,
+      "itemName": "Nodding Turtle",
+      "normalizedName": "nodding turtle"
+    },
+    {
+      "itemId": 621,
+      "itemName": "Snorkel",
+      "normalizedName": "snorkel"
+    },
+    {
+      "itemId": 622,
+      "itemName": "Flippers",
+      "normalizedName": "flippers"
+    },
+    {
+      "itemId": 623,
+      "itemName": "Speedo",
+      "normalizedName": "speedo"
+    },
+    {
+      "itemId": 624,
+      "itemName": "Bikini",
+      "normalizedName": "bikini"
+    },
+    {
+      "itemId": 625,
+      "itemName": "Wetsuit",
+      "normalizedName": "wetsuit"
+    },
+    {
+      "itemId": 626,
+      "itemName": "Diving Gloves",
+      "normalizedName": "diving gloves"
+    },
+    {
+      "itemId": 627,
+      "itemName": "Dog Poop",
+      "normalizedName": "dog poop"
+    },
+    {
+      "itemId": 628,
+      "itemName": "Stink Bombs",
+      "normalizedName": "stink bombs"
+    },
+    {
+      "itemId": 629,
+      "itemName": "Toilet Paper",
+      "normalizedName": "toilet paper"
+    },
+    {
+      "itemId": 630,
+      "itemName": "Mr Torn Crown '12",
+      "normalizedName": "mr torn crown '12"
+    },
+    {
+      "itemId": 631,
+      "itemName": "Ms Torn Crown '12",
+      "normalizedName": "ms torn crown '12"
+    },
+    {
+      "itemId": 632,
+      "itemName": "Petrified Humerus",
+      "normalizedName": "petrified humerus"
+    },
+    {
+      "itemId": 633,
+      "itemName": "Latex Gloves",
+      "normalizedName": "latex gloves"
+    },
+    {
+      "itemId": 634,
+      "itemName": "Bag of Bloody Eyeballs",
+      "normalizedName": "bag of bloody eyeballs"
+    },
+    {
+      "itemId": 635,
+      "itemName": "Straitjacket",
+      "normalizedName": "straitjacket"
+    },
+    {
+      "itemId": 636,
+      "itemName": "Cinnamon Ornament",
+      "normalizedName": "cinnamon ornament"
+    },
+    {
+      "itemId": 637,
+      "itemName": "Christmas Express",
+      "normalizedName": "christmas express"
+    },
+    {
+      "itemId": 638,
+      "itemName": "Bottle of Christmas Cocktail",
+      "normalizedName": "bottle of christmas cocktail"
+    },
+    {
+      "itemId": 639,
+      "itemName": "Golden Candy Cane",
+      "normalizedName": "golden candy cane"
+    },
+    {
+      "itemId": 640,
+      "itemName": "Kevlar Gloves",
+      "normalizedName": "kevlar gloves"
+    },
+    {
+      "itemId": 641,
+      "itemName": "WWII Helmet",
+      "normalizedName": "wwii helmet"
+    },
+    {
+      "itemId": 642,
+      "itemName": "Motorcycle Helmet",
+      "normalizedName": "motorcycle helmet"
+    },
+    {
+      "itemId": 643,
+      "itemName": "Construction Helmet",
+      "normalizedName": "construction helmet"
+    },
+    {
+      "itemId": 644,
+      "itemName": "Welding Helmet",
+      "normalizedName": "welding helmet"
+    },
+    {
+      "itemId": 645,
+      "itemName": "Safety Boots",
+      "normalizedName": "safety boots"
+    },
+    {
+      "itemId": 646,
+      "itemName": "Hiking Boots",
+      "normalizedName": "hiking boots"
+    },
+    {
+      "itemId": 647,
+      "itemName": "Leather Helmet",
+      "normalizedName": "leather helmet"
+    },
+    {
+      "itemId": 648,
+      "itemName": "Leather Pants",
+      "normalizedName": "leather pants"
+    },
+    {
+      "itemId": 649,
+      "itemName": "Leather Boots",
+      "normalizedName": "leather boots"
+    },
+    {
+      "itemId": 650,
+      "itemName": "Leather Gloves",
+      "normalizedName": "leather gloves"
+    },
+    {
+      "itemId": 651,
+      "itemName": "Combat Helmet",
+      "normalizedName": "combat helmet"
+    },
+    {
+      "itemId": 652,
+      "itemName": "Combat Pants",
+      "normalizedName": "combat pants"
+    },
+    {
+      "itemId": 653,
+      "itemName": "Combat Boots",
+      "normalizedName": "combat boots"
+    },
+    {
+      "itemId": 654,
+      "itemName": "Combat Gloves",
+      "normalizedName": "combat gloves"
+    },
+    {
+      "itemId": 655,
+      "itemName": "Riot Helmet",
+      "normalizedName": "riot helmet"
+    },
+    {
+      "itemId": 656,
+      "itemName": "Riot Body",
+      "normalizedName": "riot body"
+    },
+    {
+      "itemId": 657,
+      "itemName": "Riot Pants",
+      "normalizedName": "riot pants"
+    },
+    {
+      "itemId": 658,
+      "itemName": "Riot Boots",
+      "normalizedName": "riot boots"
+    },
+    {
+      "itemId": 659,
+      "itemName": "Riot Gloves",
+      "normalizedName": "riot gloves"
+    },
+    {
+      "itemId": 660,
+      "itemName": "Dune Helmet",
+      "normalizedName": "dune helmet"
+    },
+    {
+      "itemId": 661,
+      "itemName": "Dune Vest",
+      "normalizedName": "dune vest"
+    },
+    {
+      "itemId": 662,
+      "itemName": "Dune Pants",
+      "normalizedName": "dune pants"
+    },
+    {
+      "itemId": 663,
+      "itemName": "Dune Boots",
+      "normalizedName": "dune boots"
+    },
+    {
+      "itemId": 664,
+      "itemName": "Dune Gloves",
+      "normalizedName": "dune gloves"
+    },
+    {
+      "itemId": 665,
+      "itemName": "Assault Helmet",
+      "normalizedName": "assault helmet"
+    },
+    {
+      "itemId": 666,
+      "itemName": "Assault Body",
+      "normalizedName": "assault body"
+    },
+    {
+      "itemId": 667,
+      "itemName": "Assault Pants",
+      "normalizedName": "assault pants"
+    },
+    {
+      "itemId": 668,
+      "itemName": "Assault Boots",
+      "normalizedName": "assault boots"
+    },
+    {
+      "itemId": 669,
+      "itemName": "Assault Gloves",
+      "normalizedName": "assault gloves"
+    },
+    {
+      "itemId": 670,
+      "itemName": "Delta Gas Mask",
+      "normalizedName": "delta gas mask"
+    },
+    {
+      "itemId": 671,
+      "itemName": "Delta Body",
+      "normalizedName": "delta body"
+    },
+    {
+      "itemId": 672,
+      "itemName": "Delta Pants",
+      "normalizedName": "delta pants"
+    },
+    {
+      "itemId": 673,
+      "itemName": "Delta Boots",
+      "normalizedName": "delta boots"
+    },
+    {
+      "itemId": 674,
+      "itemName": "Delta Gloves",
+      "normalizedName": "delta gloves"
+    },
+    {
+      "itemId": 675,
+      "itemName": "Marauder Face Mask",
+      "normalizedName": "marauder face mask"
+    },
+    {
+      "itemId": 676,
+      "itemName": "Marauder Body",
+      "normalizedName": "marauder body"
+    },
+    {
+      "itemId": 677,
+      "itemName": "Marauder Pants",
+      "normalizedName": "marauder pants"
+    },
+    {
+      "itemId": 678,
+      "itemName": "Marauder Boots",
+      "normalizedName": "marauder boots"
+    },
+    {
+      "itemId": 679,
+      "itemName": "Marauder Gloves",
+      "normalizedName": "marauder gloves"
+    },
+    {
+      "itemId": 680,
+      "itemName": "EOD Helmet",
+      "normalizedName": "eod helmet"
+    },
+    {
+      "itemId": 681,
+      "itemName": "EOD Apron",
+      "normalizedName": "eod apron"
+    },
+    {
+      "itemId": 682,
+      "itemName": "EOD Pants",
+      "normalizedName": "eod pants"
+    },
+    {
+      "itemId": 683,
+      "itemName": "EOD Boots",
+      "normalizedName": "eod boots"
+    },
+    {
+      "itemId": 684,
+      "itemName": "EOD Gloves",
+      "normalizedName": "eod gloves"
+    },
+    {
+      "itemId": 685,
+      "itemName": "Torn Bible",
+      "normalizedName": "torn bible"
+    },
+    {
+      "itemId": 686,
+      "itemName": "Friendly Bot Guide",
+      "normalizedName": "friendly bot guide"
+    },
+    {
+      "itemId": 687,
+      "itemName": "Egotistical Bear",
+      "normalizedName": "egotistical bear"
+    },
+    {
+      "itemId": 688,
+      "itemName": "Brewery Key",
+      "normalizedName": "brewery key"
+    },
+    {
+      "itemId": 689,
+      "itemName": "Signed Jersey",
+      "normalizedName": "signed jersey"
+    },
+    {
+      "itemId": 690,
+      "itemName": "Mafia Kit",
+      "normalizedName": "mafia kit"
+    },
+    {
+      "itemId": 691,
+      "itemName": "Octopus Toy",
+      "normalizedName": "octopus toy"
+    },
+    {
+      "itemId": 692,
+      "itemName": "Bear Skin Rug",
+      "normalizedName": "bear skin rug"
+    },
+    {
+      "itemId": 693,
+      "itemName": "Tractor Toy",
+      "normalizedName": "tractor toy"
+    },
+    {
+      "itemId": 694,
+      "itemName": "Mr Torn Crown '13",
+      "normalizedName": "mr torn crown '13"
+    },
+    {
+      "itemId": 695,
+      "itemName": "Ms Torn Crown '13",
+      "normalizedName": "ms torn crown '13"
+    },
+    {
+      "itemId": 696,
+      "itemName": "Piece of Cake",
+      "normalizedName": "piece of cake"
+    },
+    {
+      "itemId": 697,
+      "itemName": "Rotten Eggs",
+      "normalizedName": "rotten eggs"
+    },
+    {
+      "itemId": 698,
+      "itemName": "Peg Leg",
+      "normalizedName": "peg leg"
+    },
+    {
+      "itemId": 699,
+      "itemName": "Antidote",
+      "normalizedName": "antidote"
+    },
+    {
+      "itemId": 700,
+      "itemName": "Christmas Angel",
+      "normalizedName": "christmas angel"
+    },
+    {
+      "itemId": 701,
+      "itemName": "Eggnog",
+      "normalizedName": "eggnog"
+    },
+    {
+      "itemId": 702,
+      "itemName": "Sprig of Holly",
+      "normalizedName": "sprig of holly"
+    },
+    {
+      "itemId": 703,
+      "itemName": "Festive Socks",
+      "normalizedName": "festive socks"
+    },
+    {
+      "itemId": 704,
+      "itemName": "Respo Hoodie",
+      "normalizedName": "respo hoodie"
+    },
+    {
+      "itemId": 705,
+      "itemName": "Staff Haxx Button",
+      "normalizedName": "staff haxx button"
+    },
+    {
+      "itemId": 706,
+      "itemName": "Birthday Cake '14",
+      "normalizedName": "birthday cake '14"
+    },
+    {
+      "itemId": 707,
+      "itemName": "Lump of Coal",
+      "normalizedName": "lump of coal"
+    },
+    {
+      "itemId": 708,
+      "itemName": "Gold Ribbon",
+      "normalizedName": "gold ribbon"
+    },
+    {
+      "itemId": 709,
+      "itemName": "Silver Ribbon",
+      "normalizedName": "silver ribbon"
+    },
+    {
+      "itemId": 710,
+      "itemName": "Bronze Ribbon",
+      "normalizedName": "bronze ribbon"
+    },
+    {
+      "itemId": 711,
+      "itemName": "Coin : Factions",
+      "normalizedName": "coin : factions"
+    },
+    {
+      "itemId": 712,
+      "itemName": "Coin : Casino",
+      "normalizedName": "coin : casino"
+    },
+    {
+      "itemId": 713,
+      "itemName": "Coin : Education",
+      "normalizedName": "coin : education"
+    },
+    {
+      "itemId": 714,
+      "itemName": "Coin : Hospital",
+      "normalizedName": "coin : hospital"
+    },
+    {
+      "itemId": 715,
+      "itemName": "Coin : Jail",
+      "normalizedName": "coin : jail"
+    },
+    {
+      "itemId": 716,
+      "itemName": "Coin : Travel Agency",
+      "normalizedName": "coin : travel agency"
+    },
+    {
+      "itemId": 717,
+      "itemName": "Coin : Companies",
+      "normalizedName": "coin : companies"
+    },
+    {
+      "itemId": 718,
+      "itemName": "Coin : Stock Exchange",
+      "normalizedName": "coin : stock exchange"
+    },
+    {
+      "itemId": 719,
+      "itemName": "Coin : Church",
+      "normalizedName": "coin : church"
+    },
+    {
+      "itemId": 720,
+      "itemName": "Coin : Auction House",
+      "normalizedName": "coin : auction house"
+    },
+    {
+      "itemId": 721,
+      "itemName": "Coin : Race Track",
+      "normalizedName": "coin : race track"
+    },
+    {
+      "itemId": 722,
+      "itemName": "Coin : Museum",
+      "normalizedName": "coin : museum"
+    },
+    {
+      "itemId": 723,
+      "itemName": "Coin : Drugs",
+      "normalizedName": "coin : drugs"
+    },
+    {
+      "itemId": 724,
+      "itemName": "Coin : Dump",
+      "normalizedName": "coin : dump"
+    },
+    {
+      "itemId": 725,
+      "itemName": "Coin : Estate Agents",
+      "normalizedName": "coin : estate agents"
+    },
+    {
+      "itemId": 726,
+      "itemName": "Scrooge's Top Hat",
+      "normalizedName": "scrooge's top hat"
+    },
+    {
+      "itemId": 727,
+      "itemName": "Scrooge's Topcoat",
+      "normalizedName": "scrooge's topcoat"
+    },
+    {
+      "itemId": 728,
+      "itemName": "Scrooge's Trousers",
+      "normalizedName": "scrooge's trousers"
+    },
+    {
+      "itemId": 729,
+      "itemName": "Scrooge's Boots",
+      "normalizedName": "scrooge's boots"
+    },
+    {
+      "itemId": 730,
+      "itemName": "Scrooge's Gloves",
+      "normalizedName": "scrooge's gloves"
+    },
+    {
+      "itemId": 731,
+      "itemName": "Empty Blood Bag",
+      "normalizedName": "empty blood bag"
+    },
+    {
+      "itemId": 732,
+      "itemName": "Blood Bag : A+",
+      "normalizedName": "blood bag : a+"
+    },
+    {
+      "itemId": 733,
+      "itemName": "Blood Bag : A-",
+      "normalizedName": "blood bag : a "
+    },
+    {
+      "itemId": 734,
+      "itemName": "Blood Bag : B+",
+      "normalizedName": "blood bag : b+"
+    },
+    {
+      "itemId": 735,
+      "itemName": "Blood Bag : B-",
+      "normalizedName": "blood bag : b "
+    },
+    {
+      "itemId": 736,
+      "itemName": "Blood Bag : AB+",
+      "normalizedName": "blood bag : ab+"
+    },
+    {
+      "itemId": 737,
+      "itemName": "Blood Bag : AB-",
+      "normalizedName": "blood bag : ab "
+    },
+    {
+      "itemId": 738,
+      "itemName": "Blood Bag : O+",
+      "normalizedName": "blood bag : o+"
+    },
+    {
+      "itemId": 739,
+      "itemName": "Blood Bag : O-",
+      "normalizedName": "blood bag : o "
+    },
+    {
+      "itemId": 740,
+      "itemName": "Mr Torn Crown",
+      "normalizedName": "mr torn crown"
+    },
+    {
+      "itemId": 741,
+      "itemName": "Ms Torn Crown",
+      "normalizedName": "ms torn crown"
+    },
+    {
+      "itemId": 742,
+      "itemName": "Molotov Cocktail",
+      "normalizedName": "molotov cocktail"
+    },
+    {
+      "itemId": 743,
+      "itemName": "Christmas Sweater '15",
+      "normalizedName": "christmas sweater '15"
+    },
+    {
+      "itemId": 788,
+      "itemName": "Certificate of Awesome",
+      "normalizedName": "certificate of awesome"
+    },
+    {
+      "itemId": 789,
+      "itemName": "Certificate of Lame",
+      "normalizedName": "certificate of lame"
+    },
+    {
+      "itemId": 790,
+      "itemName": "Plastic Sword",
+      "normalizedName": "plastic sword"
+    },
+    {
+      "itemId": 791,
+      "itemName": "Mediocre T-Shirt",
+      "normalizedName": "mediocre t shirt"
+    },
+    {
+      "itemId": 806,
+      "itemName": "Old Lady Mask",
+      "normalizedName": "old lady mask"
+    },
+    {
+      "itemId": 807,
+      "itemName": "Exotic Gentleman Mask",
+      "normalizedName": "exotic gentleman mask"
+    },
+    {
+      "itemId": 808,
+      "itemName": "Ginger Kid Mask",
+      "normalizedName": "ginger kid mask"
+    },
+    {
+      "itemId": 809,
+      "itemName": "Young Lady Mask",
+      "normalizedName": "young lady mask"
+    },
+    {
+      "itemId": 810,
+      "itemName": "Moustache Man Mask",
+      "normalizedName": "moustache man mask"
+    },
+    {
+      "itemId": 811,
+      "itemName": "Scarred Man Mask",
+      "normalizedName": "scarred man mask"
+    },
+    {
+      "itemId": 812,
+      "itemName": "Psycho Clown Mask",
+      "normalizedName": "psycho clown mask"
+    },
+    {
+      "itemId": 813,
+      "itemName": "Nun Mask",
+      "normalizedName": "nun mask"
+    },
+    {
+      "itemId": 814,
+      "itemName": "Tyrosine",
+      "normalizedName": "tyrosine"
+    },
+    {
+      "itemId": 815,
+      "itemName": "Keg of Beer",
+      "normalizedName": "keg of beer"
+    },
+    {
+      "itemId": 816,
+      "itemName": "Glass of Beer",
+      "normalizedName": "glass of beer"
+    },
+    {
+      "itemId": 817,
+      "itemName": "Six Pack of Alcohol",
+      "normalizedName": "six pack of alcohol"
+    },
+    {
+      "itemId": 818,
+      "itemName": "Six Pack of Energy Drink",
+      "normalizedName": "six pack of energy drink"
+    },
+    {
+      "itemId": 819,
+      "itemName": "Rosary Beads",
+      "normalizedName": "rosary beads"
+    },
+    {
+      "itemId": 827,
+      "itemName": "Perceptron : Calibrator",
+      "normalizedName": "perceptron : calibrator"
+    },
+    {
+      "itemId": 828,
+      "itemName": "Donald Trump Mask '16",
+      "normalizedName": "donald trump mask '16"
+    },
+    {
+      "itemId": 829,
+      "itemName": "Yellow Snowman '16",
+      "normalizedName": "yellow snowman '16"
+    },
+    {
+      "itemId": 830,
+      "itemName": "Nock Gun",
+      "normalizedName": "nock gun"
+    },
+    {
+      "itemId": 831,
+      "itemName": "Beretta Pico",
+      "normalizedName": "beretta pico"
+    },
+    {
+      "itemId": 832,
+      "itemName": "Riding Crop",
+      "normalizedName": "riding crop"
+    },
+    {
+      "itemId": 833,
+      "itemName": "Sand",
+      "normalizedName": "sand"
+    },
+    {
+      "itemId": 834,
+      "itemName": "Sweatpants",
+      "normalizedName": "sweatpants"
+    },
+    {
+      "itemId": 835,
+      "itemName": "String Vest",
+      "normalizedName": "string vest"
+    },
+    {
+      "itemId": 836,
+      "itemName": "Black Oxfords",
+      "normalizedName": "black oxfords"
+    },
+    {
+      "itemId": 837,
+      "itemName": "Rheinmetall MG 3",
+      "normalizedName": "rheinmetall mg 3"
+    },
+    {
+      "itemId": 838,
+      "itemName": "Homemade Pocket Shotgun",
+      "normalizedName": "homemade pocket shotgun"
+    },
+    {
+      "itemId": 839,
+      "itemName": "Madball",
+      "normalizedName": "madball"
+    },
+    {
+      "itemId": 840,
+      "itemName": "Nail Bomb",
+      "normalizedName": "nail bomb"
+    },
+    {
+      "itemId": 841,
+      "itemName": "Classic Fedora",
+      "normalizedName": "classic fedora"
+    },
+    {
+      "itemId": 842,
+      "itemName": "Pinstripe Suit Trousers",
+      "normalizedName": "pinstripe suit trousers"
+    },
+    {
+      "itemId": 843,
+      "itemName": "Duster",
+      "normalizedName": "duster"
+    },
+    {
+      "itemId": 844,
+      "itemName": "Tranquilizer Gun",
+      "normalizedName": "tranquilizer gun"
+    },
+    {
+      "itemId": 845,
+      "itemName": "Bolt Gun",
+      "normalizedName": "bolt gun"
+    },
+    {
+      "itemId": 846,
+      "itemName": "Scalpel",
+      "normalizedName": "scalpel"
+    },
+    {
+      "itemId": 847,
+      "itemName": "Nerve Gas",
+      "normalizedName": "nerve gas"
+    },
+    {
+      "itemId": 848,
+      "itemName": "Kevlar Lab Coat",
+      "normalizedName": "kevlar lab coat"
+    },
+    {
+      "itemId": 849,
+      "itemName": "Loupes",
+      "normalizedName": "loupes"
+    },
+    {
+      "itemId": 850,
+      "itemName": "Sledgehammer",
+      "normalizedName": "sledgehammer"
+    },
+    {
+      "itemId": 851,
+      "itemName": "Wifebeater",
+      "normalizedName": "wifebeater"
+    },
+    {
+      "itemId": 852,
+      "itemName": "Metal Detector",
+      "normalizedName": "metal detector"
+    },
+    {
+      "itemId": 864,
+      "itemName": "Salt Shaker",
+      "normalizedName": "salt shaker"
+    },
+    {
+      "itemId": 865,
+      "itemName": "Poison Mistletoe",
+      "normalizedName": "poison mistletoe"
+    },
+    {
+      "itemId": 866,
+      "itemName": "Santa's List '17",
+      "normalizedName": "santa's list '17"
+    },
+    {
+      "itemId": 867,
+      "itemName": "Soapbox",
+      "normalizedName": "soapbox"
+    },
+    {
+      "itemId": 868,
+      "itemName": "Turkey Baster",
+      "normalizedName": "turkey baster"
+    },
+    {
+      "itemId": 869,
+      "itemName": "Elon Musk Mask '17",
+      "normalizedName": "elon musk mask '17"
+    },
+    {
+      "itemId": 870,
+      "itemName": "Love Juice",
+      "normalizedName": "love juice"
+    },
+    {
+      "itemId": 871,
+      "itemName": "Bug Swatter",
+      "normalizedName": "bug swatter"
+    },
+    {
+      "itemId": 873,
+      "itemName": "Bottle of Green Stout",
+      "normalizedName": "bottle of green stout"
+    },
+    {
+      "itemId": 874,
+      "itemName": "Prototype",
+      "normalizedName": "prototype"
+    },
+    {
+      "itemId": 875,
+      "itemName": "Rotten Apple",
+      "normalizedName": "rotten apple"
+    },
+    {
+      "itemId": 876,
+      "itemName": "Festering Chicken",
+      "normalizedName": "festering chicken"
+    },
+    {
+      "itemId": 877,
+      "itemName": "Mouldy Pizza",
+      "normalizedName": "mouldy pizza"
+    },
+    {
+      "itemId": 878,
+      "itemName": "Smelly Cheese",
+      "normalizedName": "smelly cheese"
+    },
+    {
+      "itemId": 879,
+      "itemName": "Sour Milk",
+      "normalizedName": "sour milk"
+    },
+    {
+      "itemId": 880,
+      "itemName": "Stale Bread",
+      "normalizedName": "stale bread"
+    },
+    {
+      "itemId": 881,
+      "itemName": "Spoiled Fish",
+      "normalizedName": "spoiled fish"
+    },
+    {
+      "itemId": 882,
+      "itemName": "Insurance Policy",
+      "normalizedName": "insurance policy"
+    },
+    {
+      "itemId": 883,
+      "itemName": "Bank Statement",
+      "normalizedName": "bank statement"
+    },
+    {
+      "itemId": 884,
+      "itemName": "Car Battery",
+      "normalizedName": "car battery"
+    },
+    {
+      "itemId": 885,
+      "itemName": "Scrap Metal",
+      "normalizedName": "scrap metal"
+    },
+    {
+      "itemId": 886,
+      "itemName": "Torn City Times",
+      "normalizedName": "torn city times"
+    },
+    {
+      "itemId": 887,
+      "itemName": "Karma! Magazine",
+      "normalizedName": "karma! magazine"
+    },
+    {
+      "itemId": 888,
+      "itemName": "Umbrella",
+      "normalizedName": "umbrella"
+    },
+    {
+      "itemId": 889,
+      "itemName": "Travel Mug",
+      "normalizedName": "travel mug"
+    },
+    {
+      "itemId": 890,
+      "itemName": "Headphones",
+      "normalizedName": "headphones"
+    },
+    {
+      "itemId": 891,
+      "itemName": "Undefined",
+      "normalizedName": "undefined"
+    },
+    {
+      "itemId": 892,
+      "itemName": "Mix CD",
+      "normalizedName": "mix cd"
+    },
+    {
+      "itemId": 893,
+      "itemName": "Lost and Found Office Key",
+      "normalizedName": "lost and found office key"
+    },
+    {
+      "itemId": 894,
+      "itemName": "Cosmetics Case",
+      "normalizedName": "cosmetics case"
+    },
+    {
+      "itemId": 895,
+      "itemName": "Phone Card",
+      "normalizedName": "phone card"
+    },
+    {
+      "itemId": 896,
+      "itemName": "Subway Season Ticket",
+      "normalizedName": "subway season ticket"
+    },
+    {
+      "itemId": 897,
+      "itemName": "Bottle Cap",
+      "normalizedName": "bottle cap"
+    },
+    {
+      "itemId": 898,
+      "itemName": "Silver Coin",
+      "normalizedName": "silver coin"
+    },
+    {
+      "itemId": 899,
+      "itemName": "Silver Bead",
+      "normalizedName": "silver bead"
+    },
+    {
+      "itemId": 900,
+      "itemName": "Lucky Quarter",
+      "normalizedName": "lucky quarter"
+    },
+    {
+      "itemId": 901,
+      "itemName": "Daffodil",
+      "normalizedName": "daffodil"
+    },
+    {
+      "itemId": 902,
+      "itemName": "Bunch of Carnations",
+      "normalizedName": "bunch of carnations"
+    },
+    {
+      "itemId": 903,
+      "itemName": "White Lily",
+      "normalizedName": "white lily"
+    },
+    {
+      "itemId": 904,
+      "itemName": "Funeral Wreath",
+      "normalizedName": "funeral wreath"
+    },
+    {
+      "itemId": 905,
+      "itemName": "Car Keys",
+      "normalizedName": "car keys"
+    },
+    {
+      "itemId": 906,
+      "itemName": "Handkerchief",
+      "normalizedName": "handkerchief"
+    },
+    {
+      "itemId": 907,
+      "itemName": "Candle",
+      "normalizedName": "candle"
+    },
+    {
+      "itemId": 908,
+      "itemName": "Paper Bag",
+      "normalizedName": "paper bag"
+    },
+    {
+      "itemId": 909,
+      "itemName": "Tin Can",
+      "normalizedName": "tin can"
+    },
+    {
+      "itemId": 910,
+      "itemName": "Betting Slip",
+      "normalizedName": "betting slip"
+    },
+    {
+      "itemId": 911,
+      "itemName": "Fidget Spinner",
+      "normalizedName": "fidget spinner"
+    },
+    {
+      "itemId": 912,
+      "itemName": "Majestic Moose",
+      "normalizedName": "majestic moose"
+    },
+    {
+      "itemId": 913,
+      "itemName": "Lego Wonder Woman",
+      "normalizedName": "lego wonder woman"
+    },
+    {
+      "itemId": 914,
+      "itemName": "CR7 Doll",
+      "normalizedName": "cr7 doll"
+    },
+    {
+      "itemId": 915,
+      "itemName": "Stretch Armstrong Doll",
+      "normalizedName": "stretch armstrong doll"
+    },
+    {
+      "itemId": 916,
+      "itemName": "Beef Femur",
+      "normalizedName": "beef femur"
+    },
+    {
+      "itemId": 917,
+      "itemName": "Snake's Fang",
+      "normalizedName": "snake's fang"
+    },
+    {
+      "itemId": 918,
+      "itemName": "Icey Igloo",
+      "normalizedName": "icey igloo"
+    },
+    {
+      "itemId": 919,
+      "itemName": "Federal Jail Key",
+      "normalizedName": "federal jail key"
+    },
+    {
+      "itemId": 920,
+      "itemName": "Halloween Basket : Spooky",
+      "normalizedName": "halloween basket : spooky"
+    },
+    {
+      "itemId": 921,
+      "itemName": "Michael Myers Mask '18",
+      "normalizedName": "michael myers mask '18"
+    },
+    {
+      "itemId": 922,
+      "itemName": "Toast Jesus '18",
+      "normalizedName": "toast jesus '18"
+    },
+    {
+      "itemId": 923,
+      "itemName": "Cheesus '18",
+      "normalizedName": "cheesus '18"
+    },
+    {
+      "itemId": 924,
+      "itemName": "Bottle of Christmas Spirit",
+      "normalizedName": "bottle of christmas spirit"
+    },
+    {
+      "itemId": 925,
+      "itemName": "Scammer in the Slammer '18",
+      "normalizedName": "scammer in the slammer '18"
+    },
+    {
+      "itemId": 926,
+      "itemName": "Gronch Mask '18",
+      "normalizedName": "gronch mask '18"
+    },
+    {
+      "itemId": 927,
+      "itemName": "Baseball Cap",
+      "normalizedName": "baseball cap"
+    },
+    {
+      "itemId": 928,
+      "itemName": "Bermudas",
+      "normalizedName": "bermudas"
+    },
+    {
+      "itemId": 929,
+      "itemName": "Blouse",
+      "normalizedName": "blouse"
+    },
+    {
+      "itemId": 930,
+      "itemName": "Boob Tube",
+      "normalizedName": "boob tube"
+    },
+    {
+      "itemId": 931,
+      "itemName": "Bush Hat",
+      "normalizedName": "bush hat"
+    },
+    {
+      "itemId": 932,
+      "itemName": "Camisole",
+      "normalizedName": "camisole"
+    },
+    {
+      "itemId": 933,
+      "itemName": "Capri Pants",
+      "normalizedName": "capri pants"
+    },
+    {
+      "itemId": 934,
+      "itemName": "Cardigan",
+      "normalizedName": "cardigan"
+    },
+    {
+      "itemId": 935,
+      "itemName": "Cork Hat",
+      "normalizedName": "cork hat"
+    },
+    {
+      "itemId": 936,
+      "itemName": "Crop Top",
+      "normalizedName": "crop top"
+    },
+    {
+      "itemId": 937,
+      "itemName": "Fisherman Hat",
+      "normalizedName": "fisherman hat"
+    },
+    {
+      "itemId": 938,
+      "itemName": "Gym Shorts",
+      "normalizedName": "gym shorts"
+    },
+    {
+      "itemId": 939,
+      "itemName": "Halterneck",
+      "normalizedName": "halterneck"
+    },
+    {
+      "itemId": 940,
+      "itemName": "Raincoat",
+      "normalizedName": "raincoat"
+    },
+    {
+      "itemId": 941,
+      "itemName": "Pantyhose",
+      "normalizedName": "pantyhose"
+    },
+    {
+      "itemId": 942,
+      "itemName": "Pencil Skirt",
+      "normalizedName": "pencil skirt"
+    },
+    {
+      "itemId": 943,
+      "itemName": "Peplum Top",
+      "normalizedName": "peplum top"
+    },
+    {
+      "itemId": 944,
+      "itemName": "Polo Shirt",
+      "normalizedName": "polo shirt"
+    },
+    {
+      "itemId": 945,
+      "itemName": "Poncho",
+      "normalizedName": "poncho"
+    },
+    {
+      "itemId": 946,
+      "itemName": "Puffer Vest",
+      "normalizedName": "puffer vest"
+    },
+    {
+      "itemId": 947,
+      "itemName": "Mackintosh",
+      "normalizedName": "mackintosh"
+    },
+    {
+      "itemId": 948,
+      "itemName": "Shorts",
+      "normalizedName": "shorts"
+    },
+    {
+      "itemId": 949,
+      "itemName": "Skirt",
+      "normalizedName": "skirt"
+    },
+    {
+      "itemId": 950,
+      "itemName": "Travel Socks",
+      "normalizedName": "travel socks"
+    },
+    {
+      "itemId": 951,
+      "itemName": "Turtleneck",
+      "normalizedName": "turtleneck"
+    },
+    {
+      "itemId": 952,
+      "itemName": "Yoga Pants",
+      "normalizedName": "yoga pants"
+    },
+    {
+      "itemId": 953,
+      "itemName": "Bronze Racing Trophy",
+      "normalizedName": "bronze racing trophy"
+    },
+    {
+      "itemId": 954,
+      "itemName": "Silver Racing Trophy",
+      "normalizedName": "silver racing trophy"
+    },
+    {
+      "itemId": 955,
+      "itemName": "Gold Racing Trophy",
+      "normalizedName": "gold racing trophy"
+    },
+    {
+      "itemId": 956,
+      "itemName": "Pack of Blank CDs : 250",
+      "normalizedName": "pack of blank cds : 250"
+    },
+    {
+      "itemId": 957,
+      "itemName": "Pack of Blank CDs : 50",
+      "normalizedName": "pack of blank cds : 50"
+    },
+    {
+      "itemId": 958,
+      "itemName": "Chest Harness",
+      "normalizedName": "chest harness"
+    },
+    {
+      "itemId": 959,
+      "itemName": "Choker",
+      "normalizedName": "choker"
+    },
+    {
+      "itemId": 960,
+      "itemName": "Fishnet Stockings",
+      "normalizedName": "fishnet stockings"
+    },
+    {
+      "itemId": 961,
+      "itemName": "Knee-high Boots",
+      "normalizedName": "knee high boots"
+    },
+    {
+      "itemId": 962,
+      "itemName": "Lingerie",
+      "normalizedName": "lingerie"
+    },
+    {
+      "itemId": 963,
+      "itemName": "Mankini",
+      "normalizedName": "mankini"
+    },
+    {
+      "itemId": 964,
+      "itemName": "Mini Skirt",
+      "normalizedName": "mini skirt"
+    },
+    {
+      "itemId": 965,
+      "itemName": "Nipple Tassels",
+      "normalizedName": "nipple tassels"
+    },
+    {
+      "itemId": 966,
+      "itemName": "Bowler Hat",
+      "normalizedName": "bowler hat"
+    },
+    {
+      "itemId": 967,
+      "itemName": "Fitted Shirt",
+      "normalizedName": "fitted shirt"
+    },
+    {
+      "itemId": 968,
+      "itemName": "Bow Tie",
+      "normalizedName": "bow tie"
+    },
+    {
+      "itemId": 969,
+      "itemName": "Neck Tie",
+      "normalizedName": "neck tie"
+    },
+    {
+      "itemId": 970,
+      "itemName": "Waistcoat",
+      "normalizedName": "waistcoat"
+    },
+    {
+      "itemId": 971,
+      "itemName": "Blazer",
+      "normalizedName": "blazer"
+    },
+    {
+      "itemId": 972,
+      "itemName": "Suit Trousers",
+      "normalizedName": "suit trousers"
+    },
+    {
+      "itemId": 973,
+      "itemName": "Derby Shoes",
+      "normalizedName": "derby shoes"
+    },
+    {
+      "itemId": 974,
+      "itemName": "Smoking Jacket",
+      "normalizedName": "smoking jacket"
+    },
+    {
+      "itemId": 975,
+      "itemName": "Monocle",
+      "normalizedName": "monocle"
+    },
+    {
+      "itemId": 976,
+      "itemName": "Bronze Microphone",
+      "normalizedName": "bronze microphone"
+    },
+    {
+      "itemId": 977,
+      "itemName": "Silver Microphone",
+      "normalizedName": "silver microphone"
+    },
+    {
+      "itemId": 978,
+      "itemName": "Gold Microphone",
+      "normalizedName": "gold microphone"
+    },
+    {
+      "itemId": 979,
+      "itemName": "Paint Mask",
+      "normalizedName": "paint mask"
+    },
+    {
+      "itemId": 980,
+      "itemName": "Ladder",
+      "normalizedName": "ladder"
+    },
+    {
+      "itemId": 981,
+      "itemName": "Wire Cutters",
+      "normalizedName": "wire cutters"
+    },
+    {
+      "itemId": 982,
+      "itemName": "Ripped Jeans",
+      "normalizedName": "ripped jeans"
+    },
+    {
+      "itemId": 983,
+      "itemName": "Bandit Mask",
+      "normalizedName": "bandit mask"
+    },
+    {
+      "itemId": 984,
+      "itemName": "Bottle of Moonshine",
+      "normalizedName": "bottle of moonshine"
+    },
+    {
+      "itemId": 985,
+      "itemName": "Can of Goose Juice",
+      "normalizedName": "can of goose juice"
+    },
+    {
+      "itemId": 986,
+      "itemName": "Can of Damp Valley",
+      "normalizedName": "can of damp valley"
+    },
+    {
+      "itemId": 987,
+      "itemName": "Can of Crocozade",
+      "normalizedName": "can of crocozade"
+    },
+    {
+      "itemId": 988,
+      "itemName": "Fur Coat",
+      "normalizedName": "fur coat"
+    },
+    {
+      "itemId": 989,
+      "itemName": "Fur Scarf",
+      "normalizedName": "fur scarf"
+    },
+    {
+      "itemId": 990,
+      "itemName": "Fur Hat",
+      "normalizedName": "fur hat"
+    },
+    {
+      "itemId": 991,
+      "itemName": "Platform Shoes",
+      "normalizedName": "platform shoes"
+    },
+    {
+      "itemId": 992,
+      "itemName": "Silver Flats",
+      "normalizedName": "silver flats"
+    },
+    {
+      "itemId": 993,
+      "itemName": "Crystal Bracelet",
+      "normalizedName": "crystal bracelet"
+    },
+    {
+      "itemId": 994,
+      "itemName": "Cocktail Ring",
+      "normalizedName": "cocktail ring"
+    },
+    {
+      "itemId": 995,
+      "itemName": "Sun Hat",
+      "normalizedName": "sun hat"
+    },
+    {
+      "itemId": 996,
+      "itemName": "Square Sunglasses",
+      "normalizedName": "square sunglasses"
+    },
+    {
+      "itemId": 997,
+      "itemName": "Statement Necklace",
+      "normalizedName": "statement necklace"
+    },
+    {
+      "itemId": 998,
+      "itemName": "Floral Dress",
+      "normalizedName": "floral dress"
+    },
+    {
+      "itemId": 1001,
+      "itemName": "Shrug",
+      "normalizedName": "shrug"
+    },
+    {
+      "itemId": 1002,
+      "itemName": "Eye Patch",
+      "normalizedName": "eye patch"
+    },
+    {
+      "itemId": 1003,
+      "itemName": "Halloween Basket : Creepy",
+      "normalizedName": "halloween basket : creepy"
+    },
+    {
+      "itemId": 1004,
+      "itemName": "Halloween Basket : Freaky",
+      "normalizedName": "halloween basket : freaky"
+    },
+    {
+      "itemId": 1005,
+      "itemName": "Halloween Basket : Frightful",
+      "normalizedName": "halloween basket : frightful"
+    },
+    {
+      "itemId": 1006,
+      "itemName": "Halloween Basket : Haunting",
+      "normalizedName": "halloween basket : haunting"
+    },
+    {
+      "itemId": 1007,
+      "itemName": "Halloween Basket : Shocking",
+      "normalizedName": "halloween basket : shocking"
+    },
+    {
+      "itemId": 1008,
+      "itemName": "Halloween Basket : Terrifying",
+      "normalizedName": "halloween basket : terrifying"
+    },
+    {
+      "itemId": 1009,
+      "itemName": "Halloween Basket : Horrifying",
+      "normalizedName": "halloween basket : horrifying"
+    },
+    {
+      "itemId": 1010,
+      "itemName": "Halloween Basket : Petrifying",
+      "normalizedName": "halloween basket : petrifying"
+    },
+    {
+      "itemId": 1011,
+      "itemName": "Halloween Basket : Nightmarish",
+      "normalizedName": "halloween basket : nightmarish"
+    },
+    {
+      "itemId": 1012,
+      "itemName": "Blood Bag : Irradiated",
+      "normalizedName": "blood bag : irradiated"
+    },
+    {
+      "itemId": 1013,
+      "itemName": "Jigsaw Mask '19",
+      "normalizedName": "jigsaw mask '19"
+    },
+    {
+      "itemId": 1014,
+      "itemName": "Reading Glasses",
+      "normalizedName": "reading glasses"
+    },
+    {
+      "itemId": 1015,
+      "itemName": "Chinos",
+      "normalizedName": "chinos"
+    },
+    {
+      "itemId": 1016,
+      "itemName": "Collared Shawl",
+      "normalizedName": "collared shawl"
+    },
+    {
+      "itemId": 1017,
+      "itemName": "Pleated Skirt",
+      "normalizedName": "pleated skirt"
+    },
+    {
+      "itemId": 1018,
+      "itemName": "Flip Flops",
+      "normalizedName": "flip flops"
+    },
+    {
+      "itemId": 1019,
+      "itemName": "Bingo Visor",
+      "normalizedName": "bingo visor"
+    },
+    {
+      "itemId": 1020,
+      "itemName": "Cover-ups",
+      "normalizedName": "cover ups"
+    },
+    {
+      "itemId": 1021,
+      "itemName": "Sandals",
+      "normalizedName": "sandals"
+    },
+    {
+      "itemId": 1022,
+      "itemName": "Golf Socks",
+      "normalizedName": "golf socks"
+    },
+    {
+      "itemId": 1023,
+      "itemName": "Flat Cap",
+      "normalizedName": "flat cap"
+    },
+    {
+      "itemId": 1024,
+      "itemName": "Slippers",
+      "normalizedName": "slippers"
+    },
+    {
+      "itemId": 1025,
+      "itemName": "Bathrobe",
+      "normalizedName": "bathrobe"
+    },
+    {
+      "itemId": 1026,
+      "itemName": "Party Hat '19",
+      "normalizedName": "party hat '19"
+    },
+    {
+      "itemId": 1027,
+      "itemName": "Badge : 15th Anniversary",
+      "normalizedName": "badge : 15th anniversary"
+    },
+    {
+      "itemId": 1028,
+      "itemName": "Birthday Cupcake",
+      "normalizedName": "birthday cupcake"
+    },
+    {
+      "itemId": 1029,
+      "itemName": "Strippogram Voucher",
+      "normalizedName": "strippogram voucher"
+    },
+    {
+      "itemId": 1030,
+      "itemName": "Dong : Thomas",
+      "normalizedName": "dong : thomas"
+    },
+    {
+      "itemId": 1031,
+      "itemName": "Dong : Greg",
+      "normalizedName": "dong : greg"
+    },
+    {
+      "itemId": 1032,
+      "itemName": "Dong : Effy",
+      "normalizedName": "dong : effy"
+    },
+    {
+      "itemId": 1033,
+      "itemName": "Dong : Holly",
+      "normalizedName": "dong : holly"
+    },
+    {
+      "itemId": 1034,
+      "itemName": "Dong : Jeremy",
+      "normalizedName": "dong : jeremy"
+    },
+    {
+      "itemId": 1035,
+      "itemName": "Anniversary Present",
+      "normalizedName": "anniversary present"
+    },
+    {
+      "itemId": 1036,
+      "itemName": "Greta Mask '19",
+      "normalizedName": "greta mask '19"
+    },
+    {
+      "itemId": 1037,
+      "itemName": "Anatoly Mask '19",
+      "normalizedName": "anatoly mask '19"
+    },
+    {
+      "itemId": 1038,
+      "itemName": "Santa Beard",
+      "normalizedName": "santa beard"
+    },
+    {
+      "itemId": 1039,
+      "itemName": "Bag of Humbugs",
+      "normalizedName": "bag of humbugs"
+    },
+    {
+      "itemId": 1040,
+      "itemName": "Christmas Cracker",
+      "normalizedName": "christmas cracker"
+    },
+    {
+      "itemId": 1041,
+      "itemName": "Special Snowflake",
+      "normalizedName": "special snowflake"
+    },
+    {
+      "itemId": 1042,
+      "itemName": "Concussion Grenade",
+      "normalizedName": "concussion grenade"
+    },
+    {
+      "itemId": 1043,
+      "itemName": "Paper Crown : Green",
+      "normalizedName": "paper crown : green"
+    },
+    {
+      "itemId": 1044,
+      "itemName": "Paper Crown : Yellow",
+      "normalizedName": "paper crown : yellow"
+    },
+    {
+      "itemId": 1045,
+      "itemName": "Paper Crown : Red",
+      "normalizedName": "paper crown : red"
+    },
+    {
+      "itemId": 1046,
+      "itemName": "Paper Crown : Blue",
+      "normalizedName": "paper crown : blue"
+    },
+    {
+      "itemId": 1047,
+      "itemName": "Denim Shirt",
+      "normalizedName": "denim shirt"
+    },
+    {
+      "itemId": 1048,
+      "itemName": "Denim Vest",
+      "normalizedName": "denim vest"
+    },
+    {
+      "itemId": 1049,
+      "itemName": "Denim Jacket",
+      "normalizedName": "denim jacket"
+    },
+    {
+      "itemId": 1050,
+      "itemName": "Denim Jeans",
+      "normalizedName": "denim jeans"
+    },
+    {
+      "itemId": 1051,
+      "itemName": "Denim Shoes",
+      "normalizedName": "denim shoes"
+    },
+    {
+      "itemId": 1052,
+      "itemName": "Denim Cap",
+      "normalizedName": "denim cap"
+    },
+    {
+      "itemId": 1053,
+      "itemName": "Bread Knife",
+      "normalizedName": "bread knife"
+    },
+    {
+      "itemId": 1054,
+      "itemName": "Semtex",
+      "normalizedName": "semtex"
+    },
+    {
+      "itemId": 1055,
+      "itemName": "Poison Umbrella",
+      "normalizedName": "poison umbrella"
+    },
+    {
+      "itemId": 1056,
+      "itemName": "Millwall Brick",
+      "normalizedName": "millwall brick"
+    },
+    {
+      "itemId": 1057,
+      "itemName": "Gentleman Cache",
+      "normalizedName": "gentleman cache"
+    },
+    {
+      "itemId": 1058,
+      "itemName": "Gold Chain",
+      "normalizedName": "gold chain"
+    },
+    {
+      "itemId": 1059,
+      "itemName": "Snapback Hat",
+      "normalizedName": "snapback hat"
+    },
+    {
+      "itemId": 1060,
+      "itemName": "Saggy Pants",
+      "normalizedName": "saggy pants"
+    },
+    {
+      "itemId": 1061,
+      "itemName": "Oversized Shirt",
+      "normalizedName": "oversized shirt"
+    },
+    {
+      "itemId": 1062,
+      "itemName": "Basketball Shirt",
+      "normalizedName": "basketball shirt"
+    },
+    {
+      "itemId": 1063,
+      "itemName": "Parachute Pants",
+      "normalizedName": "parachute pants"
+    },
+    {
+      "itemId": 1064,
+      "itemName": "Tube Dress",
+      "normalizedName": "tube dress"
+    },
+    {
+      "itemId": 1065,
+      "itemName": "Gold Sneakers",
+      "normalizedName": "gold sneakers"
+    },
+    {
+      "itemId": 1066,
+      "itemName": "Shutter Shades",
+      "normalizedName": "shutter shades"
+    },
+    {
+      "itemId": 1067,
+      "itemName": "Silver Hoodie",
+      "normalizedName": "silver hoodie"
+    },
+    {
+      "itemId": 1068,
+      "itemName": "Bucket Hat",
+      "normalizedName": "bucket hat"
+    },
+    {
+      "itemId": 1069,
+      "itemName": "Puffer Jacket",
+      "normalizedName": "puffer jacket"
+    },
+    {
+      "itemId": 1070,
+      "itemName": "Durag",
+      "normalizedName": "durag"
+    },
+    {
+      "itemId": 1071,
+      "itemName": "Onesie",
+      "normalizedName": "onesie"
+    },
+    {
+      "itemId": 1072,
+      "itemName": "Baseball Jacket",
+      "normalizedName": "baseball jacket"
+    },
+    {
+      "itemId": 1073,
+      "itemName": "Braces",
+      "normalizedName": "braces"
+    },
+    {
+      "itemId": 1074,
+      "itemName": "Panama Hat",
+      "normalizedName": "panama hat"
+    },
+    {
+      "itemId": 1075,
+      "itemName": "Pipe",
+      "normalizedName": "pipe"
+    },
+    {
+      "itemId": 1076,
+      "itemName": "Shoulder Sweater",
+      "normalizedName": "shoulder sweater"
+    },
+    {
+      "itemId": 1077,
+      "itemName": "Sports Jacket",
+      "normalizedName": "sports jacket"
+    },
+    {
+      "itemId": 1078,
+      "itemName": "Old Wallet",
+      "normalizedName": "old wallet"
+    },
+    {
+      "itemId": 1079,
+      "itemName": "Cardholder",
+      "normalizedName": "cardholder"
+    },
+    {
+      "itemId": 1080,
+      "itemName": "Billfold",
+      "normalizedName": "billfold"
+    },
+    {
+      "itemId": 1081,
+      "itemName": "Coin Purse",
+      "normalizedName": "coin purse"
+    },
+    {
+      "itemId": 1082,
+      "itemName": "Zip Wallet",
+      "normalizedName": "zip wallet"
+    },
+    {
+      "itemId": 1083,
+      "itemName": "Clutch",
+      "normalizedName": "clutch"
+    },
+    {
+      "itemId": 1084,
+      "itemName": "Credit Card",
+      "normalizedName": "credit card"
+    },
+    {
+      "itemId": 1085,
+      "itemName": "Lipstick",
+      "normalizedName": "lipstick"
+    },
+    {
+      "itemId": 1086,
+      "itemName": "License",
+      "normalizedName": "license"
+    },
+    {
+      "itemId": 1087,
+      "itemName": "Tampon",
+      "normalizedName": "tampon"
+    },
+    {
+      "itemId": 1088,
+      "itemName": "Receipt",
+      "normalizedName": "receipt"
+    },
+    {
+      "itemId": 1089,
+      "itemName": "Family Photo",
+      "normalizedName": "family photo"
+    },
+    {
+      "itemId": 1090,
+      "itemName": "Lint",
+      "normalizedName": "lint"
+    },
+    {
+      "itemId": 1091,
+      "itemName": "Handcuffs",
+      "normalizedName": "handcuffs"
+    },
+    {
+      "itemId": 1092,
+      "itemName": "Lubricant",
+      "normalizedName": "lubricant"
+    },
+    {
+      "itemId": 1093,
+      "itemName": "Hit Contract",
+      "normalizedName": "hit contract"
+    },
+    {
+      "itemId": 1094,
+      "itemName": "Syringe",
+      "normalizedName": "syringe"
+    },
+    {
+      "itemId": 1095,
+      "itemName": "Spoon",
+      "normalizedName": "spoon"
+    },
+    {
+      "itemId": 1096,
+      "itemName": "Cell Phone",
+      "normalizedName": "cell phone"
+    },
+    {
+      "itemId": 1097,
+      "itemName": "Assless Chaps",
+      "normalizedName": "assless chaps"
+    },
+    {
+      "itemId": 1098,
+      "itemName": "Opera Gloves",
+      "normalizedName": "opera gloves"
+    },
+    {
+      "itemId": 1099,
+      "itemName": "Booty Shorts",
+      "normalizedName": "booty shorts"
+    },
+    {
+      "itemId": 1100,
+      "itemName": "Collar",
+      "normalizedName": "collar"
+    },
+    {
+      "itemId": 1101,
+      "itemName": "Ball Gag",
+      "normalizedName": "ball gag"
+    },
+    {
+      "itemId": 1102,
+      "itemName": "Blindfold",
+      "normalizedName": "blindfold"
+    },
+    {
+      "itemId": 1103,
+      "itemName": "Maid Uniform",
+      "normalizedName": "maid uniform"
+    },
+    {
+      "itemId": 1104,
+      "itemName": "Maid Hat",
+      "normalizedName": "maid hat"
+    },
+    {
+      "itemId": 1105,
+      "itemName": "Ball Gown",
+      "normalizedName": "ball gown"
+    },
+    {
+      "itemId": 1106,
+      "itemName": "Fascinator Hat",
+      "normalizedName": "fascinator hat"
+    },
+    {
+      "itemId": 1107,
+      "itemName": "Wedding Dress",
+      "normalizedName": "wedding dress"
+    },
+    {
+      "itemId": 1108,
+      "itemName": "Wedding Veil",
+      "normalizedName": "wedding veil"
+    },
+    {
+      "itemId": 1109,
+      "itemName": "Head Scarf",
+      "normalizedName": "head scarf"
+    },
+    {
+      "itemId": 1110,
+      "itemName": "Nightgown",
+      "normalizedName": "nightgown"
+    },
+    {
+      "itemId": 1111,
+      "itemName": "Pullover",
+      "normalizedName": "pullover"
+    },
+    {
+      "itemId": 1112,
+      "itemName": "Elegant Cache",
+      "normalizedName": "elegant cache"
+    },
+    {
+      "itemId": 1113,
+      "itemName": "Naughty Cache",
+      "normalizedName": "naughty cache"
+    },
+    {
+      "itemId": 1114,
+      "itemName": "Elderly Cache",
+      "normalizedName": "elderly cache"
+    },
+    {
+      "itemId": 1115,
+      "itemName": "Denim Cache",
+      "normalizedName": "denim cache"
+    },
+    {
+      "itemId": 1116,
+      "itemName": "Wannabe Cache",
+      "normalizedName": "wannabe cache"
+    },
+    {
+      "itemId": 1117,
+      "itemName": "Cutesy Cache",
+      "normalizedName": "cutesy cache"
+    },
+    {
+      "itemId": 1118,
+      "itemName": "Armor Cache",
+      "normalizedName": "armor cache"
+    },
+    {
+      "itemId": 1119,
+      "itemName": "Melee Cache",
+      "normalizedName": "melee cache"
+    },
+    {
+      "itemId": 1120,
+      "itemName": "Small Arms Cache",
+      "normalizedName": "small arms cache"
+    },
+    {
+      "itemId": 1121,
+      "itemName": "Medium Arms Cache",
+      "normalizedName": "medium arms cache"
+    },
+    {
+      "itemId": 1122,
+      "itemName": "Heavy Arms Cache",
+      "normalizedName": "heavy arms cache"
+    },
+    {
+      "itemId": 1123,
+      "itemName": "Spy Camera",
+      "normalizedName": "spy camera"
+    },
+    {
+      "itemId": 1124,
+      "itemName": "Cloning Device",
+      "normalizedName": "cloning device"
+    },
+    {
+      "itemId": 1125,
+      "itemName": "Card Skimmer",
+      "normalizedName": "card skimmer"
+    },
+    {
+      "itemId": 1126,
+      "itemName": "Tutu",
+      "normalizedName": "tutu"
+    },
+    {
+      "itemId": 1127,
+      "itemName": "Knee Socks",
+      "normalizedName": "knee socks"
+    },
+    {
+      "itemId": 1128,
+      "itemName": "Kitty Shoes",
+      "normalizedName": "kitty shoes"
+    },
+    {
+      "itemId": 1129,
+      "itemName": "Cat Ears",
+      "normalizedName": "cat ears"
+    },
+    {
+      "itemId": 1130,
+      "itemName": "Bunny Ears",
+      "normalizedName": "bunny ears"
+    },
+    {
+      "itemId": 1131,
+      "itemName": "Puppy Ears",
+      "normalizedName": "puppy ears"
+    },
+    {
+      "itemId": 1132,
+      "itemName": "Heart Sunglasses",
+      "normalizedName": "heart sunglasses"
+    },
+    {
+      "itemId": 1133,
+      "itemName": "Hair Bow",
+      "normalizedName": "hair bow"
+    },
+    {
+      "itemId": 1134,
+      "itemName": "Lolita Dress",
+      "normalizedName": "lolita dress"
+    },
+    {
+      "itemId": 1135,
+      "itemName": "Unicorn Horn",
+      "normalizedName": "unicorn horn"
+    },
+    {
+      "itemId": 1136,
+      "itemName": "Check Skirt",
+      "normalizedName": "check skirt"
+    },
+    {
+      "itemId": 1137,
+      "itemName": "Polka Dot Dress",
+      "normalizedName": "polka dot dress"
+    },
+    {
+      "itemId": 1138,
+      "itemName": "Ballet Shoes",
+      "normalizedName": "ballet shoes"
+    },
+    {
+      "itemId": 1139,
+      "itemName": "Dungarees",
+      "normalizedName": "dungarees"
+    },
+    {
+      "itemId": 1140,
+      "itemName": "Tights",
+      "normalizedName": "tights"
+    },
+    {
+      "itemId": 1141,
+      "itemName": "Pennywise Mask '20",
+      "normalizedName": "pennywise mask '20"
+    },
+    {
+      "itemId": 1142,
+      "itemName": "Tiger King Mask '20",
+      "normalizedName": "tiger king mask '20"
+    },
+    {
+      "itemId": 1143,
+      "itemName": "Medical Mask",
+      "normalizedName": "medical mask"
+    },
+    {
+      "itemId": 1144,
+      "itemName": "Chin Diaper",
+      "normalizedName": "chin diaper"
+    },
+    {
+      "itemId": 1145,
+      "itemName": "Tighty Whities",
+      "normalizedName": "tighty whities"
+    },
+    {
+      "itemId": 1146,
+      "itemName": "Tangerine",
+      "normalizedName": "tangerine"
+    },
+    {
+      "itemId": 1147,
+      "itemName": "Helmet of Justice",
+      "normalizedName": "helmet of justice"
+    },
+    {
+      "itemId": 1148,
+      "itemName": "Broken Bauble",
+      "normalizedName": "broken bauble"
+    },
+    {
+      "itemId": 1149,
+      "itemName": "Purple Easter Egg",
+      "normalizedName": "purple easter egg"
+    },
+    {
+      "itemId": 1150,
+      "itemName": "Ski Mask",
+      "normalizedName": "ski mask"
+    },
+    {
+      "itemId": 1151,
+      "itemName": "Bunny Nose",
+      "normalizedName": "bunny nose"
+    }
+  ]
+}

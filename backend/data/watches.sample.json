@@ -1,0 +1,10 @@
+[
+  {
+    "slotNumber": 1,
+    "itemId": 886,
+    "itemName": "Torn City Times",
+    "targetPrice": 3400,
+    "nearMissGap": 250,
+    "enabled": true
+  }
+]

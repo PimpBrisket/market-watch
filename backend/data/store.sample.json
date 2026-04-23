@@ -1,0 +1,99 @@
+{
+  "version": 2,
+  "settings": {
+    "alertCooldownMs": 120000,
+    "snapshotGroupingWindowMs": 30000
+  },
+  "slots": [
+    {
+      "slotNumber": 1,
+      "occupied": false,
+      "enabled": false,
+      "itemId": null,
+      "itemName": null,
+      "targetPrice": null,
+      "nearMissGap": null,
+      "currentState": "EMPTY",
+      "createdAt": "2026-04-22T02:05:58.758Z",
+      "updatedAt": "2026-04-22T02:05:58.758Z",
+      "clearedAt": "2026-04-22T02:05:58.758Z"
+    },
+    {
+      "slotNumber": 2,
+      "occupied": false,
+      "enabled": false,
+      "itemId": null,
+      "itemName": null,
+      "targetPrice": null,
+      "nearMissGap": null,
+      "currentState": "EMPTY",
+      "createdAt": "2026-04-22T02:05:58.758Z",
+      "updatedAt": "2026-04-22T02:05:58.758Z",
+      "clearedAt": "2026-04-22T02:05:58.758Z"
+    },
+    {
+      "slotNumber": 3,
+      "occupied": false,
+      "enabled": false,
+      "itemId": null,
+      "itemName": null,
+      "targetPrice": null,
+      "nearMissGap": null,
+      "currentState": "EMPTY",
+      "createdAt": "2026-04-22T02:05:58.758Z",
+      "updatedAt": "2026-04-22T02:05:58.758Z",
+      "clearedAt": "2026-04-22T02:05:58.758Z"
+    },
+    {
+      "slotNumber": 4,
+      "occupied": false,
+      "enabled": false,
+      "itemId": null,
+      "itemName": null,
+      "targetPrice": null,
+      "nearMissGap": null,
+      "currentState": "EMPTY",
+      "createdAt": "2026-04-22T02:05:58.758Z",
+      "updatedAt": "2026-04-22T02:05:58.758Z",
+      "clearedAt": "2026-04-22T02:05:58.758Z"
+    },
+    {
+      "slotNumber": 5,
+      "occupied": false,
+      "enabled": false,
+      "itemId": null,
+      "itemName": null,
+      "targetPrice": null,
+      "nearMissGap": null,
+      "currentState": "EMPTY",
+      "createdAt": "2026-04-22T02:05:58.758Z",
+      "updatedAt": "2026-04-22T02:05:58.758Z",
+      "clearedAt": "2026-04-22T02:05:58.758Z"
+    },
+    {
+      "slotNumber": 6,
+      "occupied": false,
+      "enabled": false,
+      "itemId": null,
+      "itemName": null,
+      "targetPrice": null,
+      "nearMissGap": null,
+      "currentState": "EMPTY",
+      "createdAt": "2026-04-22T02:05:58.758Z",
+      "updatedAt": "2026-04-22T02:05:58.758Z",
+      "clearedAt": "2026-04-22T02:05:58.758Z"
+    }
+  ],
+  "processed": {},
+  "meta": {
+    "createdAt": "2026-04-22T02:05:58.758Z",
+    "updatedAt": "2026-04-22T02:05:58.758Z",
+    "lastPollStartedAt": null,
+    "lastPollCompletedAt": null,
+    "lastPollDurationMs": null,
+    "lastPollReason": null,
+    "lastPollSuccessCount": 0,
+    "lastPollFailureCount": 0,
+    "lastError": null
+  }
+}
