@@ -98,6 +98,17 @@ The final pre-push fix keeps the sticky top bar and arrow, but:
 - removes the fragile reopen scroll-restore behavior
 - resets to a stable top position on reopen so touch scrolling starts immediately
 
+## Version Label Fix
+
+After the metadata-only `1.8.2` bump, the menu still showed `1.8.1` for both Script and Backend in some flows.
+
+The final fix does this:
+
+- Script label comes from the installed userscript metadata header at runtime
+- Backend label comes from live backend version payloads, not cached UI restore state
+- cached slot restore no longer keeps stale version labels alive across refresh or reopen
+- the About section now falls back to `Loading...` or `Unknown` until fresh live data arrives
+
 ## Remaining Manual Validation
 
 Do one final on-device TornPDA pass:

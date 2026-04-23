@@ -42,9 +42,45 @@
     MARKET_ONLY: "MARKET_ONLY",
     BAZAAR_ONLY: "BAZAAR_ONLY"
   };
-  const SCRIPT_VERSION = "1.8.1";
+  const SCRIPT_VERSION_FALLBACK = "1.8.2";
   const MINIMUM_COMPATIBLE_BACKEND_VERSION = "1.8.1";
   const ACTIVITY_LOG_LIMIT = 40;
+
+  function extractUserscriptMetadataVersion(source) {
+    const match = String(source || "").match(/^\s*\/\/\s*@version\s+([^\s]+)\s*$/m);
+    return match?.[1]?.trim() || null;
+  }
+
+  function detectInstalledScriptVersion() {
+    const candidateSources = [];
+
+    if (document.currentScript?.textContent) {
+      candidateSources.push(document.currentScript.textContent);
+    }
+
+    document.querySelectorAll("script").forEach((script) => {
+      const text = script?.textContent || "";
+
+      if (
+        text &&
+        (text.includes("// ==UserScript==") || text.includes('const PANEL_ID = "tornpda-market-watcher-panel"'))
+      ) {
+        candidateSources.push(text);
+      }
+    });
+
+    for (const source of candidateSources) {
+      const version = extractUserscriptMetadataVersion(source);
+
+      if (version) {
+        return version;
+      }
+    }
+
+    return null;
+  }
+
+  const SCRIPT_VERSION = detectInstalledScriptVersion() || SCRIPT_VERSION_FALLBACK;
 
   function createFormState() {
     return {
@@ -693,7 +729,6 @@
         summary: state.summary || null,
         status: state.status || null,
         settings: state.settings || null,
-        versions: state.versions || null,
         activityLog: Array.isArray(state.activityLog) ? state.activityLog : [],
         slots: Array.isArray(state.slots) ? state.slots : []
       }
@@ -721,7 +756,13 @@
       return false;
     }
 
-    applySlotsPayload(cached.payload, cached.lastFetchAt || new Date().toISOString());
+    applySlotsPayload(
+      {
+        ...cached.payload,
+        versions: null
+      },
+      cached.lastFetchAt || new Date().toISOString()
+    );
     state.runtime.restoredFromCache = hasCachedSlotData(cached);
     state.runtime.restoreSource = state.runtime.restoredFromCache ? "cache" : "empty_cache";
     return state.runtime.restoredFromCache;
@@ -784,6 +825,7 @@
     const backendVersion = String(versions?.backendVersion || "").trim() || null;
     const minimumCompatibleScriptVersion =
       String(versions?.minimumCompatibleScriptVersion || "").trim() || null;
+    const scriptVersion = detectInstalledScriptVersion() || SCRIPT_VERSION;
     let compatible = true;
     let warning = null;
 
@@ -795,14 +837,14 @@
     if (
       compatible &&
       minimumCompatibleScriptVersion &&
-      !isVersionAtLeast(SCRIPT_VERSION, minimumCompatibleScriptVersion)
+      !isVersionAtLeast(scriptVersion, minimumCompatibleScriptVersion)
     ) {
       compatible = false;
-      warning = `Version mismatch: script ${SCRIPT_VERSION} is older than the backend requirement ${minimumCompatibleScriptVersion}. Please update backend or script.`;
+      warning = `Version mismatch: script ${scriptVersion} is older than the backend requirement ${minimumCompatibleScriptVersion}. Please update backend or script.`;
     }
 
     state.versions = {
-      scriptVersion: SCRIPT_VERSION,
+      scriptVersion,
       backendVersion,
       minimumCompatibleBackendVersion: MINIMUM_COMPATIBLE_BACKEND_VERSION,
       minimumCompatibleScriptVersion,
@@ -2035,16 +2077,33 @@
     `;
   }
 
+  function renderBackendVersionLabel() {
+    if (state.versions?.backendVersion) {
+      return state.versions.backendVersion;
+    }
+
+    if (
+      state.requests.connectionTest ||
+      state.requests.restoreSync ||
+      state.requests.manualRefresh ||
+      state.runtime.initialRestorePending
+    ) {
+      return "Loading...";
+    }
+
+    return "Unknown";
+  }
+
   function renderAboutSection() {
     return `
       <div style="margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.8);border:1px solid rgba(13,94,168,0.12);">
         <div style="font-size:12px;font-weight:700;color:#143041;">About</div>
         <div style="margin-top:8px;display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:8px;font-size:11px;color:#143041;">
           <div><span style="color:#5f6f7b;">Script</span><br /><strong>${escapeHtml(
-            SCRIPT_VERSION
+            state.versions.scriptVersion || SCRIPT_VERSION || "Unknown"
           )}</strong></div>
           <div><span style="color:#5f6f7b;">Backend</span><br /><strong>${escapeHtml(
-            state.versions.backendVersion || "Unknown"
+            renderBackendVersionLabel()
           )}</strong></div>
           <div><span style="color:#5f6f7b;">Backend URL</span><br /><strong>${escapeHtml(
             state.backendUrl || state.backendInput || "Not set"

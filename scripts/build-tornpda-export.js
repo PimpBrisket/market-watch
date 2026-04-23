@@ -43,21 +43,9 @@ function parseHeader(source) {
 
 function buildExportEntry(source) {
   const meta = parseHeader(source);
-  const runtimeVersion =
-    /const\s+SCRIPT_VERSION\s*=\s*"([^"]+)"/.exec(source)?.[1] || null;
 
   if (!meta.name || !meta.version) {
     throw new Error("Userscript header must include @name and @version.");
-  }
-
-  if (!runtimeVersion) {
-    throw new Error("Userscript source must define SCRIPT_VERSION.");
-  }
-
-  if (runtimeVersion !== meta.version) {
-    throw new Error(
-      `Userscript @version (${meta.version}) must match SCRIPT_VERSION (${runtimeVersion}).`
-    );
   }
 
   return {

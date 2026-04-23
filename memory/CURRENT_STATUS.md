@@ -93,6 +93,20 @@ These were fixed by:
 - removing the fragile reopen scroll restoration path
 - resetting the menu to a stable top position on reopen so touch scrolling works immediately
 
+## Version Display Fix
+
+The menu version labels had gone stale after the `1.8.1 -> 1.8.2` userscript update:
+
+- the script label was still reading an outdated hardcoded runtime constant
+- the backend label could persist old values from cached slot payloads
+
+This is now fixed by:
+
+- deriving the displayed script version from the installed userscript metadata header at runtime
+- keeping backend version display tied to live `/api/status` or `/api/slots` version data
+- excluding cached version labels from long-term restored UI state
+- showing `Loading...` or `Unknown` until live backend version data is available
+
 ## Remaining Non-Code Validation Gap
 
 The main remaining gap is live phone-side TornPDA interaction confirmation for:
