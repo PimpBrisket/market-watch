@@ -67,23 +67,74 @@
 })(function () {
   const DEFAULT_POLL_MS = 10000;
   const STATUS_REFRESH_MS = 1000;
+  const STORAGE_KEY = "tornMarketDesktopViewer.uiState";
+  const SEEN_ALERTS_KEY = "tornMarketDesktopViewer.seenAlertIds";
+  const FILTER_OPTIONS = [
+    { value: "ALL", label: "All" },
+    { value: "BUY_NOW", label: "Only Buy / Buy Now" },
+    { value: "ABOVE_TARGET", label: "Only Above Target" },
+    { value: "NEAR_MISS", label: "Only Near Miss" },
+    { value: "MARKET", label: "Only Market" },
+    { value: "BAZAAR", label: "Only Bazaar" },
+    { value: "WATCHING", label: "Only Watching" },
+    { value: "STALE_ERROR", label: "Only Stale/Error" }
+  ];
+  const PANEL_VIEWS = {
+    MARKET: "MARKET_LISTINGS",
+    BAZAAR: "BAZAAR_LISTINGS",
+    ALERTS: "LATEST_ALERTS",
+    INFO: "WATCHER_INFO"
+  };
 
   const state = {
     appRoot: null,
     statusPayload: null,
     slotsPayload: null,
     syncInFlight: false,
+    requestState: {
+      startWatching: false,
+      stopWatching: false,
+      refreshNow: false,
+      resetSession: false
+    },
     connectionState: "loading",
     connectionMessage: "Loading desktop viewer...",
     lastError: null,
     lastSuccessfulSyncAt: null,
-    selectedSlotNumber: 1,
     nowMs: Date.now(),
     timers: {
       sync: null,
       clock: null
-    }
+    },
+    ui: loadUiState(),
+    listingCache: {},
+    notifications: {
+      enabled: loadUiState().desktopNotificationsEnabled === true,
+      permission:
+        typeof Notification === "undefined" ? "unsupported" : Notification.permission,
+      hydrated: false,
+      seenEventIds: loadSeenAlertIds()
+    },
+    panelResizeObserver: null,
+    panelElement: null
   };
+
+  function safeJsonParse(value, fallback) {
+    try {
+      return JSON.parse(value);
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
   function formatMoney(value) {
     if (value === null || value === undefined || Number.isNaN(Number(value))) {
@@ -91,6 +142,27 @@
     }
 
     return `$${Number(value).toLocaleString()}`;
+  }
+
+  function formatCompactTime(value) {
+    if (!value) {
+      return "--";
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return "--";
+    }
+
+    return date
+      .toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+      })
+      .replace(" AM", "am")
+      .replace(" PM", "pm")
+      .replace(" ", "");
   }
 
   function formatTime(value) {
@@ -149,17 +221,101 @@
     return `${seconds}s`;
   }
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+  function loadUiState() {
+    const stored = safeJsonParse(
+      typeof localStorage === "undefined" ? null : localStorage.getItem(STORAGE_KEY),
+      null
+    );
+
+    return {
+      selectedSlotNumber: Number.isInteger(Number(stored?.selectedSlotNumber))
+        ? Number(stored.selectedSlotNumber)
+        : null,
+      filter: FILTER_OPTIONS.some((option) => option.value === stored?.filter)
+        ? stored.filter
+        : "ALL",
+      filterMenuOpen: false,
+      alertsInboxOpen: stored?.alertsInboxOpen === true,
+      alertsClearedAt: stored?.alertsClearedAt || null,
+      desktopNotificationsEnabled: stored?.desktopNotificationsEnabled === true,
+      panel: {
+        open: stored?.panel?.open === true,
+        minimized: stored?.panel?.minimized === true,
+        width: Math.max(360, Number(stored?.panel?.width) || 440),
+        view: Object.values(PANEL_VIEWS).includes(stored?.panel?.view)
+          ? stored.panel.view
+          : null
+      }
+    };
+  }
+
+  function persistUiState() {
+    if (typeof localStorage === "undefined") {
+      return;
+    }
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        selectedSlotNumber: state.ui.selectedSlotNumber,
+        filter: state.ui.filter,
+        alertsInboxOpen: state.ui.alertsInboxOpen,
+        alertsClearedAt: state.ui.alertsClearedAt,
+        desktopNotificationsEnabled: state.notifications.enabled === true,
+        panel: {
+          open: state.ui.panel.open === true,
+          minimized: state.ui.panel.minimized === true,
+          width: state.ui.panel.width,
+          view: state.ui.panel.view
+        }
+      })
+    );
+  }
+
+  function loadSeenAlertIds() {
+    const parsed = safeJsonParse(
+      typeof localStorage === "undefined" ? null : localStorage.getItem(SEEN_ALERTS_KEY),
+      []
+    );
+
+    return Array.isArray(parsed) ? parsed.slice(-100) : [];
+  }
+
+  function persistSeenAlertIds() {
+    if (typeof localStorage === "undefined") {
+      return;
+    }
+
+    localStorage.setItem(
+      SEEN_ALERTS_KEY,
+      JSON.stringify(state.notifications.seenEventIds.slice(-100))
+    );
   }
 
   function sourceShortLabel(value) {
     return value === "BAZAAR_ONLY" ? "Bazaar" : "Market";
+  }
+
+  function createEmptySlot(slotNumber) {
+    return {
+      slotNumber,
+      occupied: false,
+      enabled: false,
+      state: "EMPTY",
+      trackerStatus: "EMPTY",
+      trackerStatusLabel: "EMPTY",
+      sourceMode: "MARKET_ONLY",
+      itemId: null,
+      itemName: null,
+      targetPrice: null,
+      nearMissGap: null,
+      currentListings: [],
+      qualifyingListings: [],
+      sessionStats: null,
+      alertState: {
+        latestEvent: null
+      }
+    };
   }
 
   function trackerStatusBadgeClass(slot) {
@@ -184,48 +340,30 @@
     return "empty";
   }
 
-  function createEmptySlot(slotNumber) {
-    return {
-      slotNumber,
-      occupied: false,
-      trackerStatus: "EMPTY",
-      trackerStatusLabel: "EMPTY",
-      sourceMode: "MARKET_ONLY",
-      sourceLabel: "Market Only",
-      currentListings: [],
-      qualifyingListings: [],
-      alertState: {
-        latestEvent: null
-      }
-    };
-  }
-
-  function getSlots() {
-    if (Array.isArray(state.slotsPayload?.slots) && state.slotsPayload.slots.length) {
-      const slotsByNumber = new Map(
-        state.slotsPayload.slots
-          .filter((slot) => Number.isInteger(Number(slot?.slotNumber)))
-          .map((slot) => [Number(slot.slotNumber), slot])
-      );
-
-      return Array.from({ length: 6 }, (_, index) => {
-        const slotNumber = index + 1;
-        return slotsByNumber.get(slotNumber) || createEmptySlot(slotNumber);
-      });
+  function getAllSlots() {
+    if (Array.isArray(state.slotsPayload?.slots)) {
+      return state.slotsPayload.slots.slice().sort((left, right) => left.slotNumber - right.slotNumber);
     }
 
     return Array.from({ length: 6 }, (_, index) => createEmptySlot(index + 1));
   }
 
+  function getOccupiedSlots() {
+    return getAllSlots().filter((slot) => slot.occupied);
+  }
+
   function chooseSelectedSlot(slots, selectedSlotNumber) {
+    if (!slots.length) {
+      return null;
+    }
+
     const matchingSlot = slots.find((slot) => slot.slotNumber === selectedSlotNumber);
 
     if (matchingSlot) {
       return matchingSlot.slotNumber;
     }
 
-    const firstOccupied = slots.find((slot) => slot.occupied);
-    return firstOccupied ? firstOccupied.slotNumber : slots[0]?.slotNumber || 1;
+    return slots[0].slotNumber;
   }
 
   function currentBestListing(slot) {
@@ -296,47 +434,184 @@
     };
   }
 
-  function alertHeadlineForSlot(slot) {
-    const listing = currentBestListing(slot);
-    const quantity = Number(listing?.quantity) || 1;
-    const price =
-      listing?.price ??
-      slot?.notification?.price ??
-      slot?.lowestPrice ??
-      slot?.lowestAboveTarget ??
-      null;
+  function notificationExtraCount(notification, slot = null) {
+    const listingCount = Number(notification?.listingCount) ||
+      (Array.isArray(slot?.qualifyingListings) ? slot.qualifyingListings.length : 0);
 
-    return `[${sourceShortLabel(slot?.sourceMode)}] ${quantity}x ${slot?.itemName || "Item"} | ${formatMoney(price)}`;
+    return Math.max(0, listingCount - 1);
   }
 
-  function buildAlertEntries(slots) {
-    return slots
-      .filter((slot) => {
-        if (!slot?.occupied) {
-          return false;
+  function formatPriceComparison(targetPrice, listedPrice, quantity) {
+    const target = formatMoney(targetPrice);
+    const listed = formatMoney(listedPrice);
+    const safeQuantity = Math.max(1, Number(quantity) || 1);
+
+    if (safeQuantity >= 2 && Number.isFinite(Number(listedPrice))) {
+      return `${target}>${listed}(${formatMoney(Number(listedPrice) * safeQuantity)})`;
+    }
+
+    return `${target}>${listed}`;
+  }
+
+  function normalizeAlertEntry(entry, slotsByItemId = {}) {
+    const details = entry?.details || {};
+    const fallbackSlot = slotsByItemId[String(entry?.itemId)] || null;
+    const listedPrice = details.listedPrice ?? details.price ?? fallbackSlot?.notification?.price ?? null;
+    const targetPrice = details.targetPrice ?? fallbackSlot?.targetPrice ?? null;
+    const quantity = Number(details.quantity) || Number(fallbackSlot?.notification?.listing?.quantity) || 1;
+    const sourceMode = details.sourceMode || fallbackSlot?.sourceMode || "MARKET_ONLY";
+
+    return {
+      eventId: details.eventId || `${entry?.timestamp || "unknown"}-${entry?.itemId || "na"}`,
+      itemId: entry?.itemId ?? fallbackSlot?.itemId ?? null,
+      itemName: entry?.itemName || fallbackSlot?.itemName || "Item",
+      sourceMode,
+      quantity,
+      targetPrice,
+      listedPrice,
+      listingCount: Number(details.listingCount) || 1,
+      timestamp: details.timestamp || entry?.timestamp || null
+    };
+  }
+
+  function formatAlertHeadline(alert, { includeTime = false } = {}) {
+    const headline = `[${sourceShortLabel(alert.sourceMode)}] ${alert.quantity}x ${alert.itemName} ${formatPriceComparison(
+      alert.targetPrice,
+      alert.listedPrice,
+      alert.quantity
+    )}`;
+
+    if (!includeTime) {
+      return headline;
+    }
+
+    return `${headline} ${formatCompactTime(alert.timestamp)}`;
+  }
+
+  function createActiveAlertForSlot(slot) {
+    if (!slot?.occupied) {
+      return null;
+    }
+
+    const listing = slot.notification?.listing || currentBestListing(slot);
+    const listedPrice =
+      slot.notification?.price ??
+      listing?.price ??
+      slot.lowestPrice ??
+      slot.lowestAboveTarget ??
+      null;
+
+    if (listedPrice === null || listedPrice === undefined) {
+      return null;
+    }
+
+    return {
+      eventId: slot.notification?.eventId || `slot-${slot.slotNumber}-${slot.lastChecked || "na"}`,
+      itemId: slot.itemId,
+      itemName: slot.itemName || "Item",
+      sourceMode: slot.sourceMode,
+      quantity: Number(listing?.quantity) || 1,
+      targetPrice: slot.targetPrice,
+      listedPrice,
+      listingCount:
+        Number(slot.notification?.listingCount) ||
+        (Array.isArray(slot.qualifyingListings) ? slot.qualifyingListings.length : 1),
+      timestamp: slot.notification?.timestamp || slot.lastChecked || null,
+      state: slot.state || "RECENT"
+    };
+  }
+
+  function buildAlertInboxEntries(activityLog, slots) {
+    const slotsByItemId = Object.fromEntries(
+      slots.filter((slot) => slot.occupied).map((slot) => [String(slot.itemId), slot])
+    );
+    const clearedAtMs = state.ui.alertsClearedAt ? Date.parse(state.ui.alertsClearedAt) : null;
+
+    return (Array.isArray(activityLog) ? activityLog : [])
+      .filter((entry) => entry?.type === "alert_triggered")
+      .filter((entry) => {
+        if (!clearedAtMs) {
+          return true;
         }
 
-        return slot.state === "BUY_NOW" || slot.state === "NEAR_MISS" || Boolean(slot.notification);
+        const entryTimestamp = Date.parse(entry.timestamp || 0);
+        return Number.isFinite(entryTimestamp) && entryTimestamp > clearedAtMs;
       })
-      .map((slot) => {
-        const qualifyingCount = Array.isArray(slot.qualifyingListings)
-          ? slot.qualifyingListings.length
-          : Number(slot.notification?.listingCount) || 0;
+      .map((entry) => normalizeAlertEntry(entry, slotsByItemId))
+      .sort((left, right) => Date.parse(right.timestamp || 0) - Date.parse(left.timestamp || 0))
+      .slice(0, 10);
+  }
 
-        return {
-          slotNumber: slot.slotNumber,
-          state: slot.state,
-          itemName: slot.itemName,
-          headline: alertHeadlineForSlot(slot),
-          extraCount: Math.max(0, qualifyingCount - 1),
-          lastUpdated: slot.notification?.timestamp || slot.lastChecked || null
-        };
-      })
+  function buildCurrentAlertEntries(slots) {
+    return slots
+      .map((slot) => ({
+        slot,
+        alert: createActiveAlertForSlot(slot)
+      }))
+      .filter((entry) => entry.alert)
       .sort((left, right) => {
-        const leftPriority = left.state === "BUY_NOW" ? 0 : left.state === "NEAR_MISS" ? 1 : 2;
-        const rightPriority = right.state === "BUY_NOW" ? 0 : right.state === "NEAR_MISS" ? 1 : 2;
-        return leftPriority - rightPriority || left.slotNumber - right.slotNumber;
+        const leftPriority = left.slot.state === "BUY_NOW" ? 0 : left.slot.state === "NEAR_MISS" ? 1 : 2;
+        const rightPriority = right.slot.state === "BUY_NOW" ? 0 : right.slot.state === "NEAR_MISS" ? 1 : 2;
+        return leftPriority - rightPriority || left.slot.slotNumber - right.slot.slotNumber;
       });
+  }
+
+  function filterSlots(slots, filterValue) {
+    if (filterValue === "ALL") {
+      return slots;
+    }
+
+    return slots.filter((slot) => {
+      if (filterValue === "BUY_NOW") {
+        return slot.state === "BUY_NOW";
+      }
+
+      if (filterValue === "ABOVE_TARGET") {
+        return slot.state === "WAIT" && slot.lowestAboveTarget !== null;
+      }
+
+      if (filterValue === "NEAR_MISS") {
+        return slot.state === "NEAR_MISS";
+      }
+
+      if (filterValue === "MARKET") {
+        return slot.sourceMode !== "BAZAAR_ONLY";
+      }
+
+      if (filterValue === "BAZAAR") {
+        return slot.sourceMode === "BAZAAR_ONLY";
+      }
+
+      if (filterValue === "WATCHING") {
+        return slot.trackerStatus === "WATCHING";
+      }
+
+      if (filterValue === "STALE_ERROR") {
+        return slot.trackerStatus === "STALE" || slot.trackerStatus === "ERROR";
+      }
+
+      return true;
+    });
+  }
+
+  function currentNotificationLabel() {
+    if (!state.notifications.enabled) {
+      return "Disabled";
+    }
+
+    if (state.notifications.permission === "unsupported") {
+      return "Unsupported";
+    }
+
+    if (state.notifications.permission === "denied") {
+      return "Permission denied";
+    }
+
+    if (state.notifications.permission === "default") {
+      return "Permission needed";
+    }
+
+    return "Enabled";
   }
 
   function deriveOverallWatcherStatus(status, slots) {
@@ -375,11 +650,7 @@
     const pollIntervalMs = Number(state.statusPayload?.config?.pollIntervalMs) || DEFAULT_POLL_MS;
     const lastPollCompletedAt = status?.lastPollCompletedAt;
 
-    if (!status?.watchingActive) {
-      return "Not scheduled";
-    }
-
-    if (!status?.activeEnabledCount) {
+    if (!status?.watchingActive || !status?.activeEnabledCount) {
       return "Not scheduled";
     }
 
@@ -388,7 +659,7 @@
     }
 
     if (!lastPollCompletedAt) {
-      return status?.activeEnabledCount > 0 ? "Waiting" : "Not scheduled";
+      return "Waiting";
     }
 
     const remainingMs = Date.parse(lastPollCompletedAt) + pollIntervalMs - nowMs;
@@ -417,8 +688,28 @@
     return formatDurationShort(Math.min(...cooldowns));
   }
 
-  function deriveNextNotificationLabel() {
-    return "Disabled";
+  function deriveNextNotificationLabel(status, inboxEntries) {
+    if (!state.notifications.enabled) {
+      return "Disabled";
+    }
+
+    if (state.notifications.permission === "denied") {
+      return "Permission denied";
+    }
+
+    if (state.notifications.permission === "default") {
+      return "Permission needed";
+    }
+
+    if (state.notifications.permission === "unsupported") {
+      return "Unsupported";
+    }
+
+    if (!status?.watchingActive) {
+      return "Not scheduled";
+    }
+
+    return inboxEntries.length ? "Ready now" : "Waiting";
   }
 
   function fetchJson(path, options = {}) {
@@ -450,6 +741,73 @@
 
       return payload;
     });
+  }
+
+  function seedListingCacheFromSlots(slots) {
+    slots.forEach((slot) => {
+      if (!slot?.occupied) {
+        return;
+      }
+
+      const key = `${slot.slotNumber}:${slot.sourceMode}`;
+      state.listingCache[key] = {
+        status: "success",
+        data: {
+          slotNumber: slot.slotNumber,
+          itemId: slot.itemId,
+          itemName: slot.itemName,
+          sourceMode: slot.sourceMode,
+          sourceLabel: sourceShortLabel(slot.sourceMode),
+          market: slot.market || null,
+          listings: Array.isArray(slot.currentListings) ? slot.currentListings : []
+        },
+        error: null,
+        lastFetchedAt: new Date().toISOString()
+      };
+    });
+  }
+
+  function currentRuntimeStatus() {
+    return state.statusPayload?.status || state.slotsPayload?.status || {};
+  }
+
+  function updateNotificationsFromPayload(activityLog, slots) {
+    const alerts = buildAlertInboxEntries(activityLog, slots).slice().reverse();
+
+    if (!state.notifications.hydrated) {
+      state.notifications.seenEventIds = alerts.map((entry) => entry.eventId).slice(-100);
+      state.notifications.hydrated = true;
+      persistSeenAlertIds();
+      return;
+    }
+
+    alerts.forEach((alert) => {
+      if (state.notifications.seenEventIds.includes(alert.eventId)) {
+        return;
+      }
+
+      state.notifications.seenEventIds.push(alert.eventId);
+
+      if (
+        !state.notifications.enabled ||
+        typeof Notification === "undefined" ||
+        state.notifications.permission !== "granted"
+      ) {
+        return;
+      }
+
+      try {
+        const notification = new Notification("Torn Market Watcher", {
+          body: formatAlertHeadline(alert, { includeTime: true })
+        });
+        window.setTimeout(() => notification.close(), 7000);
+      } catch (error) {
+        state.lastError = error?.message || "Desktop notification failed.";
+      }
+    });
+
+    state.notifications.seenEventIds = state.notifications.seenEventIds.slice(-100);
+    persistSeenAlertIds();
   }
 
   async function syncData({ manualRefresh = false } = {}) {
@@ -494,11 +852,16 @@
         errors.push(slotsResult.reason?.message || "Slot request failed.");
       }
 
+      const occupiedSlots = getOccupiedSlots();
+
       if (state.slotsPayload?.slots?.length) {
-        state.selectedSlotNumber = chooseSelectedSlot(
-          state.slotsPayload.slots,
-          state.selectedSlotNumber
-        );
+        state.ui.selectedSlotNumber = chooseSelectedSlot(occupiedSlots, state.ui.selectedSlotNumber);
+        seedListingCacheFromSlots(occupiedSlots);
+      }
+
+      if (!occupiedSlots.length) {
+        state.ui.panel.open = false;
+        state.ui.panel.minimized = false;
       }
 
       if (anySuccess) {
@@ -508,14 +871,221 @@
           ? "Viewer updated with partial data. Last known good slot data is still visible."
           : "Viewer is in sync with the backend.";
         state.lastError = errors.join(" | ") || null;
+        updateNotificationsFromPayload(
+          state.statusPayload?.activityLog || state.slotsPayload?.activityLog || [],
+          occupiedSlots
+        );
+
+        const selectedSlot = occupiedSlots.find(
+          (slot) => slot.slotNumber === state.ui.selectedSlotNumber
+        );
+        const selectedView = state.ui.panel.view;
+
+        if (
+          selectedSlot &&
+          state.ui.panel.open &&
+          (selectedView === PANEL_VIEWS.MARKET || selectedView === PANEL_VIEWS.BAZAAR)
+        ) {
+          const sourceMode =
+            selectedView === PANEL_VIEWS.BAZAAR ? "BAZAAR_ONLY" : "MARKET_ONLY";
+          const cacheKey = `${selectedSlot.slotNumber}:${sourceMode}`;
+
+          if (!state.listingCache[cacheKey]?.data && state.listingCache[cacheKey]?.status !== "loading") {
+            void loadPanelListings(selectedSlot, sourceMode);
+          }
+        }
       } else {
         state.connectionState = state.lastSuccessfulSyncAt ? "disconnected" : "error";
-        state.connectionMessage = "Viewer could not reach the backend. Last known good data is being preserved.";
+        state.connectionMessage =
+          "Viewer could not reach the backend. Last known good data is being preserved.";
         state.lastError = errors.join(" | ") || "Backend unavailable.";
       }
     } finally {
       state.syncInFlight = false;
+      persistUiState();
       render();
+    }
+  }
+
+  async function requestWatcherAction(actionKey, path, successMessage) {
+    if (state.requestState[actionKey]) {
+      return;
+    }
+
+    state.requestState[actionKey] = true;
+    state.lastError = null;
+    render();
+
+    try {
+      const payload = await fetchJson(path, {
+        method: "POST",
+        body: {}
+      });
+
+      if (payload?.status || payload?.slots) {
+        state.statusPayload = {
+          ...(state.statusPayload || {}),
+          ...(payload.status ? { status: payload.status } : {}),
+          ...(payload.activityLog ? { activityLog: payload.activityLog } : {}),
+          ...(payload.versions ? { versions: payload.versions } : {}),
+          ...(payload.session ? { session: payload.session } : {})
+        };
+        state.slotsPayload = payload;
+      }
+
+      state.connectionState = "connected";
+      state.connectionMessage = successMessage;
+      state.lastSuccessfulSyncAt = new Date().toISOString();
+      const occupiedSlots = getOccupiedSlots();
+      seedListingCacheFromSlots(occupiedSlots);
+      updateNotificationsFromPayload(
+        payload?.activityLog || state.statusPayload?.activityLog || [],
+        occupiedSlots
+      );
+    } catch (error) {
+      state.connectionState = "degraded";
+      state.connectionMessage = error.message;
+      state.lastError = error.message;
+    } finally {
+      state.requestState[actionKey] = false;
+      persistUiState();
+      render();
+    }
+  }
+
+  async function toggleDesktopNotifications() {
+    const nextEnabled = !state.notifications.enabled;
+    state.notifications.enabled = nextEnabled;
+
+    if (typeof Notification !== "undefined" && nextEnabled && Notification.permission === "default") {
+      try {
+        state.notifications.permission = await Notification.requestPermission();
+      } catch (error) {
+        state.notifications.permission = Notification.permission;
+        state.lastError = error?.message || "Notification permission request failed.";
+      }
+    } else if (typeof Notification !== "undefined") {
+      state.notifications.permission = Notification.permission;
+    }
+
+    persistUiState();
+    render();
+  }
+
+  function clearAlerts() {
+    state.ui.alertsClearedAt = new Date().toISOString();
+    persistUiState();
+    render();
+  }
+
+  function toggleAlertsInbox() {
+    state.ui.alertsInboxOpen = !state.ui.alertsInboxOpen;
+    persistUiState();
+    render();
+  }
+
+  function openPanelForSlot(slotNumber) {
+    state.ui.selectedSlotNumber = slotNumber;
+    state.ui.panel.open = true;
+    state.ui.panel.minimized = false;
+
+    const slot = getOccupiedSlots().find((entry) => entry.slotNumber === slotNumber);
+
+    if (slot) {
+      state.ui.panel.view =
+        state.ui.panel.view ||
+        (slot.sourceMode === "BAZAAR_ONLY" ? PANEL_VIEWS.BAZAAR : PANEL_VIEWS.MARKET);
+    }
+
+    persistUiState();
+    render();
+
+    if (slot && (state.ui.panel.view === PANEL_VIEWS.MARKET || state.ui.panel.view === PANEL_VIEWS.BAZAAR)) {
+      void loadPanelListings(slot, state.ui.panel.view === PANEL_VIEWS.BAZAAR ? "BAZAAR_ONLY" : "MARKET_ONLY");
+    }
+  }
+
+  function minimizePanel() {
+    state.ui.panel.minimized = true;
+    state.ui.panel.open = false;
+    persistUiState();
+    render();
+  }
+
+  function closePanel() {
+    state.ui.panel.open = false;
+    state.ui.panel.minimized = false;
+    persistUiState();
+    render();
+  }
+
+  function restoreMinimizedPanel() {
+    if (!state.ui.selectedSlotNumber) {
+      return;
+    }
+
+    state.ui.panel.open = true;
+    state.ui.panel.minimized = false;
+    persistUiState();
+    render();
+  }
+
+  async function loadPanelListings(slot, sourceMode) {
+    const cacheKey = `${slot.slotNumber}:${sourceMode}`;
+    const cached = state.listingCache[cacheKey];
+
+    if (cached?.status === "loading") {
+      return;
+    }
+
+    state.listingCache[cacheKey] = {
+      status: "loading",
+      data: cached?.data || null,
+      error: null,
+      lastFetchedAt: cached?.lastFetchedAt || null
+    };
+    render();
+
+    try {
+      const payload = await fetchJson(
+        `/api/slot/${slot.slotNumber}/listings?sourceMode=${encodeURIComponent(sourceMode)}`
+      );
+      state.listingCache[cacheKey] = {
+        status: "success",
+        data: payload,
+        error: null,
+        lastFetchedAt: new Date().toISOString()
+      };
+    } catch (error) {
+      state.listingCache[cacheKey] = {
+        status: "error",
+        data: cached?.data || null,
+        error: error.message,
+        lastFetchedAt: cached?.lastFetchedAt || null
+      };
+      state.lastError = error.message;
+    } finally {
+      render();
+    }
+  }
+
+  function setPanelView(nextView) {
+    state.ui.panel.view = nextView;
+    persistUiState();
+    render();
+
+    const slot = getOccupiedSlots().find((entry) => entry.slotNumber === state.ui.selectedSlotNumber);
+
+    if (!slot) {
+      return;
+    }
+
+    if (nextView === PANEL_VIEWS.MARKET) {
+      void loadPanelListings(slot, "MARKET_ONLY");
+    }
+
+    if (nextView === PANEL_VIEWS.BAZAAR) {
+      void loadPanelListings(slot, "BAZAAR_ONLY");
     }
   }
 
@@ -527,8 +1097,8 @@
     window.open(url, "_blank", "noopener");
   }
 
-  function renderTopStatus(slots) {
-    const status = state.statusPayload?.status || state.slotsPayload?.status || {};
+  function renderTopStatus(slots, inboxEntries) {
+    const status = currentRuntimeStatus();
     const backendVersion =
       state.statusPayload?.versions?.backendVersion ||
       state.slotsPayload?.versions?.backendVersion ||
@@ -569,12 +1139,19 @@
       },
       {
         label: "Next Notification",
-        value: deriveNextNotificationLabel(),
-        detail: "Desktop notifications are not part of v1 yet"
+        value: deriveNextNotificationLabel(status, inboxEntries),
+        detail: `Desktop notifications: ${currentNotificationLabel()}`
       },
       {
         label: "Connection",
-        value: state.connectionState === "connected" ? "Connected" : state.connectionState === "degraded" ? "Degraded" : state.connectionState === "loading" ? "Loading" : "Disconnected",
+        value:
+          state.connectionState === "connected"
+            ? "Connected"
+            : state.connectionState === "degraded"
+              ? "Degraded"
+              : state.connectionState === "loading"
+                ? "Loading"
+                : "Disconnected",
         detail:
           state.lastSuccessfulSyncAt
             ? `Last good sync ${formatDateTime(state.lastSuccessfulSyncAt)}`
@@ -599,21 +1176,18 @@
     `;
   }
 
-  function renderSlotCard(slot) {
+  function renderWatchedSlotCard(slot) {
     const stateInfo = describeSlotDataState(slot);
+    const activeAlert = createActiveAlertForSlot(slot);
 
     return `
-      <article class="slot-card ${slot.occupied ? "occupied" : "empty"} ${
-        state.selectedSlotNumber === slot.slotNumber ? "selected" : ""
-      }" data-slot-select="${slot.slotNumber}">
+      <article class="slot-card occupied" data-slot-select="${slot.slotNumber}">
         <div class="slot-head">
           <div>
-            <div class="slot-title">Slot ${slot.slotNumber}${slot.occupied ? `: ${escapeHtml(slot.itemName)}` : ""}</div>
-            <div class="slot-subtitle">${
-              slot.occupied
-                ? `Item ${escapeHtml(slot.itemId)} | ${escapeHtml(sourceShortLabel(slot.sourceMode))}`
-                : "Empty watch slot"
-            }</div>
+            <div class="slot-title">Slot ${slot.slotNumber}: ${escapeHtml(slot.itemName)}</div>
+            <div class="slot-subtitle">Item ${escapeHtml(slot.itemId)} | ${escapeHtml(
+              sourceShortLabel(slot.sourceMode)
+            )}</div>
           </div>
           <div class="badge-row">
             <span class="badge source">${escapeHtml(sourceShortLabel(slot.sourceMode))}</span>
@@ -622,7 +1196,7 @@
             )}</span>
           </div>
         </div>
-        <div class="meta-grid">
+        <div class="meta-grid compact">
           <div class="meta-card">
             <span class="label">Target</span>
             <span class="value">${formatMoney(slot.targetPrice)}</span>
@@ -637,86 +1211,148 @@
           </div>
           <div class="meta-card">
             <span class="label">Watching</span>
-            <span class="value">${slot.occupied ? (slot.enabled ? "Enabled" : "Disabled") : "--"}</span>
+            <span class="value">${slot.enabled ? "Enabled" : "Disabled"}</span>
           </div>
         </div>
         <div class="slot-note ${escapeHtml(stateInfo.tone)}">
           <strong>${escapeHtml(stateInfo.label)}</strong><br />
           ${escapeHtml(stateInfo.detail)}
         </div>
+        ${
+          activeAlert
+            ? `<div class="slot-alert-line">${escapeHtml(
+                formatAlertHeadline(activeAlert, { includeTime: true })
+              )}</div>`
+            : ""
+        }
         <div class="slot-subtitle" style="margin-top: 12px;">
-          Last checked: ${escapeHtml(formatDateTime(slot.lastChecked))} | Last success: ${escapeHtml(
-            formatTime(slot.lastChecked)
-          )}
+          Last checked: ${escapeHtml(formatDateTime(slot.lastChecked))}
         </div>
       </article>
     `;
   }
 
-  function renderAlerts(slots) {
-    const alerts = buildAlertEntries(slots);
+  function renderCurrentAlerts(slots) {
+    const entries = buildCurrentAlertEntries(slots);
 
-    if (!alerts.length) {
+    if (!entries.length) {
       return `
         <div class="empty-state">
-          No active desktop alerts right now. This panel will show current BUY NOW and near-miss opportunities in a denser desktop format.
+          No active desktop alerts right now. This panel stays focused on current opportunities instead of the full alert history.
         </div>
       `;
     }
 
     return `
       <div class="alert-list">
-        ${alerts
-          .map(
-            (alert) => `
-              <article class="alert-card">
-                <div class="alert-head">
-                  <div>
-                    <div class="alert-title">${escapeHtml(alert.headline)}</div>
-                    <div class="alert-detail">Slot ${escapeHtml(alert.slotNumber)} | ${escapeHtml(
-                      alert.state || "RECENT"
-                    )}</div>
-                  </div>
-                  <span class="badge ${alert.state === "BUY_NOW" ? "watching" : "stale"}">${escapeHtml(
-                    alert.state || "RECENT"
-                  )}</span>
+        ${entries
+          .map(({ slot, alert }) => `
+            <article class="alert-card">
+              <div class="alert-head">
+                <div>
+                  <div class="alert-title">${escapeHtml(
+                    formatAlertHeadline(alert, { includeTime: true })
+                  )}</div>
+                  <div class="alert-detail">Slot ${escapeHtml(slot.slotNumber)} | ${escapeHtml(
+                    slot.state || "RECENT"
+                  )}</div>
                 </div>
-                ${
-                  alert.extraCount > 0
-                    ? `<div class="alert-detail" style="margin-top: 10px;">+${escapeHtml(
-                        alert.extraCount
-                      )} Listings available</div>`
-                    : ""
-                }
-                <div class="alert-detail">Last updated ${escapeHtml(formatDateTime(alert.lastUpdated))}</div>
-              </article>
-            `
-          )
+                <span class="badge ${slot.state === "BUY_NOW" ? "watching" : "stale"}">${escapeHtml(
+                  slot.state || "RECENT"
+                )}</span>
+              </div>
+              ${
+                notificationExtraCount(slot.notification, slot) > 0
+                  ? `<div class="alert-detail">+${escapeHtml(
+                      notificationExtraCount(slot.notification, slot)
+                    )} Listings available</div>`
+                  : ""
+              }
+            </article>
+          `)
           .join("")}
       </div>
     `;
   }
 
-  function renderListingTable(slot) {
-    if (!slot.occupied) {
-      return `
-        <div class="empty-state">
-          This slot is empty. Desktop Viewer v1 shows all six slots so you can monitor occupancy at a glance.
-        </div>
-      `;
+  function renderAlertInbox(inboxEntries) {
+    if (!state.ui.alertsInboxOpen) {
+      return "";
     }
 
-    if (!Array.isArray(slot.currentListings) || slot.currentListings.length === 0) {
-      const listingState = describeSlotDataState(slot);
-      return `
-        <div class="empty-state ${escapeHtml(listingState.tone)}">
-          <strong>${escapeHtml(listingState.label)}</strong><br />
-          ${escapeHtml(listingState.detail)}
+    return `
+      <section class="panel inbox-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Alert Inbox</h2>
+            <div class="panel-subtitle">Last 10 alerts plus new alerts that arrive while watching.</div>
+          </div>
+          <div class="panel-subtitle">${escapeHtml(inboxEntries.length)} visible</div>
         </div>
-      `;
+        ${
+          inboxEntries.length
+            ? `<div class="alert-list compact">
+                ${inboxEntries
+                  .map((alert) => `
+                    <article class="alert-card">
+                      <div class="alert-title">${escapeHtml(
+                        formatAlertHeadline(alert, { includeTime: true })
+                      )}</div>
+                      ${alert.listingCount > 1 ? `<div class="alert-detail">+${escapeHtml(alert.listingCount - 1)} Listings available</div>` : ""}
+                    </article>
+                  `)
+                  .join("")}
+              </div>`
+            : `<div class="empty-state">No alerts yet. New alerts will appear here while watching.</div>`
+        }
+      </section>
+    `;
+  }
+
+  function renderFilterMenu() {
+    if (!state.ui.filterMenuOpen) {
+      return "";
     }
 
-    if (slot.sourceMode === "BAZAAR_ONLY") {
+    return `
+      <div class="filter-menu" data-filter-menu>
+        ${FILTER_OPTIONS.map(
+          (option) => `
+            <button
+              class="filter-option ${state.ui.filter === option.value ? "active" : ""}"
+              data-filter-value="${escapeHtml(option.value)}"
+            >
+              ${escapeHtml(option.label)}
+            </button>
+          `
+        ).join("")}
+      </div>
+    `;
+  }
+
+  function renderPanelListings(slot, sourceMode) {
+    const cacheKey = `${slot.slotNumber}:${sourceMode}`;
+    const entry = state.listingCache[cacheKey];
+    const label = sourceMode === "BAZAAR_ONLY" ? "Bazaar" : "Market";
+    const listings = Array.isArray(entry?.data?.listings) ? entry.data.listings : [];
+
+    if (entry?.status === "loading" && !entry?.data) {
+      return `<div class="empty-state">Loading ${escapeHtml(label.toLowerCase())} listings...</div>`;
+    }
+
+    if (entry?.status === "error" && !entry?.data) {
+      return `<div class="empty-state bad">Failed to load ${escapeHtml(
+        label.toLowerCase()
+      )} listings.<br />${escapeHtml(entry.error || "Unknown fetch error.")}</div>`;
+    }
+
+    if (!listings.length) {
+      return `<div class="empty-state">No current ${escapeHtml(
+        label.toLowerCase()
+      )} listings exist for this item.</div>`;
+    }
+
+    if (sourceMode === "BAZAAR_ONLY") {
       return `
         <div class="detail-listings">
           <table>
@@ -730,7 +1366,7 @@
               </tr>
             </thead>
             <tbody>
-              ${slot.currentListings
+              ${listings
                 .map(
                   (listing) => `
                     <tr>
@@ -740,12 +1376,12 @@
                       )}</td>
                       <td>${escapeHtml(formatMoney(listing.price))}</td>
                       <td>${escapeHtml(listing.quantity ?? "--")}</td>
-                      <td>${escapeHtml(formatTime(listing.contentUpdated || listing.lastChecked))}</td>
+                      <td>${escapeHtml(formatCompactTime(listing.contentUpdated || listing.lastChecked))}</td>
                       <td>${
                         listing.bazaarUrl
-                          ? `<a class="listing-action" href="${escapeHtml(
+                          ? `<button class="link-button" data-open-link="${escapeHtml(
                               listing.bazaarUrl
-                            )}" target="_blank" rel="noopener">Open Bazaar</a>`
+                            )}">Open Bazaar</button>`
                           : `<span class="panel-subtitle">Unavailable</span>`
                       }</td>
                     </tr>
@@ -769,13 +1405,13 @@
             </tr>
           </thead>
           <tbody>
-            ${slot.currentListings
+            ${listings
               .map(
                 (listing) => `
                   <tr>
                     <td>${escapeHtml(formatMoney(listing.price))}</td>
                     <td>${escapeHtml(listing.quantity ?? "--")}</td>
-                    <td>${escapeHtml(formatTime(listing.contentUpdated || listing.lastChecked))}</td>
+                    <td>${escapeHtml(formatCompactTime(listing.contentUpdated || listing.lastChecked))}</td>
                   </tr>
                 `
               )
@@ -786,147 +1422,202 @@
     `;
   }
 
-  function renderDetail(slot) {
-    if (!slot) {
-      return `
-        <div class="empty-state">
-          Select a slot to inspect its listing detail view.
-        </div>
-      `;
+  function renderPanelAlerts(slot, inboxEntries) {
+    const itemAlerts = inboxEntries.filter((alert) => Number(alert.itemId) === Number(slot.itemId));
+
+    if (!itemAlerts.length) {
+      return `<div class="empty-state">No alerts recorded for this watched item in the current desktop inbox view.</div>`;
     }
 
-    const listingState = describeSlotDataState(slot);
-    const bestListing = currentBestListing(slot);
-
     return `
-      <div class="detail-stack">
-        <section class="detail-header">
-          <h2>${slot.occupied ? escapeHtml(slot.itemName) : `Slot ${escapeHtml(slot.slotNumber)}`}</h2>
-          <p>${
-            slot.occupied
-              ? `Slot ${escapeHtml(slot.slotNumber)} | Item ${escapeHtml(slot.itemId)} | ${escapeHtml(
-                  sourceShortLabel(slot.sourceMode)
-                )}`
-              : "Empty slot ready for a new watch item"
-          }</p>
-          <div class="badge-row" style="justify-content:flex-start; margin-top: 10px;">
-            <span class="badge source">${escapeHtml(sourceShortLabel(slot.sourceMode))}</span>
-            <span class="badge ${escapeHtml(trackerStatusBadgeClass(slot))}">${escapeHtml(
-              slot.trackerStatusLabel || slot.trackerStatus || "EMPTY"
-            )}</span>
-          </div>
-          ${
-            slot.occupied
-              ? `<div class="detail-actions">
-                  ${
-                    slot.links?.tornMarket && slot.sourceMode !== "BAZAAR_ONLY"
-                      ? `<button class="button secondary" data-open-link="${escapeHtml(
-                          slot.links.tornMarket
-                        )}">Open Market</button>`
-                      : ""
-                  }
-                  <button class="button secondary" data-action="refresh-now">Refresh Snapshot</button>
-                </div>`
-              : ""
-          }
-        </section>
-
-        <section class="meta-grid">
-          <div class="meta-card">
-            <span class="label">Target Price</span>
-            <span class="value">${formatMoney(slot.targetPrice)}</span>
-          </div>
-          <div class="meta-card">
-            <span class="label">Near-Miss Gap</span>
-            <span class="value">${formatMoney(slot.nearMissGap)}</span>
-          </div>
-          <div class="meta-card">
-            <span class="label">Current Status</span>
-            <span class="value">${escapeHtml(slot.trackerStatusLabel || slot.trackerStatus || "EMPTY")}</span>
-          </div>
-          <div class="meta-card">
-            <span class="label">Current Best Listing</span>
-            <span class="value">${escapeHtml(currentBestPriceLabel(slot))}</span>
-          </div>
-          <div class="meta-card">
-            <span class="label">Watching Enabled</span>
-            <span class="value">${slot.occupied ? (slot.enabled ? "Yes" : "No") : "--"}</span>
-          </div>
-          <div class="meta-card">
-            <span class="label">Desktop Notifications</span>
-            <span class="value">Not in v1</span>
-          </div>
-        </section>
-
-        <section class="slot-note ${escapeHtml(listingState.tone)}">
-          <strong>${escapeHtml(listingState.label)}</strong><br />
-          ${escapeHtml(listingState.detail)}
-        </section>
-
-        <section class="panel" style="padding: 14px;">
-          <div class="panel-head">
-            <div>
-              <h3>Recent Alert</h3>
-              <div class="panel-subtitle">Current or most recent interesting deal for this slot</div>
-            </div>
-          </div>
-          ${
-            slot.notification || bestListing
-              ? `<div class="alert-card">
-                  <div class="alert-title">${escapeHtml(alertHeadlineForSlot(slot))}</div>
-                  ${
-                    (slot.qualifyingListings?.length || 0) > 1
-                      ? `<div class="alert-detail">+${escapeHtml(
-                          (slot.qualifyingListings?.length || 0) - 1
-                        )} Listings available</div>`
-                      : ""
-                  }
-                  <div class="alert-detail">Last updated ${escapeHtml(
-                    formatDateTime(slot.notification?.timestamp || slot.lastChecked)
-                  )}</div>
-                </div>`
-              : `<div class="empty-state">No alert has been recorded for this slot yet.</div>`
-          }
-        </section>
-
-        <section>
-          <div class="panel-head">
-            <div>
-              <h3>${slot.sourceMode === "BAZAAR_ONLY" ? "Bazaar Listings" : "Market Listings"}</h3>
-              <div class="panel-subtitle">Source-specific live listing view with more room than TornPDA.</div>
-            </div>
-          </div>
-          ${renderListingTable(slot)}
-        </section>
-
-        <section class="panel" style="padding: 14px;">
-          <div class="panel-head">
-            <div>
-              <h3>Update Details</h3>
-              <div class="panel-subtitle">Useful backend timestamps for diagnosing watcher state</div>
-            </div>
-          </div>
-          <div class="meta-grid">
-            <div class="meta-card">
-              <span class="label">Last Checked</span>
-              <span class="value">${escapeHtml(formatDateTime(slot.lastChecked))}</span>
-            </div>
-            <div class="meta-card">
-              <span class="label">Last Attempted</span>
-              <span class="value">${escapeHtml(formatDateTime(slot.lastAttemptedAt))}</span>
-            </div>
-            <div class="meta-card">
-              <span class="label">Lowest Price</span>
-              <span class="value">${escapeHtml(formatMoney(slot.lowestPrice))}</span>
-            </div>
-            <div class="meta-card">
-              <span class="label">Lowest Above Target</span>
-              <span class="value">${escapeHtml(formatMoney(slot.lowestAboveTarget))}</span>
-            </div>
-          </div>
-        </section>
+      <div class="alert-list compact">
+        ${itemAlerts
+          .map(
+            (alert) => `
+              <article class="alert-card">
+                <div class="alert-title">${escapeHtml(
+                  formatAlertHeadline(alert, { includeTime: true })
+                )}</div>
+                ${alert.listingCount > 1 ? `<div class="alert-detail">+${escapeHtml(alert.listingCount - 1)} Listings available</div>` : ""}
+              </article>
+            `
+          )
+          .join("")}
       </div>
     `;
+  }
+
+  function renderWatcherInfo(slot) {
+    const stats = slot.sessionStats || state.slotsPayload?.session?.slots?.[String(slot.slotNumber)] || null;
+    const targetPrice = slot.targetPrice;
+
+    if (!stats) {
+      return `<div class="empty-state">No current watch-session stats are available for this item yet.</div>`;
+    }
+
+    const lowDelta =
+      stats.lowestListingPrice !== null && targetPrice !== null
+        ? stats.lowestListingPrice - targetPrice
+        : null;
+    const highDelta =
+      stats.highestListingPrice !== null && targetPrice !== null
+        ? stats.highestListingPrice - targetPrice
+        : null;
+
+    const cards = [
+      {
+        label: "Lowest Found",
+        value:
+          stats.lowestListingPrice === null
+            ? "--"
+            : `${formatMoney(stats.lowestListingPrice)} (${lowDelta >= 0 ? "+" : ""}${formatMoney(
+                lowDelta
+              )})`
+      },
+      {
+        label: "Highest Found",
+        value:
+          stats.highestListingPrice === null
+            ? "--"
+            : `${formatMoney(stats.highestListingPrice)} (${highDelta >= 0 ? "+" : ""}${formatMoney(
+                highDelta
+              )})`
+      },
+      {
+        label: "Alerted Qty",
+        value: String(stats.totalAlertedQuantity ?? 0)
+      },
+      {
+        label: "Listings Seen",
+        value: String(stats.totalListingsFound ?? 0)
+      },
+      {
+        label: "Near-Misses",
+        value: String(stats.totalNearMisses ?? 0)
+      },
+      {
+        label: "Total Alerts",
+        value: String(stats.totalAlerts ?? 0)
+      },
+      {
+        label: "Last Checked",
+        value: formatDateTime(stats.lastChecked)
+      },
+      {
+        label: "Source Mode",
+        value: sourceShortLabel(stats.sourceMode)
+      }
+    ];
+
+    return `
+      <div class="meta-grid">
+        ${cards
+          .map(
+            (card) => `
+              <div class="meta-card">
+                <span class="label">${escapeHtml(card.label)}</span>
+                <span class="value">${escapeHtml(card.value)}</span>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  function panelViewOptions() {
+    return [
+      { value: PANEL_VIEWS.MARKET, label: "View Market Listings" },
+      { value: PANEL_VIEWS.BAZAAR, label: "View Bazaar Listings" },
+      { value: PANEL_VIEWS.ALERTS, label: "Latest Alerts" },
+      { value: PANEL_VIEWS.INFO, label: "Watcher Info" }
+    ];
+  }
+
+  function renderSidePanel(slot, inboxEntries) {
+    if (!slot || !state.ui.panel.open) {
+      return "";
+    }
+
+    let content = "";
+
+    if (state.ui.panel.view === PANEL_VIEWS.BAZAAR) {
+      content = renderPanelListings(slot, "BAZAAR_ONLY");
+    } else if (state.ui.panel.view === PANEL_VIEWS.ALERTS) {
+      content = renderPanelAlerts(slot, inboxEntries);
+    } else if (state.ui.panel.view === PANEL_VIEWS.INFO) {
+      content = renderWatcherInfo(slot);
+    } else {
+      content = renderPanelListings(slot, "MARKET_ONLY");
+    }
+
+    return `
+      <aside
+        class="side-panel"
+        id="desktop-side-panel"
+        style="width:${escapeHtml(state.ui.panel.width)}px;"
+      >
+        <div class="side-panel-header">
+          <div>
+            <h2>${escapeHtml(slot.itemName)}</h2>
+            <div class="panel-subtitle">Slot ${escapeHtml(slot.slotNumber)} | Item ${escapeHtml(
+              slot.itemId
+            )}</div>
+          </div>
+          <div class="side-panel-controls">
+            <button class="button secondary slim" data-action="minimize-panel">Minimize</button>
+            <button class="button secondary slim" data-action="close-panel">X</button>
+          </div>
+        </div>
+        <div class="badge-row panel-badges">
+          <span class="badge source">${escapeHtml(sourceShortLabel(slot.sourceMode))}</span>
+          <span class="badge ${escapeHtml(trackerStatusBadgeClass(slot))}">${escapeHtml(
+            slot.trackerStatusLabel || slot.trackerStatus || "EMPTY"
+          )}</span>
+        </div>
+        <div class="panel-controls-row">
+          <select class="panel-select" data-action="change-panel-view">
+            ${panelViewOptions()
+              .map(
+                (option) => `
+                  <option value="${escapeHtml(option.value)}" ${
+                    option.value === state.ui.panel.view ? "selected" : ""
+                  }>
+                    ${escapeHtml(option.label)}
+                  </option>
+                `
+              )
+              .join("")}
+          </select>
+          ${
+            slot.links?.tornMarket
+              ? `<button class="button secondary slim" data-open-link="${escapeHtml(
+                  slot.links.tornMarket
+                )}">Open Market</button>`
+              : ""
+          }
+        </div>
+        <div class="side-panel-content">
+          ${content}
+        </div>
+      </aside>
+    `;
+  }
+
+  function renderMinimizedPanelChip(slot) {
+    if (!slot || !state.ui.panel.minimized) {
+      return "";
+    }
+
+    return `
+      <button class="minimized-panel-chip" data-action="restore-panel">
+        ${escapeHtml(slot.itemName)} (${escapeHtml(sourceShortLabel(slot.sourceMode))})
+      </button>
+    `;
+  }
+
+  function requestBusy(actionKey) {
+    return state.requestState[actionKey] === true || state.syncInFlight;
   }
 
   function render() {
@@ -934,21 +1625,32 @@
       return;
     }
 
-    const slots = getSlots();
-    const selectedSlotNumber = chooseSelectedSlot(slots, state.selectedSlotNumber);
-    const selectedSlot = slots.find((slot) => slot.slotNumber === selectedSlotNumber) || null;
+    const occupiedSlots = getOccupiedSlots();
+    const filteredSlots = filterSlots(occupiedSlots, state.ui.filter);
+    state.ui.selectedSlotNumber = chooseSelectedSlot(occupiedSlots, state.ui.selectedSlotNumber);
+    const selectedSlot = occupiedSlots.find((slot) => slot.slotNumber === state.ui.selectedSlotNumber) || null;
     const summary = state.slotsPayload?.summary || state.statusPayload?.status || {};
-    const runtimeStatus = state.statusPayload?.status || state.slotsPayload?.status || {};
+    const runtimeStatus = currentRuntimeStatus();
+    const activityLog = state.statusPayload?.activityLog || state.slotsPayload?.activityLog || [];
+    const inboxEntries = buildAlertInboxEntries(activityLog, occupiedSlots);
 
-    state.selectedSlotNumber = selectedSlotNumber;
+    if (!selectedSlot && state.ui.panel.open) {
+      state.ui.panel.open = false;
+      state.ui.panel.minimized = false;
+    }
+
+    if (selectedSlot && !state.ui.panel.view) {
+      state.ui.panel.view =
+        selectedSlot.sourceMode === "BAZAAR_ONLY" ? PANEL_VIEWS.BAZAAR : PANEL_VIEWS.MARKET;
+    }
 
     state.appRoot.innerHTML = `
       <header class="viewer-header">
         <div class="viewer-title">
-          <h1>Desktop Viewer v1</h1>
+          <h1>Desktop Viewer</h1>
           <p>
-            Desktop-first monitoring for the same Torn market watcher backend. This view keeps all 6 slots visible,
-            expands listing detail, and preserves the backend as the single source of truth.
+            Desktop-first monitoring for the same Torn market watcher backend. This view focuses on occupied watches,
+            compact alerts, and a resizable detail panel without changing backend truth.
           </p>
         </div>
         <div class="header-actions">
@@ -961,17 +1663,51 @@
                   ? "Connecting"
                   : "Backend Disconnected"
           )}</span>
-          <button class="button" data-action="refresh-now" ${state.syncInFlight ? "disabled" : ""}>
-            ${state.syncInFlight
-              ? "Refreshing..."
-              : runtimeStatus.watchingActive && runtimeStatus.activeEnabledCount > 0
-                ? "Refresh Now"
-                : "Reload View"}
+          <button class="button secondary" data-action="toggle-inbox">
+            ${state.ui.alertsInboxOpen ? "Close" : "Alerts"}
+          </button>
+          <button class="button secondary" data-action="toggle-desktop-notifications">
+            Notifications: ${escapeHtml(state.notifications.enabled ? "On" : "Off")}
+          </button>
+          <button
+            class="button secondary"
+            data-action="start-watching"
+            ${runtimeStatus.watchingActive || requestBusy("startWatching") ? "disabled" : ""}
+          >
+            ${requestBusy("startWatching") ? "Starting..." : "Start Watching"}
+          </button>
+          <button
+            class="button secondary"
+            data-action="stop-watching"
+            ${!runtimeStatus.watchingActive || requestBusy("stopWatching") ? "disabled" : ""}
+          >
+            ${requestBusy("stopWatching") ? "Stopping..." : "Stop Watching"}
+          </button>
+          <button
+            class="button"
+            data-action="refresh-now"
+            ${requestBusy("refreshNow") ? "disabled" : ""}
+          >
+            ${
+              requestBusy("refreshNow")
+                ? "Refreshing..."
+                : runtimeStatus.watchingActive && runtimeStatus.activeEnabledCount > 0
+                  ? "Refresh Now"
+                  : "Reload View"
+            }
+          </button>
+          <button class="button secondary" data-action="clear-alerts">Clear Alerts</button>
+          <button
+            class="button secondary"
+            data-action="reset-session"
+            ${requestBusy("resetSession") ? "disabled" : ""}
+          >
+            ${requestBusy("resetSession") ? "Resetting..." : "Reset Session Stats"}
           </button>
         </div>
       </header>
 
-      ${renderTopStatus(slots)}
+      ${renderTopStatus(occupiedSlots, inboxEntries)}
 
       <div class="notice ${escapeHtml(
         state.connectionState === "connected"
@@ -990,80 +1726,62 @@
         }
       </div>
 
-      <main class="layout-grid" style="margin-top: 18px;">
-        <section>
-          <section class="panel">
-            <div class="panel-head">
-              <div>
-                <h2>Watched Slots</h2>
-                <div class="panel-subtitle">
-                  All 6 slots stay visible. Occupied slots surface key pricing and backend status at a glance.
-                </div>
-              </div>
-          <div class="panel-subtitle">
-            ${escapeHtml(summary.occupiedCount ?? 0)} occupied / ${escapeHtml(
-              summary.slotLimit ?? 6
-            )} total
-          </div>
-        </div>
-        ${
-          !state.syncInFlight && !state.slotsPayload?.slots?.length
-            ? `<div class="empty-state" style="margin-bottom: 16px;">
-                No slot data available from the backend yet. The viewer is showing all 6 slot placeholders until /api/slots responds.
-              </div>`
-            : ""
-        }
-        <div class="slot-grid">
-          ${slots.map((slot) => renderSlotCard(slot)).join("")}
-        </div>
-      </section>
+      ${renderAlertInbox(inboxEntries)}
 
-          <section class="panel">
-            <div class="panel-head">
-              <div>
-                <h2>Active Alerts</h2>
-                <div class="panel-subtitle">
-                  Current BUY NOW and near-miss opportunities in a denser desktop format.
-                </div>
-              </div>
-            </div>
-            ${renderAlerts(slots)}
-          </section>
-        </section>
-
-        <aside class="panel">
+      <main class="viewer-main ${state.ui.panel.open ? "panel-open" : ""}" ${
+        state.ui.panel.open ? `style="margin-right:${escapeHtml(state.ui.panel.width + 24)}px;"` : ""
+      }>
+        <section class="panel watched-panel">
           <div class="panel-head">
             <div>
-              <h2>Selected Slot Detail</h2>
+              <h2>Watched Slots</h2>
               <div class="panel-subtitle">
-                Click any slot to inspect its source-specific listing table, recent alert, and update state.
+                Only currently occupied slots appear here so the dashboard stays dense and readable.
+              </div>
+            </div>
+            <div class="panel-tools">
+              <button class="button secondary slim" data-action="toggle-filter-menu" data-filter-menu>
+                Filter
+              </button>
+              <div class="panel-subtitle">
+                ${escapeHtml(summary.occupiedCount ?? occupiedSlots.length)} watched
+              </div>
+              ${renderFilterMenu()}
+            </div>
+          </div>
+          ${
+            !occupiedSlots.length
+              ? `<div class="empty-state">No watched items yet.</div>`
+              : !filteredSlots.length
+                ? `<div class="empty-state">No watched items match the current filter.</div>`
+                : `<div class="slot-grid">${filteredSlots.map((slot) => renderWatchedSlotCard(slot)).join("")}</div>`
+          }
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Active Alerts</h2>
+              <div class="panel-subtitle">
+                Current active opportunities stay here. Use the inbox for recent alert history.
               </div>
             </div>
           </div>
-          ${renderDetail(selectedSlot)}
-        </aside>
+          ${renderCurrentAlerts(occupiedSlots)}
+        </section>
       </main>
 
+      ${renderSidePanel(selectedSlot, inboxEntries)}
+      ${renderMinimizedPanelChip(selectedSlot)}
+
       <div class="footer-note">
-        Desktop Viewer v1 is intentionally lightweight: no charts, no predictors, and no heavy analytics yet.
+        Desktop Viewer v1 stays monitoring-focused: no charts, no predictors, and no heavy analytics yet.
       </div>
     `;
 
     state.appRoot.querySelectorAll("[data-slot-select]").forEach((button) => {
       button.addEventListener("click", () => {
-        state.selectedSlotNumber = Number(button.getAttribute("data-slot-select"));
-        render();
-      });
-    });
-
-    state.appRoot.querySelectorAll('[data-action="refresh-now"]').forEach((button) => {
-      button.addEventListener("click", () => {
-        syncData({
-          manualRefresh: Boolean(
-            (state.statusPayload?.status || state.slotsPayload?.status)?.watchingActive &&
-              (state.statusPayload?.status || state.slotsPayload?.status)?.activeEnabledCount > 0
-          )
-        });
+        openPanelForSlot(Number(button.getAttribute("data-slot-select")));
       });
     });
 
@@ -1072,6 +1790,123 @@
         openExternal(button.getAttribute("data-open-link"));
       });
     });
+
+    state.appRoot.querySelectorAll("[data-filter-value]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        state.ui.filter = button.getAttribute("data-filter-value") || "ALL";
+        state.ui.filterMenuOpen = false;
+        persistUiState();
+        render();
+      });
+    });
+
+    const filterToggle = state.appRoot.querySelector('[data-action="toggle-filter-menu"]');
+    if (filterToggle) {
+      filterToggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        state.ui.filterMenuOpen = !state.ui.filterMenuOpen;
+        render();
+      });
+    }
+
+    const panelViewSelect = state.appRoot.querySelector('[data-action="change-panel-view"]');
+    if (panelViewSelect) {
+      panelViewSelect.addEventListener("change", () => {
+        setPanelView(panelViewSelect.value);
+      });
+    }
+
+    const panel = document.getElementById("desktop-side-panel");
+    if (panel && typeof ResizeObserver !== "undefined") {
+      if (state.panelResizeObserver) {
+        state.panelResizeObserver.disconnect();
+      }
+
+      state.panelResizeObserver = new ResizeObserver((entries) => {
+        const width = Math.round(entries[0]?.contentRect?.width || state.ui.panel.width);
+        state.ui.panel.width = Math.max(360, width);
+        persistUiState();
+      });
+      state.panelResizeObserver.observe(panel);
+      state.panelElement = panel;
+    } else if (state.panelResizeObserver) {
+      state.panelResizeObserver.disconnect();
+      state.panelResizeObserver = null;
+      state.panelElement = null;
+    }
+
+    const handlers = {
+      "toggle-inbox": toggleAlertsInbox,
+      "toggle-desktop-notifications": () => {
+        void toggleDesktopNotifications();
+      },
+      "start-watching": () => {
+        void requestWatcherAction(
+          "startWatching",
+          "/api/watching/start",
+          "Global watching started. Enabled slots will now poll on the backend interval."
+        );
+      },
+      "stop-watching": () => {
+        void requestWatcherAction(
+          "stopWatching",
+          "/api/watching/stop",
+          "Global watching stopped. Slots remain saved as preferences."
+        );
+      },
+      "refresh-now": () => {
+        const active = runtimeStatus.watchingActive && runtimeStatus.activeEnabledCount > 0;
+
+        if (active) {
+          state.requestState.refreshNow = true;
+          render();
+          syncData({ manualRefresh: true }).finally(() => {
+            state.requestState.refreshNow = false;
+            render();
+          });
+          return;
+        }
+
+        state.requestState.refreshNow = true;
+        render();
+        syncData({ manualRefresh: false }).finally(() => {
+          state.requestState.refreshNow = false;
+          render();
+        });
+      },
+      "clear-alerts": clearAlerts,
+      "reset-session": () => {
+        void requestWatcherAction(
+          "resetSession",
+          "/api/session/reset",
+          "Watcher session stats were reset."
+        );
+      },
+      "close-panel": closePanel,
+      "minimize-panel": minimizePanel,
+      "restore-panel": restoreMinimizedPanel
+    };
+
+    Object.entries(handlers).forEach(([action, handler]) => {
+      state.appRoot.querySelectorAll(`[data-action="${action}"]`).forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          handler();
+        });
+      });
+    });
+  }
+
+  function handleDocumentClick(event) {
+    if (
+      state.ui.filterMenuOpen &&
+      !event.target.closest("[data-filter-menu]") &&
+      !event.target.closest(".filter-menu")
+    ) {
+      state.ui.filterMenuOpen = false;
+      render();
+    }
   }
 
   function init() {
@@ -1079,6 +1914,10 @@
 
     if (!state.appRoot) {
       throw new Error("Desktop viewer app root was not found.");
+    }
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("click", handleDocumentClick);
     }
 
     render();
@@ -1098,6 +1937,9 @@
 
     state.timers.clock = window.setInterval(() => {
       state.nowMs = Date.now();
+      if (typeof Notification !== "undefined") {
+        state.notifications.permission = Notification.permission;
+      }
       render();
     }, STATUS_REFRESH_MS);
   }
@@ -1105,13 +1947,15 @@
   return {
     init,
     __test: {
-      chooseSelectedSlot,
-      buildAlertEntries,
+      formatPriceComparison,
+      formatAlertHeadline,
+      filterSlots,
+      buildAlertInboxEntries,
+      createActiveAlertForSlot,
+      describeSlotDataState,
       deriveNextCheckLabel,
       deriveNextAlertLabel,
-      deriveOverallWatcherStatus,
-      describeSlotDataState,
-      currentBestPriceLabel
+      deriveOverallWatcherStatus
     }
   };
 });

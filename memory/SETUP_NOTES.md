@@ -6,8 +6,8 @@ Get the backend running locally, import the TornPDA script, and connect TornPDA 
 
 ## Versions
 
-- Backend: `1.8.1`
-- Script: `1.8.1`
+- Backend: `1.8.6`
+- Script: `1.8.6`
 
 ## Local Setup
 
@@ -34,7 +34,7 @@ npm run dev
 
 1. Open `Settings -> Advanced Browser Settings -> Manage Scripts`
 2. Import `tornpda-script/tornpda-market-watcher.json`
-3. Confirm the imported script version is `1.8.1`
+3. Confirm the imported script version is `1.8.6`
 
 ## Correct TornPDA Base URL
 

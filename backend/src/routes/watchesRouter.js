@@ -6,6 +6,7 @@ const {
 } = require("../services/watchEvaluator");
 const { createApiError } = require("../utils/apiError");
 const { normalizeApiError } = require("../utils/apiError");
+const { normalizeSourceMode, sourceModeLabel } = require("../utils/sourceModes");
 
 function buildSlotView(slot, repository, config) {
   if (!slot.occupied) {
@@ -47,6 +48,7 @@ function buildCollectionPayload(repository, runner, config) {
     status,
     settings: repository.getSettingsSummary(),
     activityLog: repository.getActivityLog(),
+    session: repository.getSessionSummary(),
     versions: {
       backendVersion: config.backendVersion,
       minimumCompatibleScriptVersion: config.minimumCompatibleScriptVersion
@@ -54,6 +56,25 @@ function buildCollectionPayload(repository, runner, config) {
     tornMarketBaseUrl: config.tornMarketBaseUrl,
     staleAfterMs: config.staleAfterMs
   });
+}
+
+function mapSnapshotListing(listing) {
+  return {
+    sourceMode: normalizeSourceMode(listing?.sourceMode),
+    sourceLabel: listing?.sourceLabel || sourceModeLabel(listing?.sourceMode),
+    sourceType: listing?.sourceType || "item_market",
+    itemId: listing?.itemId ?? null,
+    listingId: listing?.listingId ?? null,
+    playerId: listing?.playerId ?? null,
+    playerName: listing?.playerName ?? null,
+    quantity: listing?.quantity ?? null,
+    price: listing?.price ?? null,
+    lastChecked: listing?.lastChecked ?? null,
+    contentUpdated: listing?.contentUpdated ?? null,
+    position: listing?.position ?? null,
+    occurrenceIndex: listing?.occurrenceIndex ?? null,
+    bazaarUrl: listing?.bazaarUrl || null
+  };
 }
 
 function sendApiError(response, error, fallbackStatus = 400) {
@@ -69,7 +90,7 @@ function sendApiError(response, error, fallbackStatus = 400) {
   });
 }
 
-function createWatchesRouter({ repository, runner, config }) {
+function createWatchesRouter({ repository, runner, config, weav3rClient }) {
   const router = express.Router();
 
   router.get("/slots", (request, response) => {
@@ -97,6 +118,48 @@ function createWatchesRouter({ repository, runner, config }) {
       });
     } catch (error) {
       sendApiError(response, error, 404);
+    }
+  });
+
+  router.get("/slot/:slotNumber/listings", async (request, response) => {
+    try {
+      const slot = repository.getSlot(request.params.slotNumber);
+
+      if (!slot.occupied) {
+        throw createApiError(404, "slot_empty", `Slot ${slot.slotNumber} is empty.`);
+      }
+
+      const sourceMode = normalizeSourceMode(request.query.sourceMode, slot.sourceMode);
+      const snapshot = await weav3rClient.fetchSnapshot(slot.itemId, sourceMode);
+
+      response.json({
+        ok: true,
+        slotNumber: slot.slotNumber,
+        itemId: slot.itemId,
+        itemName: slot.itemName,
+        sourceMode,
+        sourceLabel: sourceModeLabel(sourceMode),
+        market: {
+          source: "weav3r",
+          sourceMode,
+          sourceLabel: sourceModeLabel(sourceMode),
+          sourceType: snapshot.sourceType,
+          marketPrice: snapshot.marketPrice,
+          bazaarAverage: snapshot.bazaarAverage,
+          totalListings: snapshot.totalListings,
+          fetchedListings: snapshot.fetchedListings ?? snapshot.listings.length,
+          hasMoreListings: Boolean(snapshot.hasMoreListings),
+          totalItems: snapshot.totalItems ?? null,
+          totalValue: snapshot.totalValue ?? null,
+          cacheTimestamp: snapshot.cacheTimestamp ?? null,
+          fromCache: Boolean(snapshot.fromCache)
+        },
+        listings: Array.isArray(snapshot.listings)
+          ? snapshot.listings.map((listing) => mapSnapshotListing(listing))
+          : []
+      });
+    } catch (error) {
+      sendApiError(response, error, 500);
     }
   });
 
@@ -169,6 +232,27 @@ function createWatchesRouter({ repository, runner, config }) {
       await runner.stopWatching("api_stop");
       response.json({
         ok: true,
+        ...buildCollectionPayload(repository, runner, config)
+      });
+    } catch (error) {
+      sendApiError(response, error, 500);
+    }
+  });
+
+  router.post("/session/reset", async (request, response) => {
+    try {
+      const startedAt = repository.isWatchingActive() ? new Date().toISOString() : null;
+      await repository.resetSessionStats(startedAt);
+      await repository.appendActivity({
+        type: "session_reset",
+        message: "Watcher session stats were reset.",
+        details: {
+          watchingActive: repository.isWatchingActive()
+        }
+      });
+      response.json({
+        ok: true,
+        session: repository.getSessionSummary(),
         ...buildCollectionPayload(repository, runner, config)
       });
     } catch (error) {

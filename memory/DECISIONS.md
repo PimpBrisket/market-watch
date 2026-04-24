@@ -163,3 +163,28 @@ Why:
 - fixes the mismatch where the backend could still poll while the UIs looked idle
 - makes Start/Stop behavior understandable across TornPDA and the desktop viewer
 - keeps timers like `Next Check` honest by tying them to real backend polling state
+
+## 2026-04-24: Keep Desktop Viewer Dense By Showing Occupied Slots Only
+
+Decision:
+
+- the desktop watched-slot grid should show occupied slots only
+- empty-slot placeholders remain a TornPDA concern, not a desktop monitoring concern
+
+Why:
+
+- desktop monitoring is better served by higher information density
+- empty placeholders were wasting space once the side panel and inbox were added
+
+## 2026-04-24: Use Backend Activity And Session Data For Desktop Alerts And Watcher Info
+
+Decision:
+
+- desktop alert inbox and per-item alert history should read backend alert activity
+- watcher info should come from backend-managed current-session stats
+
+Why:
+
+- keeps the backend as the source of truth for event history and session totals
+- avoids building a second alert/session model in the desktop client
+- leaves room for future market intelligence features without overloading the viewer now

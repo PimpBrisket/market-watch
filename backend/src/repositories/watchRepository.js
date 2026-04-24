@@ -40,6 +40,45 @@ function createDefaultSettings(defaultSettings) {
   };
 }
 
+function createSessionSlotStats(slot, timestamp = nowIso()) {
+  return {
+    slotNumber: slot.slotNumber,
+    occupied: Boolean(slot.occupied),
+    itemId: slot.itemId ?? null,
+    itemName: slot.itemName ?? null,
+    sourceMode: normalizeSourceMode(slot.sourceMode, SOURCE_MODES.MARKET_ONLY),
+    targetPrice: slot.targetPrice ?? null,
+    nearMissGap: slot.nearMissGap ?? null,
+    lastChecked: null,
+    lowestListingPrice: null,
+    highestListingPrice: null,
+    totalAlertedQuantity: 0,
+    totalListingsFound: 0,
+    totalNearMisses: 0,
+    totalAlerts: 0,
+    lastAlertAt: null,
+    lastAlertPrice: null,
+    updatedAt: timestamp
+  };
+}
+
+function createDefaultSession(slotLimit, timestamp = nowIso()) {
+  const slots = {};
+
+  for (let slotNumber = 1; slotNumber <= slotLimit; slotNumber += 1) {
+    slots[String(slotNumber)] = createSessionSlotStats(
+      createEmptySlot(slotNumber, timestamp),
+      timestamp
+    );
+  }
+
+  return {
+    startedAt: null,
+    lastResetAt: timestamp,
+    slots
+  };
+}
+
 function isLegacyDemoSeed(slots) {
   if (!Array.isArray(slots) || slots.length !== 6) {
     return false;
@@ -79,7 +118,7 @@ function createDefaultStore(slotLimit = 6, defaultSettings = {}) {
   const timestamp = nowIso();
 
   return {
-    version: 4,
+    version: 5,
     settings: createDefaultSettings(defaultSettings),
     slots: createDefaultSlots(slotLimit, timestamp),
     processed: {},
@@ -94,7 +133,8 @@ function createDefaultStore(slotLimit = 6, defaultSettings = {}) {
       lastPollFailureCount: 0,
       lastError: null,
       watchingActive: false,
-      activityLog: []
+      activityLog: [],
+      session: createDefaultSession(slotLimit, timestamp)
     }
   };
 }
@@ -359,7 +399,7 @@ function migrateStore(rawData, slotLimit, itemCatalog, defaultSettings) {
   }
 
   return {
-    version: 4,
+    version: 5,
     settings: sanitizeRuntimeSettings(
       source.settings || {},
       fallback.settings,
@@ -370,7 +410,15 @@ function migrateStore(rawData, slotLimit, itemCatalog, defaultSettings) {
     meta: {
       ...fallback.meta,
       ...(source.meta || {}),
-      watchingActive: false
+      watchingActive: false,
+      session: {
+        ...fallback.meta.session,
+        ...(source.meta?.session || {}),
+        slots: {
+          ...fallback.meta.session.slots,
+          ...(source.meta?.session?.slots || {})
+        }
+      }
     }
   };
 }
@@ -384,6 +432,41 @@ class WatchRepository {
     this.defaultSettings = defaultSettings;
     this.activityLogLimit = defaultSettings.activityLogLimit || 40;
     this.data = createDefaultStore(slotLimit, defaultSettings);
+  }
+
+  cloneSessionSlotStats(slotStats) {
+    return {
+      ...slotStats
+    };
+  }
+
+  ensureSessionSlotStats(slotNumber) {
+    const normalizedSlotNumber = normalizeSlotNumber(slotNumber, this.slotLimit);
+    const key = String(normalizedSlotNumber);
+    const slot = this.getSlot(normalizedSlotNumber) || createEmptySlot(normalizedSlotNumber);
+
+    this.data.meta.session = this.data.meta.session || createDefaultSession(this.slotLimit);
+    this.data.meta.session.slots = this.data.meta.session.slots || {};
+
+    if (!this.data.meta.session.slots[key]) {
+      this.data.meta.session.slots[key] = createSessionSlotStats(slot);
+    }
+
+    return this.data.meta.session.slots[key];
+  }
+
+  createFreshSessionSummary(startedAt = null, timestamp = nowIso()) {
+    const slots = {};
+
+    for (const slot of this.listSlots()) {
+      slots[String(slot.slotNumber)] = createSessionSlotStats(slot, timestamp);
+    }
+
+    return {
+      startedAt,
+      lastResetAt: timestamp,
+      slots
+    };
   }
 
   async init() {
@@ -560,7 +643,33 @@ class WatchRepository {
       lastPollSuccessCount: this.data.meta.lastPollSuccessCount,
       lastPollFailureCount: this.data.meta.lastPollFailureCount,
       lastError: this.data.meta.lastError,
-      activityCount: this.getActivityLog().length
+      activityCount: this.getActivityLog().length,
+      sessionStartedAt: this.data.meta.session?.startedAt || null,
+      sessionLastResetAt: this.data.meta.session?.lastResetAt || null
+    };
+  }
+
+  getSessionSummary() {
+    const slots = this.listSlots().reduce((accumulator, slot) => {
+      const key = String(slot.slotNumber);
+      const slotStats = this.ensureSessionSlotStats(slot.slotNumber);
+
+      accumulator[key] = this.cloneSessionSlotStats({
+        ...slotStats,
+        occupied: Boolean(slot.occupied),
+        itemId: slot.itemId ?? null,
+        itemName: slot.itemName ?? null,
+        sourceMode: normalizeSourceMode(slot.sourceMode, SOURCE_MODES.MARKET_ONLY),
+        targetPrice: slot.targetPrice ?? null,
+        nearMissGap: slot.nearMissGap ?? null
+      });
+      return accumulator;
+    }, {});
+
+    return {
+      startedAt: this.data.meta.session?.startedAt || null,
+      lastResetAt: this.data.meta.session?.lastResetAt || null,
+      slots
     };
   }
 
@@ -572,6 +681,71 @@ class WatchRepository {
     this.data.meta.watchingActive = active === true;
     await this.persist();
     return this.isWatchingActive();
+  }
+
+  async resetSessionStats(startedAt = null) {
+    this.data.meta.session = this.createFreshSessionSummary(startedAt, nowIso());
+    await this.persist();
+    return this.getSessionSummary();
+  }
+
+  async recordSessionResult(slotNumber, result) {
+    const slotStats = this.ensureSessionSlotStats(slotNumber);
+    const listingPrices = Array.isArray(result?.currentListings)
+      ? result.currentListings
+          .map((listing) => Number(listing?.price))
+          .filter((price) => Number.isFinite(price))
+      : [];
+    const buyNowQuantities = Array.isArray(result?.alertState?.latestEvent?.listings)
+      ? result.alertState.latestEvent.listings
+          .map((listing) => Number(listing?.quantity) || 0)
+          .filter((quantity) => quantity > 0)
+      : [];
+
+    slotStats.occupied = Boolean(result?.occupied);
+    slotStats.itemId = result?.itemId ?? slotStats.itemId ?? null;
+    slotStats.itemName = result?.itemName ?? slotStats.itemName ?? null;
+    slotStats.sourceMode = normalizeSourceMode(result?.sourceMode, slotStats.sourceMode);
+    slotStats.targetPrice = result?.targetPrice ?? slotStats.targetPrice ?? null;
+    slotStats.nearMissGap = result?.nearMissGap ?? slotStats.nearMissGap ?? null;
+    slotStats.lastChecked = result?.lastChecked || result?.lastAttemptedAt || slotStats.lastChecked;
+    slotStats.updatedAt = nowIso();
+
+    if (listingPrices.length) {
+      const lowestPrice = Math.min(...listingPrices);
+      const highestPrice = Math.max(...listingPrices);
+
+      slotStats.lowestListingPrice =
+        slotStats.lowestListingPrice === null
+          ? lowestPrice
+          : Math.min(slotStats.lowestListingPrice, lowestPrice);
+      slotStats.highestListingPrice =
+        slotStats.highestListingPrice === null
+          ? highestPrice
+          : Math.max(slotStats.highestListingPrice, highestPrice);
+      slotStats.totalListingsFound += listingPrices.length;
+    }
+
+    if (result?.nearMiss) {
+      slotStats.totalNearMisses += 1;
+    }
+
+    if (result?.alertState?.shouldNotify && result?.alertState?.latestEvent) {
+      slotStats.totalAlerts += 1;
+      slotStats.lastAlertAt =
+        result.alertState.latestEvent.timestamp || slotStats.updatedAt;
+      slotStats.lastAlertPrice =
+        result.alertState.latestEvent.price ?? slotStats.lastAlertPrice ?? null;
+
+      if (result.alertState.latestEvent.type === "BUY_NOW") {
+        slotStats.totalAlertedQuantity += buyNowQuantities.length
+          ? buyNowQuantities.reduce((sum, quantity) => sum + quantity, 0)
+          : Number(result.alertState.latestEvent.listing?.quantity) || 0;
+      }
+    }
+
+    await this.persist();
+    return this.cloneSessionSlotStats(slotStats);
   }
 
   exportBackup() {
@@ -663,7 +837,8 @@ class WatchRepository {
       ...this.data.meta,
       lastError: null,
       lastPollSuccessCount: 0,
-      lastPollFailureCount: 0
+      lastPollFailureCount: 0,
+      session: this.createFreshSessionSummary(null, timestamp)
     };
     await this.persist();
     await this.appendActivity({
@@ -732,6 +907,8 @@ class WatchRepository {
     this.data.slots = this.data.slots.map((slot) =>
       slot.slotNumber === existingSlot.slotNumber ? created : slot
     );
+    this.ensureSessionSlotStats(created.slotNumber);
+    this.data.meta.session.slots[String(created.slotNumber)] = createSessionSlotStats(created);
 
     delete this.data.processed[String(existingSlot.slotNumber)];
     await this.persist();
@@ -799,6 +976,8 @@ class WatchRepository {
     this.data.slots = this.data.slots.map((slot) =>
       slot.slotNumber === existing.slotNumber ? updated : slot
     );
+    this.ensureSessionSlotStats(updated.slotNumber);
+    this.data.meta.session.slots[String(updated.slotNumber)] = createSessionSlotStats(updated);
 
     if (itemChanged || sourceChanged) {
       delete this.data.processed[String(existing.slotNumber)];
@@ -856,6 +1035,8 @@ class WatchRepository {
     this.data.slots = this.data.slots.map((slot) =>
       slot.slotNumber === existing.slotNumber ? cleared : slot
     );
+    this.ensureSessionSlotStats(cleared.slotNumber);
+    this.data.meta.session.slots[String(cleared.slotNumber)] = createSessionSlotStats(cleared);
 
     delete this.data.processed[String(existing.slotNumber)];
     await this.persist();
@@ -938,6 +1119,7 @@ class WatchRepository {
       ...this.data.meta,
       lastError: null
     };
+    this.data.meta.session = this.createFreshSessionSummary(null, timestamp);
 
     await this.persist();
     await this.appendActivity({

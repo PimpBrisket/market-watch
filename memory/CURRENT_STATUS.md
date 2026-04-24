@@ -2,12 +2,12 @@
 
 ## Overall State
 
-As of 2026-04-23, the project includes a new Desktop Viewer v1 in the same repo and served by the same backend. The backend remains canonical, TornPDA remains the mobile client, and the desktop viewer is now the desktop monitoring client.
+As of 2026-04-24, the project includes a new Desktop Viewer v1 in the same repo and served by the same backend. The backend remains canonical, TornPDA remains the mobile client, and the desktop viewer is now the desktop monitoring client.
 
 Current versions:
 
-- Backend: `1.8.1`
-- TornPDA script: `1.8.5`
+- Backend: `1.8.6`
+- TornPDA script: `1.8.6`
 
 ## Confirmed Working
 
@@ -24,7 +24,7 @@ Current versions:
 - manual `Show Market Listings` and `Show Bazaar Listings` panels
 - compact timing strip
 - persisted notification toggle
-- simplified alert text in the form `[Market] 22x Item | $Price`
+- shared alert text in the form `[Market] 10x Item $350>$250($2,500)`
 - second-line `+N Listings available` counts from the current valid qualifying snapshot only
 - lightweight recent activity log
 - backup export
@@ -33,8 +33,8 @@ Current versions:
 - backend or script compatibility warning surface
 - disabled risky actions when versions are incompatible
 - Desktop Viewer v1 route at `/viewer`
-- desktop dashboard with all 6 slots visible
-- selected-slot detail panel
+- occupied-slot desktop watched grid
+- resizable side detail panel
 - source-correct Market and Bazaar listing tables
 - desktop top status bar for connection, versions, and timing
 - active alerts panel for current interesting deals
@@ -43,6 +43,15 @@ Current versions:
 - enabled slot toggles now behave as preferences unless global watching is ON
 - desktop `Next Check` and related timing labels now show `Not scheduled` while stopped
 - TornPDA now re-syncs backend global watching state automatically after navigation, refresh, or reinjection
+- desktop main view now shows occupied slots only instead of placeholder empty slots
+- desktop alert inbox with last-10 history and alert button toggle
+- shared alert format now uses `target>listed(total)` formatting, with total cost shown when quantity >= 2
+- desktop side panel replaces the old bottom details area
+- side panel supports Market listings, Bazaar listings, Latest Alerts, and current-session Watcher Info views
+- current-session watcher stats reset automatically on Stop Watching
+- desktop watched-slot filter menu is available from the Watched Slots panel
+- `/viewer/health` is now a dedicated diagnostic page and `/viewer/health.json` backs it
+- desktop browser notifications are available with persisted toggle state and graceful permission fallback
 
 ## Final Architecture Status
 
@@ -57,6 +66,9 @@ Current versions:
 - `/api/status` and `/api/slots` both expose version metadata
 - `/api/backup/export` and `/api/backup/import` now exist
 - `/viewer` serves the desktop dashboard static client
+- `/viewer/health` serves the diagnostic health page
+- `/api/slot/:slotNumber/listings` serves on-demand Market or Bazaar listing data for the selected desktop panel view
+- backend session stats now accumulate per slot only for the current watching session and clear on stop
 
 ## Automated Validation Completed
 
@@ -83,12 +95,14 @@ Covered by backend checks:
 - backend blocks `/api/refresh` while watching is OFF
 - start watching enables global polling
 - stop watching returns slots to IDLE state
+- on-demand listing detail route returns source-correct listing tables
+- current watch-session stats are created on Start Watching and cleared on Stop Watching
 
 Covered by local desktop-viewer harness validation in this session:
 
 - desktop viewer helper module loads successfully
 - desktop viewer render path boots successfully with mocked backend data
-- 6-slot dashboard stays visible even when the backend payload only includes occupied slots
+- occupied-slot filtering keeps empty slots out of the main desktop watched area
 - selecting a slot resolves to the requested or first occupied slot correctly
 - Bazaar mode alert and listing logic stays separate from Market mode
 - Market mode alert and listing logic stays separate from Bazaar mode
@@ -98,6 +112,43 @@ Covered by local desktop-viewer harness validation in this session:
 - the viewer now shows a visible loading or error shell instead of rendering as a blank white page if startup fails
 - the viewer shows `Idle` / `Not scheduled` while global watching is OFF
 - the viewer switches back to active refresh labels only when global watching is ON
+- occupied-slot filtering keeps empty slots out of the main desktop watched area
+- shared alert formatting uses `target>listed(total)` style and compact local time in the desktop inbox
+- desktop helper logic preserves layout preferences without overriding backend watch data
+
+## Desktop Viewer UI Upgrade
+
+Desktop Viewer v1 is now denser and more useful for active monitoring:
+
+- the watched-slot area shows occupied items only
+- the old bottom detail block is gone
+- clicking a slot opens a resizable side panel instead
+- the side panel can minimize to a bottom restore chip or close entirely
+- Market listings, Bazaar listings, item-specific alert history, and watcher session stats now live in that panel
+- a top-level `Alerts` button opens a compact inbox with the last 10 alert entries and live additions while watching
+- desktop notifications now use the same compact alert format and respect permission state
+- the viewer now has a small filter menu for common watch states and source types
+
+## Watcher Session Stats
+
+The backend now keeps lightweight per-slot session stats for the current watch session only.
+
+They include:
+
+- lowest listing found
+- highest listing found
+- total alerted quantity below target
+- total listings found
+- total near-misses found
+- total alerts
+- last checked
+- source mode
+
+These stats are reset:
+
+- when Start Watching begins a new session
+- when Stop Watching ends the current session
+- when the user manually resets desktop session stats
 
 ## Global Watching Model Fix
 
@@ -143,7 +194,7 @@ Covered by local userscript harness validation in this session:
 - listing panels stay collapsed by default
 - `Show Market Listings` expands current market rows
 - `Show Bazaar Listings` expands current bazaar rows
-- alert headline formatting matches the simplified `[Source] #x Item | $Price` pattern
+- alert headline formatting matches the shared `[Source] #x Item $Target>$Listed($Total)` pattern
 - extra listing counts only come from currently active qualifying listings
 - sticky top bar markup is present and the old `Hide` button is gone
 - the sticky-bar regression that pushed slots out of normal view was fixed before Git push

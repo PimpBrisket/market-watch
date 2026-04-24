@@ -6,8 +6,8 @@ The project now has a third client layer: Desktop Viewer v1. It remains in the s
 
 Current versions:
 
-- Backend `1.8.1`
-- TornPDA script `1.8.5`
+- Backend `1.8.6`
+- TornPDA script `1.8.6`
 
 ## What Was Added In The Final Pass
 
@@ -22,12 +22,17 @@ Current versions:
 - compact About section
 - lightweight recent activity panel
 - desktop viewer route at `/viewer`
-- desktop 6-slot monitoring dashboard
-- selected-slot detail panel with source-specific listing tables
-- desktop top status bar with connection and timing info
+- occupied-slot-only desktop monitoring dashboard
+- resizable side detail panel with source-specific listing tables
+- desktop top status bar with connection, timing, and notification info
 - active alerts panel for current interesting deals
+- alert inbox with last-10 history and live additions while watching
+- watcher-session stats per slot for the current active session only
+- desktop watched-slot filters
+- desktop browser notifications with permission-aware fallback
+- `/viewer/health` diagnostic page with `/viewer/health.json` data route
 - backend-owned global watching state with startup default OFF
-- simplified alert text in the form `[Market] 22x Item | $Price`
+- shared alert text in the form `[Market] 10x Item $350>$250($2,500)`
 - second-line `+N Listings available` counts from current valid qualifying listings only
 - sticky top bar with a right-side collapse arrow replacing the old `Hide` button
 - clearer per-slot status labels for:
@@ -78,16 +83,18 @@ Covered by automated backend checks:
 - version metadata exposure
 - activity log population
 - desktop viewer route and static asset serving
+- desktop viewer health page and JSON diagnostics route
 - backend starts with global watching OFF
 - `/api/refresh` is blocked while watching is OFF
 - `POST /api/watching/start` enables polling
 - `POST /api/watching/stop` stops polling and returns slots to IDLE
+- watcher-session stats reset on stop and can be reset manually
 
 Covered by local desktop-viewer harness checks in this session:
 
 - helper module loads in Node without a browser dependency
 - full desktop render boots with mocked `/api/status` and `/api/slots` payloads
-- the dashboard still renders all 6 slots when only occupied slots are returned by the backend payload
+- occupied-slot filtering and alert formatting helpers behave correctly in Node
 - alert formatting stays source-aware and compact
 - source-specific listing-state helpers distinguish Market and Bazaar correctly
 - slot selection resolves correctly for requested or fallback slots
@@ -131,13 +138,16 @@ The final pre-push fix keeps the sticky top bar and arrow, but:
 Desktop Viewer v1 is intentionally a monitoring-oriented foundation, not a full second control surface.
 
 - access it at `/viewer` from the same backend host
-- it reuses `/api/status`, `/api/slots`, and `POST /api/refresh`
-- it keeps all 6 slots visible, including empty ones
-- clicking a slot opens the detail panel on the right
+- it reuses `/api/status`, `/api/slots`, and `POST /api/refresh`, plus a small on-demand listing route
+- it keeps only occupied slots in the main watched area
+- clicking a slot opens the resizable side panel on the right
+- the side panel can minimize to a bottom restore chip or close fully
+- the side panel view dropdown switches between Market listings, Bazaar listings, Latest Alerts, and Watcher Info
 - Bazaar slots show seller-aware bazaar rows when available
 - Market slots show market rows without forcing Bazaar-only fields
 - temporary refresh failures keep the last known good dashboard visible and surface a connection or stale state instead of blanking the UI
 - global watching timers now come from backend status rather than local UI inference
+- desktop alert inbox and browser notifications are driven by backend alert activity
 
 ## Global Watching Fix
 
@@ -207,7 +217,7 @@ Do one final validation pass:
 4. confirm Bazaar and Market listings look correct once watching is started
 5. TornPDA:
 6. import `tornpda-script/tornpda-market-watcher.json`
-7. confirm version `1.8.5`
+7. confirm version `1.8.6`
 8. enter base URL `http://YOUR-LAN-IP:3000`
 9. test add, edit, delete
 10. confirm global watching starts OFF

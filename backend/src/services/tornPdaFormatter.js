@@ -105,14 +105,19 @@ function formatSlotCollection({
   status,
   settings,
   activityLog,
+  session,
   versions,
   tornMarketBaseUrl,
   staleAfterMs
 }) {
   const globalWatchingActive = status?.watchingActive === true;
+  const sessionSlots = session?.slots || {};
   const formattedSlots = slots
     .filter(Boolean)
-    .map((slot) => withLinks(slot, tornMarketBaseUrl, staleAfterMs, globalWatchingActive))
+    .map((slot) => ({
+      ...withLinks(slot, tornMarketBaseUrl, staleAfterMs, globalWatchingActive),
+      sessionStats: sessionSlots[String(slot.slotNumber)] || null
+    }))
     .sort((left, right) => left.slotNumber - right.slotNumber);
   const occupiedSlots = formattedSlots.filter((slot) => slot.occupied);
 
@@ -135,6 +140,7 @@ function formatSlotCollection({
     },
     status,
     settings,
+    session: session || null,
     activityLog: Array.isArray(activityLog) ? activityLog : [],
     versions: versions || null,
     slots: formattedSlots,

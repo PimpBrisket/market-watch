@@ -19,7 +19,7 @@ The user can keep up to 6 watched items, choose whether each slot tracks:
 
 and get clear mobile-friendly status plus immediate low-price alerts without duplicate spam for the same still-active listing.
 
-The same canonical backend state can now also be viewed on a desktop dashboard that shows all 6 slots, current source-specific listings, active alerts, and timing status without relying on TornPDA screen space.
+The same canonical backend state can now also be viewed on a desktop dashboard that focuses on occupied watched slots, current source-specific listings, alert history, and timing status without relying on TornPDA screen space.
 
 ## Final Core Capabilities
 
@@ -37,8 +37,9 @@ The same canonical backend state can now also be viewed on a desktop dashboard t
 - backup export or import
 - lightweight recent activity history
 - Desktop Viewer v1 dashboard with:
-  - 6 always-visible slots
-  - selected-slot detail panel
+  - occupied-slot watched grid
+  - alert inbox and desktop notifications
+  - side detail panel
   - Bazaar and Market listing tables
   - top status and timing bar
   - current active alerts panel
@@ -60,8 +61,8 @@ The desktop viewer follows the same rule. It is a consumer of backend state, not
 
 ## Current Versions
 
-- Backend: `1.8.1`
-- Script: `1.8.5`
+- Backend: `1.8.6`
+- Script: `1.8.6`
 
 ## Current Next Milestone
 

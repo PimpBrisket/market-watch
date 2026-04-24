@@ -2,7 +2,7 @@
 
 ## Highest Priority Next
 
-- Run one real TornPDA phone-side validation pass using script version `1.8.5`
+- Run one real TornPDA phone-side validation pass using script version `1.8.6`
 - Confirm:
   - `Open market` lands correctly
   - `Open Bazaar` lands correctly
@@ -12,7 +12,10 @@
 - Run one real desktop browser-side validation pass for Desktop Viewer v1
 - Confirm:
   - `/viewer` layout feels right on the target monitor size
+  - occupied-slot-only watched view feels better than the old 6-slot placeholder layout
   - slot selection is comfortable with real data
+  - side panel resize and minimize behavior feel reliable
+  - desktop notification permission wording is understandable
   - Bazaar `Open Bazaar` actions behave as expected
   - stale or disconnected states are readable at a glance
 

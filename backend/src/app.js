@@ -9,22 +9,83 @@ function createApp({ repository, runner, config }) {
   const app = express();
   const desktopViewerPath = path.resolve(__dirname, "..", "..", "desktop-viewer");
 
+  function buildViewerHealthPayload() {
+    const status = {
+      ...repository.getStatusSummary(),
+      ...runner.getRuntimeSummary()
+    };
+    const activityLog = repository.getActivityLog();
+    const recentErrors = [
+      status.lastError
+        ? {
+            source: "backend",
+            message: status.lastError,
+            timestamp: status.lastPollCompletedAt || status.lastPollStartedAt || null
+          }
+        : null,
+      ...activityLog
+        .filter((entry) => {
+          const type = String(entry?.type || "").toLowerCase();
+          return type.includes("error") || type.includes("failure");
+        })
+        .slice(-5)
+        .map((entry) => ({
+          source: entry.type || "activity",
+          message: entry.message || "Recent backend error.",
+          timestamp: entry.timestamp || null
+        }))
+    ].filter(Boolean);
+
+    return {
+      ok: true,
+      route: "/viewer/health",
+      generatedAt: new Date().toISOString(),
+      viewer: {
+        status: "ready",
+        route: "/viewer",
+        assets: {
+          html: "/viewer",
+          script: "/viewer/app.js",
+          stylesheet: "/viewer/styles.css",
+          healthScript: "/viewer/health.js"
+        }
+      },
+      backend: {
+        version: config.backendVersion,
+        watchingActive: status.watchingActive,
+        polling: status.polling,
+        lastSuccessfulStatusCheckAt: new Date().toISOString(),
+        intervals: {
+          pollIntervalMs: config.pollIntervalMs,
+          requestTimeoutMs: config.requestTimeoutMs,
+          staleAfterMs: config.staleAfterMs,
+          alertCooldownMs: config.alertCooldownMs,
+          snapshotGroupingWindowMs: config.snapshotGroupingWindowMs
+        },
+        counts: {
+          occupiedSlots: status.occupiedCount,
+          enabledSlots: status.enabledCount,
+          activeEnabledSlots: status.activeEnabledCount
+        },
+        lastPollStartedAt: status.lastPollStartedAt,
+        lastPollCompletedAt: status.lastPollCompletedAt,
+        lastError: status.lastError,
+        recentErrors
+      }
+    };
+  }
+
   app.use(
     cors({
       origin: config.corsOrigin
     })
   );
   app.use(express.json());
+  app.get("/viewer/health.json", (request, response) => {
+    response.json(buildViewerHealthPayload());
+  });
   app.get("/viewer/health", (request, response) => {
-    response.json({
-      ok: true,
-      route: "/viewer",
-      assets: {
-        html: "/viewer",
-        script: "/viewer/app.js",
-        stylesheet: "/viewer/styles.css"
-      }
-    });
+    response.sendFile(path.join(desktopViewerPath, "health.html"));
   });
   app.get("/viewer", (request, response) => {
     response.sendFile(path.join(desktopViewerPath, "index.html"));
@@ -56,7 +117,7 @@ function createApp({ repository, runner, config }) {
       .send("ok - tornpda-market-watcher backend is running\n");
   });
 
-  app.use("/api", createWatchesRouter({ repository, runner, config }));
+  app.use("/api", createWatchesRouter({ repository, runner, config, weav3rClient: runner.weav3rClient }));
   app.use("/api", createStatusRouter({ repository, runner, config }));
 
   return app;

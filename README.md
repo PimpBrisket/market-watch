@@ -18,8 +18,8 @@ The clients stay lightweight:
 
 Current release:
 
-- Backend version: `1.8.1`
-- TornPDA script version: `1.8.5`
+- Backend version: `1.8.6`
+- TornPDA script version: `1.8.6`
 
 ## Features
 
@@ -31,7 +31,7 @@ Current release:
 - Active qualifying-listing memory so the same current listing does not spam every poll
 - Automatic removal of active listing memory when that listing disappears
 - Manual `Show Market Listings` / `Show Bazaar Listings` panels
-- Simplified mobile alerts such as `[Market] 22x Cell Phone | $288`
+- Shared alert formatting such as `[Market] 10x Cell Phone $350>$250($2,500)`
 - Additional qualifying-listing counts on a second alert line when more current matches exist
 - Startup-closed TornPDA menu with compact and manage modes
 - Sticky menu top bar with a right-side collapse arrow
@@ -40,10 +40,12 @@ Current release:
 - Export and import backup flow for backend slots plus local UI preferences
 - Lightweight recent activity log
 - Desktop Viewer v1 served at `/viewer`
-- Desktop slot dashboard with 6 always-visible slots
-- Selected-slot detail panel with source-correct listing tables
-- Desktop top status bar for backend connection, versions, and timing info
-- Desktop active alerts panel with compact deal summaries
+- Desktop watched-slot grid that shows occupied slots only
+- Desktop side detail panel with Market/Bazaar listing views, per-item alerts, and watcher info
+- Desktop alert inbox with last-10 alert history and live additions while watching
+- Desktop top status bar for backend connection, versions, timing info, and notification status
+- Desktop browser notifications with permission-aware fallback behavior
+- Dedicated `/viewer/health` diagnostic page
 
 ## Source Modes
 
@@ -115,7 +117,7 @@ In TornPDA:
 
 1. Open `Settings -> Advanced Browser Settings -> Manage Scripts`
 2. Import [tornpda-script/tornpda-market-watcher.json](/c:/Users/Anthony/Downloads/Torn/tornpda-script/tornpda-market-watcher.json)
-3. Make sure the imported script version shows `1.8.5`
+3. Make sure the imported script version shows `1.8.6`
 
 ### 6. Enter the backend base URL
 
@@ -133,12 +135,17 @@ Do not enter:
 
 Desktop Viewer v1:
 
-- `/viewer` shows all 6 slots in a desktop-friendly dashboard
+- `/viewer` shows only occupied watched slots so the main dashboard stays dense
 - the page now starts with a visible `Loading viewer...` shell instead of a blank white screen
 - when global watching is OFF, the viewer shows `Idle` / `Not scheduled` instead of a live polling countdown
-- click any slot to open its detail panel on the right
-- Bazaar slots show bazaar listings with seller and `Open Bazaar` when available
-- Market slots show market listings without forcing bazaar-only fields
+- click any watched slot to open the resizable side detail panel on the right
+- the side panel can be minimized to a bottom restore chip or closed completely
+- the side panel dropdown can switch between Market listings, Bazaar listings, item-specific latest alerts, and current-session watcher info
+- the alert inbox button opens the last 10 alert entries and toggles to `Close` while open
+- Bazaar slots can show seller-aware bazaar rows with `Open Bazaar` when available
+- Market slots can show market rows without forcing Bazaar-only fields
+- desktop notifications can be enabled or disabled separately from TornPDA notifications
+- watched-slot filters can focus the dashboard on BUY NOW, Near Miss, Market, Bazaar, Watching, or Stale/Error states
 - `Refresh Now` in the top bar runs one immediate sync while regular polling stays lightweight
 - temporary backend failures keep the last known good desktop state on screen and mark the connection as stale or failed instead of blanking the UI
 - if the client fails very early, the page now shows `Error loading viewer` instead of an empty page
@@ -161,8 +168,12 @@ Desktop Viewer v1:
 
 `BUY_NOW` alerts are now intentionally compact:
 
-- `[Market] 22x Cell Phone | $288`
-- `[Bazaar] 5x Morphine | $4,500,000`
+- `[Market] 13x Cell Phone $350>$220 6:20pm`
+- `[Bazaar] 4x Morphine $4,800,000>$4,300,000 6:22pm`
+
+When the listing quantity is `2` or more, the single-item listed price keeps showing and the total quantity cost appears beside it:
+
+- `[Market] 10x Cell Phone $350>$250($2,500)`
 
 If more currently present qualifying listings are still available under the target, the alert adds:
 
@@ -253,7 +264,7 @@ What `npm run check` covers right now:
 - the original Desktop Viewer white-screen issue was caused by relative asset paths from `/viewer`; the viewer now uses absolute `/viewer/...` asset URLs and a visible boot shell
 - Desktop Viewer v1 is intentionally monitoring-focused for now:
   - it does not add charts, predictors, or heavy analytics yet
-  - it currently reuses existing backend endpoints instead of introducing a separate frontend API
+  - it currently reuses existing backend endpoints plus a small on-demand listing route instead of introducing a separate frontend API
 - desktop and TornPDA polling displays now depend on the backend global watching state, so stale cached UI state should no longer imply that active polling is still running
 - Final real-device TornPDA tap-through validation is still recommended for:
   - `Open Bazaar`

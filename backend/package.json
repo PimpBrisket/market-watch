@@ -1,6 +1,6 @@
 {
   "name": "tornpda-market-watcher-backend",
-  "version": "1.8.1",
+  "version": "1.8.6",
   "private": true,
   "main": "src/server.js",
   "scripts": {

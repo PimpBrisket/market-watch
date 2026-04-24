@@ -37,12 +37,14 @@ Responsible for:
 Responsible for:
 
 - desktop-first monitoring layout
-- all-6-slots dashboard view
-- selected-slot detail panel
-- source-specific Market or Bazaar listing tables
-- compact top status bar with connection, version, and timing info
+- occupied-slot dashboard view
+- alert inbox with recent alert history
+- resizable side detail panel
+- source-specific Market or Bazaar listing tables, including on-demand source switching for the selected item
+- compact top status bar with connection, version, timing, and notification info
 - current active alerts panel
 - last-known-good display preservation during temporary refresh failures
+- persistent layout preferences such as selected slot, panel state, active filter, and notification toggle
 
 ## Canonical Data Rules
 
@@ -69,6 +71,15 @@ Desktop Viewer v1 keeps the same principle:
 - no independent watch persistence
 - no parallel source-of-truth state
 - temporary in-memory UI state only for selected slot, connection status, and last known good payloads
+
+Persisted desktop layout state is intentionally UI-only:
+
+- selected slot
+- side panel open or minimized state
+- side panel width
+- active filter
+- alert inbox state
+- desktop notification toggle
 
 ## Source-Mode Model
 
@@ -176,6 +187,39 @@ Examples:
 
 The log is bounded and intended for recent operator-facing history, not deep analytics.
 
+Alert-trigger activity now includes enough detail for desktop or TornPDA formatting:
+
+- source mode
+- target price
+- listed price
+- quantity
+- total cost when quantity > 1
+- listing count
+- seller metadata when available
+- event ID for desktop notification dedupe
+
+## Session Stats Model
+
+The backend now tracks lightweight per-slot watcher session stats in `meta.session`.
+
+Rules:
+
+- a new session starts when global watching starts
+- stats clear when global watching stops
+- stats can be reset manually from the desktop viewer
+- stats are for the current watch session only, not lifetime history
+
+Tracked values:
+
+- lowest listing found
+- highest listing found
+- total alerted quantity below target
+- total listings found
+- total near-misses found
+- total alerts
+- last checked
+- current source mode
+
 ## Main Files
 
 Backend:
@@ -204,7 +248,7 @@ The backend remains responsible for determining the current valid qualifying lis
 
 - immediate `BUY_NOW` events are built from the current active qualifying listings, not only the newly discovered delta
 - the lead alert listing is the lowest currently valid qualifying listing at event creation time
-- the userscript renders alerts as `[Market] 22x Item | $288` or `[Bazaar] 5x Item | $Price`
+- the userscript and desktop viewer render alerts as `[Market] 10x Item $350>$250($2,500)` style summaries
 - if more current qualifying listings remain, the userscript adds a second line such as `+3 Listings available`
 - the additional count excludes stale or disappeared listings and excludes the lead listing itself
 
@@ -223,6 +267,9 @@ Desktop Viewer v1 is served by the backend at `/viewer`.
 - `GET /viewer` serves `desktop-viewer/index.html`
 - `GET /viewer/app.js` serves the viewer client
 - `GET /viewer/styles.css` serves the desktop styling
+- `GET /viewer/health` serves a diagnostics page
+- `GET /viewer/health.json` exposes diagnostic JSON for the health page
+- `GET /api/slot/:slotNumber/listings?sourceMode=...` fetches on-demand Market or Bazaar listing data for the selected desktop panel view
 
 The layout is intentionally desktop-first:
 

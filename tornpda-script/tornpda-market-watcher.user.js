@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TornPDA Market Watcher
 // @namespace    https://weav3r.dev/
-// @version      1.8.5
+// @version      1.8.6
 // @description  Displays processed Torn market watch alerts inside TornPDA with manual controls, item-name resolution, and compact mobile UI.
 // @author       Codex
 // @match        https://www.torn.com/*
@@ -42,7 +42,7 @@
     MARKET_ONLY: "MARKET_ONLY",
     BAZAAR_ONLY: "BAZAAR_ONLY"
   };
-  const SCRIPT_VERSION_FALLBACK = "1.8.5";
+  const SCRIPT_VERSION_FALLBACK = "1.8.6";
   const MINIMUM_COMPATIBLE_BACKEND_VERSION = "1.8.1";
   const ACTIVITY_LOG_LIMIT = 40;
 
@@ -365,6 +365,22 @@
     return listingCount > 1 ? listingCount - 1 : 0;
   }
 
+  function formatPriceComparison(targetPrice, listedPrice, quantity) {
+    const safeQuantity = Math.max(1, Number(quantity) || 1);
+
+    if (targetPrice === null || targetPrice === undefined) {
+      return formatMoney(listedPrice);
+    }
+
+    if (safeQuantity >= 2 && Number.isFinite(Number(listedPrice))) {
+      return `${formatMoney(targetPrice)}>${formatMoney(listedPrice)}(${formatMoney(
+        Number(listedPrice) * safeQuantity
+      )})`;
+    }
+
+    return `${formatMoney(targetPrice)}>${formatMoney(listedPrice)}`;
+  }
+
   function formatNotificationHeadline(notification, slot = null) {
     if (!notification) {
       return "";
@@ -374,8 +390,13 @@
     const quantity = Number(notification?.listing?.quantity) || 1;
     const quantityLabel = `${quantity}x`;
     const itemName = slot?.itemName || notification?.listing?.itemName || "Item";
+    const targetPrice = slot?.targetPrice ?? notification?.targetPrice ?? null;
 
-    return `[${sourceLabel}] ${quantityLabel} ${itemName} | ${formatMoney(notification.price)}`;
+    return `[${sourceLabel}] ${quantityLabel} ${itemName} ${formatPriceComparison(
+      targetPrice,
+      notification.price,
+      quantity
+    )}`;
   }
 
   function formatNotificationDetails(notification, slot = null) {

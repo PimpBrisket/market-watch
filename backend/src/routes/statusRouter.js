@@ -59,6 +59,7 @@ function createStatusRouter({ repository, runner, config }) {
         minimumCompatibleScriptVersion: MINIMUM_COMPATIBLE_SCRIPT_VERSION
       },
       settings: repository.getSettingsSummary(),
+      session: repository.getSessionSummary(),
       activityLog: repository.getActivityLog(),
       itemCatalog: repository.itemCatalog.getSummary(),
       status: {

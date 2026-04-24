@@ -22,7 +22,7 @@ function assert(condition, message) {
 }
 
 const config = {
-  backendVersion: "1.8.1",
+  backendVersion: "1.8.6",
   minimumCompatibleScriptVersion: "1.8.0",
   minimumCompatibleBackendVersion: "1.8.1",
   historyPointsLimit: 8,

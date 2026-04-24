@@ -69,6 +69,7 @@ class WatchRunner {
       return this.getRuntimeSummary();
     }
 
+    await this.repository.resetSessionStats(new Date().toISOString());
     await this.repository.setWatchingActive(true);
     await this.repository.updateMeta({
       lastError: null
@@ -98,6 +99,7 @@ class WatchRunner {
 
     this.stop();
     await this.repository.setWatchingActive(false);
+    await this.repository.resetSessionStats(null);
     await this.repository.updateMeta({
       lastError: null
     });
@@ -266,34 +268,54 @@ class WatchRunner {
       await this.recordListingActivity(previousResult, result);
 
       if (result.alertState.shouldNotify && result.alertState.latestEvent) {
+        const latestEvent = result.alertState.latestEvent;
+        const alertListings = Array.isArray(latestEvent.listings) ? latestEvent.listings : [];
+        const alertedQuantity = alertListings.length
+          ? alertListings.reduce((sum, listing) => sum + (Number(listing.quantity) || 0), 0)
+          : Number(latestEvent.listing?.quantity) || 0;
+
         this.logger.info("Alert fired", {
           slotNumber: watch.slotNumber,
           itemId: watch.itemId,
-          type: result.alertState.latestEvent.type,
-          reason: result.alertState.latestEvent.reason,
-          price: result.alertState.latestEvent.price,
-          listingKey: result.alertState.latestEvent.listingKey || null,
-          sellerName: result.alertState.latestEvent.sellerName || null,
-          listingCount: result.alertState.latestEvent.listingCount || 0,
+          type: latestEvent.type,
+          reason: latestEvent.reason,
+          price: latestEvent.price,
+          listingKey: latestEvent.listingKey || null,
+          sellerName: latestEvent.sellerName || null,
+          listingCount: latestEvent.listingCount || 0,
           groupingWindowMs: result.alertState.groupingWindowMs,
           cooldownMs: result.alertState.cooldownMs
         });
         await this.repository.appendActivity({
           type: "alert_triggered",
-          message: `Alert ${result.alertState.latestEvent.type} triggered for ${result.itemName}.`,
+          message: `Alert ${latestEvent.type} triggered for ${result.itemName}.`,
           slotNumber: result.slotNumber,
           itemId: result.itemId,
           itemName: result.itemName,
           details: {
+            eventId: latestEvent.eventId || null,
             sourceMode: result.sourceMode,
-            price: result.alertState.latestEvent.price,
-            sellerName: result.alertState.latestEvent.sellerName || null,
-            listingKey: result.alertState.latestEvent.listingKey || null
+            targetPrice: result.targetPrice,
+            listedPrice: latestEvent.price,
+            quantity: Number(latestEvent.listing?.quantity) || 1,
+            totalCost:
+              Number.isFinite(Number(latestEvent.price)) &&
+              Number(latestEvent.listing?.quantity) > 1
+                ? Number(latestEvent.price) * Number(latestEvent.listing.quantity)
+                : null,
+            alertedQuantity,
+            listingCount: latestEvent.listingCount || 0,
+            sellerName: latestEvent.sellerName || null,
+            listingKey: latestEvent.listingKey || null,
+            alertType: latestEvent.type,
+            alertReason: latestEvent.reason,
+            timestamp: latestEvent.timestamp || null
           }
         });
       }
 
       await this.repository.upsertProcessed(slotNumber, result);
+      await this.repository.recordSessionResult(slotNumber, result);
       return result;
     } catch (error) {
       this.logger.error("Failed source fetch", {

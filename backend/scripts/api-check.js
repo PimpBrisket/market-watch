@@ -23,7 +23,7 @@ const catalog = new ItemCatalog({
 });
 
 const config = {
-  backendVersion: "1.8.1",
+  backendVersion: "1.8.6",
   minimumCompatibleScriptVersion: "1.8.0",
   minimumCompatibleBackendVersion: "1.8.1",
   corsOrigin: "*",
@@ -325,12 +325,20 @@ async function main() {
       "/viewer/styles.css should serve the desktop viewer stylesheet"
     );
 
-    result = await requestJson(baseUrl, "/viewer/health");
-    assert(result.status === 200, "GET /viewer/health should return 200");
-    assert(result.payload?.ok === true, "/viewer/health should report ok");
+    textResult = await requestText(baseUrl, "/viewer/health");
+    assert(textResult.status === 200, "GET /viewer/health should return 200");
     assert(
-      result.payload?.assets?.script === "/viewer/app.js",
-      "/viewer/health should expose viewer asset paths"
+      textResult.text.includes("Viewer Health") &&
+        textResult.text.includes('src="/viewer/health.js"'),
+      "/viewer/health should serve the health-page shell"
+    );
+
+    result = await requestJson(baseUrl, "/viewer/health.json");
+    assert(result.status === 200, "GET /viewer/health.json should return 200");
+    assert(result.payload?.ok === true, "/viewer/health.json should report ok");
+    assert(
+      result.payload?.viewer?.assets?.script === "/viewer/app.js",
+      "/viewer/health.json should expose viewer asset paths"
     );
 
     result = await requestJson(baseUrl, "/api/slots");
@@ -430,6 +438,14 @@ async function main() {
     assert(slot2AfterRefresh.trackerStatus === "WATCHING", "slot 2 should be WATCHING");
     assert(slot3AfterRefresh.trackerStatus === "WATCHING", "slot 3 should be WATCHING");
     assert(
+      result.payload.session?.startedAt !== null,
+      "starting watching should create a current watch session"
+    );
+    assert(
+      Number(slot2AfterRefresh.sessionStats?.totalListingsFound) > 0,
+      "session stats should accumulate listing observations while watching"
+    );
+    assert(
       slot2AfterRefresh.sourceMode === SOURCE_MODES.BAZAAR_ONLY &&
         slot2AfterRefresh.notification?.sourceMode === SOURCE_MODES.BAZAAR_ONLY,
       "bazaar-only slots should only alert from bazaar listings"
@@ -447,6 +463,14 @@ async function main() {
     assert(
       slot2AfterRefresh.notification?.listing?.playerName === "SellerOne",
       "slot 2 notification should keep seller details when the source provides them"
+    );
+
+    result = await requestJson(baseUrl, "/api/slot/2/listings?sourceMode=MARKET_ONLY");
+    assert(result.status === 200, "slot listing detail view should return 200");
+    assert(
+      Array.isArray(result.payload?.listings) &&
+        result.payload.sourceMode === SOURCE_MODES.MARKET_ONLY,
+      "slot listing detail view should support on-demand market listings"
     );
 
     const initialSlot2EventId = slot2AfterRefresh.notification.eventId;
@@ -565,6 +589,11 @@ async function main() {
     const slot3AfterStop = result.payload.slots.find((slot) => slot.slotNumber === 3);
     assert(slot2AfterStop.trackerStatus === "IDLE", "slot 2 should return to IDLE after stop");
     assert(slot3AfterStop.trackerStatus === "IDLE", "slot 3 should return to IDLE after stop");
+    assert(
+      result.payload.session?.startedAt === null &&
+        Number(result.payload.session?.slots?.["2"]?.totalAlerts || 0) === 0,
+      "stopping watching should clear current-session watcher stats"
+    );
 
     result = await requestJson(baseUrl, "/api/slot/3/update", {
       method: "POST",
