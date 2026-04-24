@@ -2,12 +2,12 @@
 
 ## Final Snapshot
 
-The project is now in a publishable, version-aware state.
+The project now has a third client layer: Desktop Viewer v1. It remains in the same repo, is served by the same backend, and does not replace the TornPDA script.
 
 Current versions:
 
 - Backend `1.8.1`
-- TornPDA script `1.8.1`
+- TornPDA script `1.8.3`
 
 ## What Was Added In The Final Pass
 
@@ -21,10 +21,15 @@ Current versions:
 - frontend export or import UI
 - compact About section
 - lightweight recent activity panel
+- desktop viewer route at `/viewer`
+- desktop 6-slot monitoring dashboard
+- selected-slot detail panel with source-specific listing tables
+- desktop top status bar with connection and timing info
+- active alerts panel for current interesting deals
+- backend-owned global watching state with startup default OFF
 - simplified alert text in the form `[Market] 22x Item | $Price`
 - second-line `+N Listings available` counts from current valid qualifying listings only
 - sticky top bar with a right-side collapse arrow replacing the old `Hide` button
-- in-menu scroll position restore on collapse or reopen within the same page session
 - clearer per-slot status labels for:
   - loading
   - no listings found
@@ -42,6 +47,9 @@ Current versions:
 - `backend/src/routes/statusRouter.js`
 - `backend/src/routes/watchesRouter.js`
 - `backend/src/services/watchRunner.js`
+- `desktop-viewer/app.js`
+- `desktop-viewer/index.html`
+- `desktop-viewer/styles.css`
 - `tornpda-script/tornpda-market-watcher.user.js`
 - `scripts/build-tornpda-export.js`
 - `README.md`
@@ -68,6 +76,24 @@ Covered by automated backend checks:
 - duplicate suppression
 - version metadata exposure
 - activity log population
+- desktop viewer route and static asset serving
+- backend starts with global watching OFF
+- `/api/refresh` is blocked while watching is OFF
+- `POST /api/watching/start` enables polling
+- `POST /api/watching/stop` stops polling and returns slots to IDLE
+
+Covered by local desktop-viewer harness checks in this session:
+
+- helper module loads in Node without a browser dependency
+- full desktop render boots with mocked `/api/status` and `/api/slots` payloads
+- the dashboard still renders all 6 slots when only occupied slots are returned by the backend payload
+- alert formatting stays source-aware and compact
+- source-specific listing-state helpers distinguish Market and Bazaar correctly
+- slot selection resolves correctly for requested or fallback slots
+- timer helpers produce useful `Waiting`, `Ready now`, and countdown text
+- the desktop alert panel logic uses current qualifying listing data
+- the desktop viewer shows `Idle` / `Not scheduled` while backend watching is OFF
+- fallback handling keeps the viewer visible during API failures
 
 Covered by local userscript harness checks in this session:
 
@@ -84,7 +110,7 @@ Covered by local userscript harness checks in this session:
 - timing strip renders
 - notification toggle persists
 
-## Final UI Stability Fix
+## TornPDA UI Stability Fix
 
 The first sticky-header implementation caused two regressions:
 
@@ -97,6 +123,53 @@ The final pre-push fix keeps the sticky top bar and arrow, but:
 - keeps the 6-slot list in the normal menu flow
 - removes the fragile reopen scroll-restore behavior
 - resets to a stable top position on reopen so touch scrolling starts immediately
+
+## Desktop Viewer v1 Notes
+
+Desktop Viewer v1 is intentionally a monitoring-oriented foundation, not a full second control surface.
+
+- access it at `/viewer` from the same backend host
+- it reuses `/api/status`, `/api/slots`, and `POST /api/refresh`
+- it keeps all 6 slots visible, including empty ones
+- clicking a slot opens the detail panel on the right
+- Bazaar slots show seller-aware bazaar rows when available
+- Market slots show market rows without forcing Bazaar-only fields
+- temporary refresh failures keep the last known good dashboard visible and surface a connection or stale state instead of blanking the UI
+- global watching timers now come from backend status rather than local UI inference
+
+## Global Watching Fix
+
+The previous setup could still poll in the backend even when the user thought watching was stopped.
+
+The fix centralizes control in the backend:
+
+- backend startup now forces global watching OFF
+- `Start Watching` from TornPDA calls backend start instead of creating a local polling loop
+- `Stop Watching` from TornPDA calls backend stop and disables all slot activity
+- per-slot enabled toggles stay as preferences until global watching is ON
+- desktop viewer timing cards now show `Not scheduled` when the backend is stopped
+
+## Desktop Viewer White-Screen Fix
+
+The first `/viewer` release had a pathing bug that could produce a blank white page.
+
+Cause:
+
+- the HTML shell used relative `./app.js` and `./styles.css` links
+- from the URL `/viewer`, those paths did not reliably resolve to the mounted `/viewer/...` assets
+- because the shell root started empty, a failed script load looked like a totally blank page
+
+Fix:
+
+- `desktop-viewer/index.html` now links to absolute `/viewer/styles.css` and `/viewer/app.js`
+- the initial HTML now includes a visible `Loading viewer...` shell
+- fatal startup errors now render a visible `Error loading viewer` panel
+- `backend/src/app.js` now exposes `/viewer/health` for quick route or asset verification
+
+Correct access URLs:
+
+- desktop viewer: `http://127.0.0.1:3000/viewer`
+- viewer health: `http://127.0.0.1:3000/viewer/health`
 
 ## Version Label Fix
 
@@ -111,17 +184,24 @@ The final fix does this:
 
 ## Remaining Manual Validation
 
-Do one final on-device TornPDA pass:
+Do one final validation pass:
 
-1. import `tornpda-script/tornpda-market-watcher.json`
-2. confirm version `1.8.1`
-3. enter base URL `http://YOUR-LAN-IP:3000`
-4. test add, edit, delete
-5. test `Market Only` and `Bazaar Only`
-6. test `Open market`
-7. test `Open Bazaar`
-8. test export and import
-9. test version warning behavior if you intentionally mismatch backend or script
+1. desktop browser:
+2. open `/viewer`
+3. confirm slot layout, detail panel, alert panel, and `Idle` / `Not scheduled` startup state with real data
+4. confirm Bazaar and Market listings look correct once watching is started
+5. TornPDA:
+6. import `tornpda-script/tornpda-market-watcher.json`
+7. confirm version `1.8.3`
+8. enter base URL `http://YOUR-LAN-IP:3000`
+9. test add, edit, delete
+10. confirm global watching starts OFF
+11. test `Start Watching` and `Stop Watching`
+12. test `Market Only` and `Bazaar Only`
+13. test `Open market`
+14. test `Open Bazaar`
+15. test export and import
+16. test version warning behavior if you intentionally mismatch backend or script
 
 ## Important Safety Notes
 

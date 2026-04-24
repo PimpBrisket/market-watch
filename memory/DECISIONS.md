@@ -123,3 +123,43 @@ Why:
 
 - helps explain what changed
 - avoids a noisy developer-style debug panel in the normal UI
+
+## 2026-04-23: Add Desktop Viewer v1 As A Third Client In The Same Repo
+
+Decision:
+
+- add a lightweight browser-based desktop viewer in `desktop-viewer/`
+- serve it from the existing backend at `/viewer`
+- keep the backend as the only source of truth
+
+Why:
+
+- gives the user a desktop-friendly monitoring surface without replacing TornPDA
+- avoids splitting the project into unrelated apps
+- keeps future dashboard growth possible without introducing Electron or a second backend
+
+## 2026-04-23: Reuse Existing Backend Endpoints For Desktop Viewer v1
+
+Decision:
+
+- Desktop Viewer v1 should consume the existing `/api/status`, `/api/slots`, and `/api/refresh` routes first
+
+Why:
+
+- keeps the architecture simple
+- reduces backend churn for the first desktop iteration
+- proves the current backend contract is already useful to multiple clients
+
+## 2026-04-24: Make Global Watching Backend-Controlled And Default OFF
+
+Decision:
+
+- backend startup defaults global watching to OFF
+- backend owns the only real polling lifecycle
+- slot `enabled` flags stay as preferences and do not create independent background watchers
+
+Why:
+
+- fixes the mismatch where the backend could still poll while the UIs looked idle
+- makes Start/Stop behavior understandable across TornPDA and the desktop viewer
+- keeps timers like `Next Check` honest by tying them to real backend polling state

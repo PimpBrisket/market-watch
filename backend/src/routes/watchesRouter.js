@@ -4,6 +4,7 @@ const {
   buildEmptySlotResult,
   buildIdleResult
 } = require("../services/watchEvaluator");
+const { createApiError } = require("../utils/apiError");
 const { normalizeApiError } = require("../utils/apiError");
 
 function buildSlotView(slot, repository, config) {
@@ -16,24 +17,34 @@ function buildSlotView(slot, repository, config) {
     ...repository.getSettings()
   };
 
-  return (
-    repository.getProcessed(slot.slotNumber) ||
+  if (!repository.isWatchingActive()) {
+    return buildIdleResult({
+      watch: slot,
+      previousResult: repository.getProcessed(slot.slotNumber),
+      config: effectiveConfig
+    });
+  }
+
+  return repository.getProcessed(slot.slotNumber) ||
     buildIdleResult({
       watch: slot,
       previousResult: null,
       config: effectiveConfig
-    })
-  );
+    });
 }
 
-function buildCollectionPayload(repository, config) {
+function buildCollectionPayload(repository, runner, config) {
+  const status = {
+    ...repository.getStatusSummary(),
+    ...runner.getRuntimeSummary()
+  };
   const slots = repository.listSlots().map((slot) => {
     return buildSlotView(slot, repository, config);
   });
 
   return formatSlotCollection({
     slots,
-    status: repository.getStatusSummary(),
+    status,
     settings: repository.getSettingsSummary(),
     activityLog: repository.getActivityLog(),
     versions: {
@@ -64,14 +75,14 @@ function createWatchesRouter({ repository, runner, config }) {
   router.get("/slots", (request, response) => {
     response.json({
       ok: true,
-      ...buildCollectionPayload(repository, config)
+      ...buildCollectionPayload(repository, runner, config)
     });
   });
 
   router.get("/watches", (request, response) => {
     response.json({
       ok: true,
-      ...buildCollectionPayload(repository, config)
+      ...buildCollectionPayload(repository, runner, config)
     });
   });
 
@@ -108,7 +119,7 @@ function createWatchesRouter({ repository, runner, config }) {
       await repository.importBackup(request.body?.backup || {});
       response.json({
         ok: true,
-        ...buildCollectionPayload(repository, config)
+        ...buildCollectionPayload(repository, runner, config)
       });
     } catch (error) {
       sendApiError(response, error, 400);
@@ -129,6 +140,41 @@ function createWatchesRouter({ repository, runner, config }) {
 
   router.put("/settings", saveSettings);
   router.post("/settings", saveSettings);
+
+  router.get("/watching", (request, response) => {
+    response.json({
+      ok: true,
+      watching: runner.getRuntimeSummary(),
+      status: {
+        ...repository.getStatusSummary(),
+        ...runner.getRuntimeSummary()
+      }
+    });
+  });
+
+  router.post("/watching/start", async (request, response) => {
+    try {
+      await runner.startWatching("api_start");
+      response.json({
+        ok: true,
+        ...buildCollectionPayload(repository, runner, config)
+      });
+    } catch (error) {
+      sendApiError(response, error, 500);
+    }
+  });
+
+  router.post("/watching/stop", async (request, response) => {
+    try {
+      await runner.stopWatching("api_stop");
+      response.json({
+        ok: true,
+        ...buildCollectionPayload(repository, runner, config)
+      });
+    } catch (error) {
+      sendApiError(response, error, 500);
+    }
+  });
 
   router.get("/items/resolve", (request, response) => {
     try {
@@ -285,11 +331,24 @@ function createWatchesRouter({ repository, runner, config }) {
   });
 
   router.post("/refresh", async (request, response) => {
+    if (!runner.isWatchingActive()) {
+      sendApiError(
+        response,
+        createApiError(
+          409,
+          "watching_inactive",
+          "Global watching is stopped. Start Watching before running a backend poll."
+        ),
+        409
+      );
+      return;
+    }
+
     try {
       await runner.runPollCycle("manual_api");
       response.json({
         ok: true,
-        ...buildCollectionPayload(repository, config)
+        ...buildCollectionPayload(repository, runner, config)
       });
     } catch (error) {
       sendApiError(response, error, 500);

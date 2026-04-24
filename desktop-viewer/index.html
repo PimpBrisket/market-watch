@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Torn Market Watcher Desktop Viewer</title>
+    <link rel="stylesheet" href="/viewer/styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <div class="boot-shell panel">
+        <h1>Desktop Viewer v1</h1>
+        <p>Loading viewer...</p>
+        <p class="panel-subtitle">
+          If this stays on screen, check <code>/viewer/health</code>, <code>/viewer/app.js</code>, and
+          <code>/viewer/styles.css</code>.
+        </p>
+      </div>
+    </div>
+    <noscript>
+      <div class="app-shell">
+        <div class="boot-shell panel bad">
+          <h1>Desktop Viewer v1</h1>
+          <p>Error loading viewer</p>
+          <p class="panel-subtitle">
+            JavaScript is required for the desktop viewer. The backend should still respond at
+            <code>/viewer/health</code>.
+          </p>
+        </div>
+      </div>
+    </noscript>
+    <script src="/viewer/app.js"></script>
+  </body>
+</html>

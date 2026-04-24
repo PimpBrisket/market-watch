@@ -2,12 +2,19 @@
 
 ## Highest Priority Next
 
-- Run one real TornPDA phone-side validation pass using script version `1.8.1`
+- Run one real TornPDA phone-side validation pass using script version `1.8.3`
 - Confirm:
   - `Open market` lands correctly
   - `Open Bazaar` lands correctly
   - compact mode still feels clean on the device
   - notification permission behavior is understandable on the device
+
+- Run one real desktop browser-side validation pass for Desktop Viewer v1
+- Confirm:
+  - `/viewer` layout feels right on the target monitor size
+  - slot selection is comfortable with real data
+  - Bazaar `Open Bazaar` actions behave as expected
+  - stale or disconnected states are readable at a glance
 
 ## GitHub Follow-Up
 
@@ -28,6 +35,9 @@
 
 - optional file-based import in addition to paste-based import
 - richer device notification controls
+- desktop notifications once the viewer foundation is stable
+- lightweight price history in the desktop detail panel
+- richer desktop analytics after the monitoring layout settles
 - deeper paginated Bazaar listing support if upstream access is worth the extra complexity
 - optional auth or shared secret for LAN-only deployments
 - SQLite storage option if history needs become larger

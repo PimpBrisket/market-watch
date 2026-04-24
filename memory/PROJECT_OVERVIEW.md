@@ -2,12 +2,13 @@
 
 ## What This Project Is
 
-TornPDA Market Watcher is a two-part personal tool for watching Torn item prices:
+TornPDA Market Watcher is now a three-part personal tool for watching Torn item prices:
 
 1. A local Node.js backend
 2. A TornPDA userscript frontend
+3. A browser-based Desktop Viewer v1
 
-The backend is the source of truth for slot configuration, polling results, alert logic, and processed listing state. The TornPDA script is the mobile control and display layer.
+The backend is the source of truth for slot configuration, polling results, alert logic, and processed listing state. TornPDA remains the mobile control layer, and the desktop viewer is an additional read-heavy monitoring client for the same backend.
 
 ## Main User Outcome
 
@@ -17,6 +18,8 @@ The user can keep up to 6 watched items, choose whether each slot tracks:
 - `Bazaar Only`
 
 and get clear mobile-friendly status plus immediate low-price alerts without duplicate spam for the same still-active listing.
+
+The same canonical backend state can now also be viewed on a desktop dashboard that shows all 6 slots, current source-specific listings, active alerts, and timing status without relying on TornPDA screen space.
 
 ## Final Core Capabilities
 
@@ -33,6 +36,12 @@ and get clear mobile-friendly status plus immediate low-price alerts without dup
 - version compatibility warnings
 - backup export or import
 - lightweight recent activity history
+- Desktop Viewer v1 dashboard with:
+  - 6 always-visible slots
+  - selected-slot detail panel
+  - Bazaar and Market listing tables
+  - top status and timing bar
+  - current active alerts panel
 
 ## Important Design Rule
 
@@ -47,11 +56,18 @@ Local TornPDA persistence is only for smoother UX:
 
 It must not replace good backend data with empty local state.
 
+The desktop viewer follows the same rule. It is a consumer of backend state, not a second source of truth.
+
 ## Current Versions
 
 - Backend: `1.8.1`
-- Script: `1.8.1`
+- Script: `1.8.3`
 
 ## Current Next Milestone
 
-The project is now ready for GitHub cleanup and future automatic update work. The next meaningful step after publishing is a real on-device TornPDA validation pass and then implementing the update delivery path on top of the new version-compatibility layer.
+Desktop Viewer v1 is now in place as the next client layer. The next likely expansion areas are:
+
+- real browser-side usability validation on the desktop viewer
+- desktop notifications if wanted later
+- lightweight price history
+- future auto-update delivery on top of the existing version-compatibility layer

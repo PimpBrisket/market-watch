@@ -2,13 +2,14 @@
 
 ## High-Level Design
 
-The project has two layers.
+The project now has three layers.
 
 ### 1. Backend
 
 Responsible for:
 
 - persistent slot storage
+- global watching ON/OFF state
 - Weav3r fetching
 - source-mode separation
 - alert evaluation
@@ -31,12 +32,25 @@ Responsible for:
 - version mismatch warnings
 - device-side banners and supported notifications
 
+### 3. Desktop Viewer v1
+
+Responsible for:
+
+- desktop-first monitoring layout
+- all-6-slots dashboard view
+- selected-slot detail panel
+- source-specific Market or Bazaar listing tables
+- compact top status bar with connection, version, and timing info
+- current active alerts panel
+- last-known-good display preservation during temporary refresh failures
+
 ## Canonical Data Rules
 
 Canonical backend state:
 
 - slots
 - runtime settings
+- global watching active or inactive state
 - processed watch results
 - activity log
 
@@ -48,6 +62,12 @@ Local TornPDA support state:
 - cached last-known-good slot payload
 
 Fresh page loads intentionally start closed even if the previous session ended open.
+
+Desktop Viewer v1 keeps the same principle:
+
+- no independent watch persistence
+- no parallel source-of-truth state
+- temporary in-memory UI state only for selected slot, connection status, and last known good payloads
 
 ## Source-Mode Model
 
@@ -66,6 +86,8 @@ That source mode drives:
 - duplicate suppression
 
 There is no mixed-source alert evaluation.
+
+Enabled slot toggles are preferences only. They matter only while backend global watching is ON.
 
 ## Versioning Model
 
@@ -87,6 +109,21 @@ Compatibility model:
 - backend exposes a minimum compatible script version
 - incompatible versions trigger a visible warning
 - risky actions are disabled instead of silently failing
+
+## Global Watching Model
+
+The backend owns the only real polling switch.
+
+- startup defaults `watchingActive` to `false`
+- `POST /api/watching/start` enables backend polling
+- `POST /api/watching/stop` disables backend polling
+- `POST /api/refresh` is blocked while global watching is OFF
+
+Important consequence:
+
+- per-slot `enabled` flags do not create their own background watchers
+- enabled slots become active only when global watching is ON
+- when global watching is OFF, occupied slots render as `IDLE`
 
 ## Backup Model
 
@@ -147,6 +184,9 @@ Backend:
 
 Frontend:
 
+- `desktop-viewer/index.html`
+- `desktop-viewer/styles.css`
+- `desktop-viewer/app.js`
 - `tornpda-script/tornpda-market-watcher.user.js`
 - `tornpda-script/tornpda-market-watcher.json`
 - `scripts/build-tornpda-export.js`
@@ -161,14 +201,38 @@ The backend remains responsible for determining the current valid qualifying lis
 - if more current qualifying listings remain, the userscript adds a second line such as `+3 Listings available`
 - the additional count excludes stale or disappeared listings and excludes the lead listing itself
 
-## Menu Shell
+## TornPDA Menu Shell
 
 The TornPDA panel uses a sticky top bar inside the scrolling menu container.
 
 - the top bar stays visible while scrolling
 - the old `Hide` button was replaced by a compact right-side arrow control
-- collapsing the menu stores the current in-panel scroll position in runtime state
-- reopening restores that scroll position within the same page session
+- the current stable implementation prioritizes immediate scrolling on reopen over fragile scroll-position replay
+
+## Desktop Viewer Shell
+
+Desktop Viewer v1 is served by the backend at `/viewer`.
+
+- `GET /viewer` serves `desktop-viewer/index.html`
+- `GET /viewer/app.js` serves the viewer client
+- `GET /viewer/styles.css` serves the desktop styling
+
+The layout is intentionally desktop-first:
+
+- top bar for connection, version, and timer status
+- main grid of 6 slot cards
+- right-side detail panel for the selected slot
+- active alerts panel near the dashboard instead of a raw debug wall
+
+The desktop client reuses existing backend routes first:
+
+- `GET /api/status`
+- `GET /api/slots`
+- `POST /api/watching/start`
+- `POST /api/watching/stop`
+- `POST /api/refresh`
+
+No separate desktop-only backend architecture was introduced for v1.
 
 ## Request Flow
 
@@ -186,6 +250,15 @@ The TornPDA panel uses a sticky top bar inside the scrolling menu container.
 1. userscript calls `POST /api/refresh`
 2. backend refreshes enabled occupied slots
 3. userscript re-syncs `/api/slots`
+
+### Desktop viewer refresh
+
+1. desktop viewer renders immediately with any last known good in-memory payload
+2. desktop viewer requests `/api/status`
+3. desktop viewer requests `/api/slots`
+4. if global watching is ON, `Refresh Now` may call `POST /api/refresh`
+5. if global watching is OFF, the viewer only reloads status and slot state and shows `Not scheduled`
+6. temporary failures keep the previous payload visible and mark the connection as failed or stale instead of blanking the dashboard
 
 ### Backup import
 

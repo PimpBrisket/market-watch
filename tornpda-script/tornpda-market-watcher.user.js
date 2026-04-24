@@ -759,7 +759,13 @@
     applySlotsPayload(
       {
         ...cached.payload,
-        versions: null
+        versions: null,
+        status: {
+          ...(cached.payload.status || {}),
+          watchingActive: false,
+          polling: false,
+          watcherStatus: "INACTIVE"
+        }
       },
       cached.lastFetchAt || new Date().toISOString()
     );
@@ -866,6 +872,29 @@
       window.clearInterval(state.watcher.timerId);
       state.watcher.timerId = null;
     }
+  }
+
+  function syncWatcherFromStatus(status) {
+    clearWatcherTimer();
+
+    const active = status?.watchingActive === true;
+    const polling = status?.polling === true;
+    const watcherStatus =
+      String(status?.watcherStatus || "").trim() ||
+      (polling || active ? "WATCHING" : "INACTIVE");
+
+    state.watcher = {
+      ...state.watcher,
+      active,
+      polling,
+      status: watcherStatus,
+      timerId: null,
+      lastStartedAt: status?.lastPollStartedAt || null,
+      lastCompletedAt: status?.lastPollCompletedAt || null,
+      lastSuccessfulAt: status?.lastPollCompletedAt || null,
+      lastError: status?.lastError || null,
+      lastReason: status?.lastPollReason || null
+    };
   }
 
   function getWatcherReadiness() {
@@ -1309,6 +1338,7 @@
     });
     state.summary = payload.summary || state.summary || null;
     state.status = payload.status || state.status || null;
+    syncWatcherFromStatus(payload.status || null);
     syncCompatibility(payload.versions || null);
     syncSettings(payload.settings || payload.status?.settings || null);
     state.lastFetchAt = fetchedAt;
@@ -1815,6 +1845,10 @@
 
   function watcherDetail() {
     if (state.watcher.status === "WATCHING") {
+      if (!(state.summary?.activeEnabledCount > 0)) {
+        return "Global watching is on, but no enabled slots are active yet.";
+      }
+
       return state.watcher.polling
         ? "Checking the backend now."
         : `Watching is active. Poll interval: ${Math.round(POLL_INTERVAL_MS / 1000)}s.`;
@@ -1848,6 +1882,13 @@
       };
     }
 
+    if (!(state.summary?.activeEnabledCount > 0)) {
+      return {
+        value: "Not scheduled",
+        detail: "No enabled slots are active under the current global watching state."
+      };
+    }
+
     const lastStartedAtMs = Date.parse(state.watcher.lastStartedAt || "");
 
     if (!Number.isFinite(lastStartedAtMs)) {
@@ -1866,6 +1907,13 @@
   }
 
   function deriveNextAlertInfo() {
+    if (!state.watcher.active) {
+      return {
+        value: "Not scheduled",
+        detail: "Start Watching before any slot can actively check for alerts."
+      };
+    }
+
     const slots = activeOccupiedSlots();
 
     if (!slots.length) {
@@ -1884,13 +1932,6 @@
       return {
         value: `In ${formatDurationShort(nextReadyMs)}`,
         detail: "Next alert = next time a watcher alert becomes eligible."
-      };
-    }
-
-    if (!state.watcher.active) {
-      return {
-        value: "Waiting",
-        detail: "Alerts are ready, but a new check is needed to discover them."
       };
     }
 
@@ -3229,13 +3270,13 @@
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
           <div>
             <div style="font-size:15px;font-weight:800;">Market Watcher</div>
-            <div style="font-size:11px;color:#5f6f7b;">${compactMode ? "Compact tracker view. Switch to Manage Mode for setup, editing, and reset tools." : "Base backend URL only. Refresh Now runs one backend poll. Reload Saved Slots only re-reads current backend output without starting active watching."}</div>
+            <div style="font-size:11px;color:#5f6f7b;">${compactMode ? "Compact tracker view. Switch to Manage Mode for setup, editing, and reset tools." : "Base backend URL only. Start Watching is required before any backend polling occurs. Reload Saved Slots only re-reads current backend output."}</div>
           </div>
           <button data-action="collapse-panel" aria-label="Hide Menu" title="Hide Menu" style="align-self:flex-start;border:none;border-radius:999px;padding:6px 10px;background:#d9e8f6;color:#12314a;font-size:15px;font-weight:800;line-height:1;min-width:34px;">▴</button>
         </div>
         <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
           <button data-action="toggle-mode" style="border:none;border-radius:10px;padding:8px 10px;background:#eef3f7;color:#12314a;font-size:12px;font-weight:700;">${modeButtonLabel}</button>
-          <button data-action="manual-refresh" ${state.requests.manualRefresh || featureBlock ? "disabled" : ""} style="border:none;border-radius:10px;padding:8px 10px;background:${state.requests.manualRefresh || featureBlock ? "#d5dce2" : "#0d5ea8"};color:${state.requests.manualRefresh || featureBlock ? "#61707c" : "#fff"};font-size:12px;font-weight:700;">${state.requests.manualRefresh ? "Refreshing..." : "Refresh Now"}</button>
+          <button data-action="manual-refresh" ${state.requests.manualRefresh || featureBlock || !state.watcher.active ? "disabled" : ""} style="border:none;border-radius:10px;padding:8px 10px;background:${state.requests.manualRefresh || featureBlock || !state.watcher.active ? "#d5dce2" : "#0d5ea8"};color:${state.requests.manualRefresh || featureBlock || !state.watcher.active ? "#61707c" : "#fff"};font-size:12px;font-weight:700;">${state.requests.manualRefresh ? "Refreshing..." : "Refresh Now"}</button>
         </div>
       </div>
       <div style="padding:12px 12px 0;">
@@ -3272,7 +3313,7 @@
             ${escapeHtml(
               state.watcher.lastError ||
                 watcherReadiness.reason ||
-                "Start creates exactly one polling loop. Stop cancels it fully. Refresh Now does one backend poll without starting continuous watching."
+                "Global Start Watching enables backend polling. Stop Watching disables all slot activity even if slot toggles remain on."
             )}
           </div>
           <div style="margin-top:6px;font-size:11px;color:${state.requests.restoreSync ? "#0d5ea8" : "#5f6f7b"};">
@@ -4200,6 +4241,17 @@
       return;
     }
 
+    if (!state.watcher.active) {
+      state.lastError = "Global watching is stopped. Start Watching before running a backend poll.";
+      updateConnection(
+        "partial",
+        state.lastError,
+        "Reload Saved Slots still works while watching is stopped."
+      );
+      render();
+      return;
+    }
+
     const normalized = normalizeBackendUrlInput(state.backendUrl || state.backendInput);
 
     if (!normalized.ok) {
@@ -4353,34 +4405,56 @@
     }
 
     persistBackendUrl(readiness.normalized.baseUrl);
-    state.watcher.active = true;
-    state.watcher.polling = false;
-    state.watcher.status = "WATCHING";
-    state.watcher.lastError = null;
-    pushDebugLog("info", "Watching started", {
-      baseUrl: readiness.normalized.baseUrl,
-      intervalMs: POLL_INTERVAL_MS
-    });
-    render();
+    const endpoint = buildApiUrl(readiness.normalized.baseUrl, "/api/watching/start");
 
-    await runWatchPollCycle("start");
-
-    if (!state.watcher.active) {
+    if (!endpoint) {
+      state.lastError = "Bad URL construction for start-watching request.";
+      render();
       return;
     }
 
-    clearWatcherTimer();
-    state.watcher.timerId = window.setInterval(() => {
-      void runWatchPollCycle("interval");
-    }, POLL_INTERVAL_MS);
-
-    pushDebugLog("info", "Watching interval armed", {
-      intervalMs: POLL_INTERVAL_MS
+    state.requests.manualRefresh = true;
+    state.watcher.lastError = null;
+    pushDebugLog("info", "Watching started", {
+      baseUrl: readiness.normalized.baseUrl,
+      endpoint
     });
     render();
+
+    try {
+      const result = await requestJson(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: "{}"
+      });
+
+      if (!result.ok) {
+        state.lastError = result.error.message;
+        state.watcher.status = "ERROR";
+        state.watcher.lastError = result.error.message;
+        updateConnection("error", result.error.message, `Requested URL: ${endpoint}`);
+        return;
+      }
+
+      applySlotsPayload(result.payload, new Date().toISOString());
+      state.runtime.restoredFromCache = Array.isArray(state.slots) && state.slots.length > 0;
+      state.runtime.restoreSource = "backend_sync";
+      state.runtime.initialRestorePending = false;
+      state.runtime.autoRestoreReason = null;
+      updateConnection(
+        "success",
+        "Global watching started. Enabled slots will now poll on the backend interval.",
+        `Requested URL: ${endpoint}`
+      );
+    } finally {
+      state.requests.manualRefresh = false;
+      render();
+    }
   }
 
-  function stopWatching(reason = "manual") {
+  async function stopWatching(reason = "manual") {
     if (!state.watcher.active && !state.watcher.polling && state.watcher.timerId === null) {
       pushDebugLog("info", "Watching stop requested while already inactive", {
         reason
@@ -4389,17 +4463,59 @@
       return;
     }
 
-    const hadTimer = state.watcher.timerId !== null;
+    const normalized = normalizeBackendUrlInput(state.backendUrl || state.backendInput);
+
+    if (!normalized.ok) {
+      state.lastError = normalized.error;
+      render();
+      return;
+    }
+
+    const endpoint = buildApiUrl(normalized.baseUrl, "/api/watching/stop");
+
+    if (!endpoint) {
+      state.lastError = "Bad URL construction for stop-watching request.";
+      render();
+      return;
+    }
+
     clearWatcherTimer();
-    state.watcher.active = false;
-    state.watcher.polling = false;
-    state.watcher.status = "INACTIVE";
-    state.watcher.lastError = null;
+    state.requests.manualRefresh = true;
     pushDebugLog("info", "Watching stopped", {
       reason,
-      hadTimer
+      endpoint
     });
     render();
+
+    try {
+      const result = await requestJson(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: "{}"
+      });
+
+      if (!result.ok) {
+        state.lastError = result.error.message;
+        updateConnection("error", result.error.message, `Requested URL: ${endpoint}`);
+        return;
+      }
+
+      applySlotsPayload(result.payload, new Date().toISOString());
+      state.runtime.restoredFromCache = Array.isArray(state.slots) && state.slots.length > 0;
+      state.runtime.restoreSource = "backend_sync";
+      state.runtime.initialRestorePending = false;
+      state.runtime.autoRestoreReason = null;
+      updateConnection(
+        "success",
+        "Global watching stopped. Slots remain stored as preferences, but no backend polling is active.",
+        `Requested URL: ${endpoint}`
+      );
+    } finally {
+      state.requests.manualRefresh = false;
+      render();
+    }
   }
 
   window.addEventListener(FLUTTER_READY_EVENT, () => {

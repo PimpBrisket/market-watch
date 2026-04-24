@@ -2,16 +2,17 @@
 
 ## Overall State
 
-As of 2026-04-23, the project is functionally complete and has now had a final stabilization and GitHub-readiness pass.
+As of 2026-04-23, the project includes a new Desktop Viewer v1 in the same repo and served by the same backend. The backend remains canonical, TornPDA remains the mobile client, and the desktop viewer is now the desktop monitoring client.
 
 Current versions:
 
 - Backend: `1.8.1`
-- TornPDA script: `1.8.1`
+- TornPDA script: `1.8.3`
 
 ## Confirmed Working
 
 - 6-slot backend model
+- backend startup defaults to global watching OFF
 - add, edit, delete, enable or disable, and reset flows
 - strict `Market Only` vs `Bazaar Only` separation
 - same-slot source switching in both directions
@@ -31,17 +32,30 @@ Current versions:
 - version display in the UI
 - backend or script compatibility warning surface
 - disabled risky actions when versions are incompatible
+- Desktop Viewer v1 route at `/viewer`
+- desktop dashboard with all 6 slots visible
+- selected-slot detail panel
+- source-correct Market and Bazaar listing tables
+- desktop top status bar for connection, versions, and timing
+- active alerts panel for current interesting deals
+- polling-based desktop refresh that preserves last known good data on temporary failures
+- global Start Watching and Stop Watching now control all backend polling
+- enabled slot toggles now behave as preferences unless global watching is ON
+- desktop `Next Check` and related timing labels now show `Not scheduled` while stopped
 
 ## Final Architecture Status
 
 - Backend remains canonical for watches and processed state
+- Backend global watching state is now canonical for whether polling may run at all
 - TornPDA local persistence is only support state
+- Desktop Viewer v1 is a thin browser client that reuses existing backend endpoints where possible
 - Backup format now contains:
   - backend slot and settings payload
   - local UI preferences
   - version metadata
 - `/api/status` and `/api/slots` both expose version metadata
 - `/api/backup/export` and `/api/backup/import` now exist
+- `/viewer` serves the desktop dashboard static client
 
 ## Automated Validation Completed
 
@@ -63,6 +77,64 @@ Covered by backend checks:
 - backup export returns all slots
 - backup import restores canonical state
 - backend version metadata is exposed
+- desktop viewer route and static asset serving are exposed correctly
+- backend starts with watching OFF
+- backend blocks `/api/refresh` while watching is OFF
+- start watching enables global polling
+- stop watching returns slots to IDLE state
+
+Covered by local desktop-viewer harness validation in this session:
+
+- desktop viewer helper module loads successfully
+- desktop viewer render path boots successfully with mocked backend data
+- 6-slot dashboard stays visible even when the backend payload only includes occupied slots
+- selecting a slot resolves to the requested or first occupied slot correctly
+- Bazaar mode alert and listing logic stays separate from Market mode
+- Market mode alert and listing logic stays separate from Bazaar mode
+- top timing helpers produce useful `Waiting`, `Ready now`, and countdown-style labels
+- active alert formatting stays compact and source-aware
+- temporary failure handling is intentionally last-known-good-first rather than blanking the UI
+- the viewer now shows a visible loading or error shell instead of rendering as a blank white page if startup fails
+- the viewer shows `Idle` / `Not scheduled` while global watching is OFF
+- the viewer switches back to active refresh labels only when global watching is ON
+
+## Global Watching Model Fix
+
+The previous model had two conflicting truths:
+
+- the backend started polling automatically on startup
+- TornPDA kept its own local start or stop loop state
+
+That could make the desktop viewer show active timing even when the user expected the system to be stopped, and enabled slot toggles could still appear active after Stop Watching.
+
+This is now fixed by:
+
+- making backend global watching state canonical
+- forcing backend startup to default to OFF
+- requiring `Start Watching` before any backend market polling can happen
+- making `Stop Watching` disable all slot activity even if per-slot toggles remain enabled
+- treating per-slot toggles as preferences until global watching is ON
+- blocking backend `/api/refresh` while stopped so no hidden poll path remains
+
+## Desktop Viewer White-Screen Fix
+
+The initial `/viewer` rollout could load as a blank white page even though the backend route existed.
+
+Root cause:
+
+- `index.html` linked `./app.js` and `./styles.css`
+- when the page was opened at `/viewer` without a trailing slash, the browser resolved those paths incorrectly instead of requesting `/viewer/app.js` and `/viewer/styles.css`
+- if the JS never loaded, the page only contained an empty root node, which looked like a white screen
+
+Fix:
+
+- switched the desktop viewer shell to absolute asset paths:
+  - `/viewer/app.js`
+  - `/viewer/styles.css`
+- added a visible `Loading viewer...` shell directly in `index.html`
+- added startup-fatal rendering so early JS crashes show `Error loading viewer`
+- added `/viewer/health` to confirm viewer shell and asset routing quickly
+- kept the main dashboard shell visible during API failures instead of blanking the page
 
 Covered by local userscript harness validation in this session:
 
@@ -109,7 +181,10 @@ This is now fixed by:
 
 ## Remaining Non-Code Validation Gap
 
-The main remaining gap is live phone-side TornPDA interaction confirmation for:
+The main remaining gaps are:
+
+- live desktop browser-side interaction confirmation for the new viewer
+- live phone-side TornPDA interaction confirmation for:
 
 - `Open market`
 - `Open Bazaar`

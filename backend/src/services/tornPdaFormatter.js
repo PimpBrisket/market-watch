@@ -10,9 +10,13 @@ function buildTornMarketLink(result, tornMarketBaseUrl) {
   return `${tornMarketBaseUrl}${result.itemId}${itemNamePart}`;
 }
 
-function deriveTrackerStatus(result, derivedStale) {
+function deriveTrackerStatus(result, derivedStale, globalWatchingActive) {
   if (!result?.occupied) {
     return "EMPTY";
+  }
+
+  if (!globalWatchingActive) {
+    return "IDLE";
   }
 
   if (!result.enabled) {
@@ -49,7 +53,7 @@ function deriveCooldownState(result) {
   };
 }
 
-function withLinks(result, tornMarketBaseUrl, staleAfterMs) {
+function withLinks(result, tornMarketBaseUrl, staleAfterMs, globalWatchingActive = true) {
   if (!result) {
     return null;
   }
@@ -74,7 +78,7 @@ function withLinks(result, tornMarketBaseUrl, staleAfterMs) {
     result.lastChecked === null
       ? result.stale
       : result.stale || Date.now() - Date.parse(result.lastChecked) > staleAfterMs;
-  const trackerStatus = deriveTrackerStatus(result, derivedStale);
+  const trackerStatus = deriveTrackerStatus(result, derivedStale, globalWatchingActive);
   const cooldownState = deriveCooldownState(result);
 
   return {
@@ -82,8 +86,8 @@ function withLinks(result, tornMarketBaseUrl, staleAfterMs) {
     stale: derivedStale,
     trackerStatus,
     trackerStatusLabel: trackerStatus.replace("_", " "),
-    coolingDown: cooldownState.coolingDown,
-    cooldownRemainingMs: cooldownState.cooldownRemainingMs,
+    coolingDown: globalWatchingActive ? cooldownState.coolingDown : false,
+    cooldownRemainingMs: globalWatchingActive ? cooldownState.cooldownRemainingMs : 0,
     links: {
       tornMarket: buildTornMarketLink(result, tornMarketBaseUrl)
     },
@@ -105,9 +109,10 @@ function formatSlotCollection({
   tornMarketBaseUrl,
   staleAfterMs
 }) {
+  const globalWatchingActive = status?.watchingActive === true;
   const formattedSlots = slots
     .filter(Boolean)
-    .map((slot) => withLinks(slot, tornMarketBaseUrl, staleAfterMs))
+    .map((slot) => withLinks(slot, tornMarketBaseUrl, staleAfterMs, globalWatchingActive))
     .sort((left, right) => left.slotNumber - right.slotNumber);
   const occupiedSlots = formattedSlots.filter((slot) => slot.occupied);
 
@@ -119,6 +124,9 @@ function formatSlotCollection({
       occupiedCount: occupiedSlots.length,
       emptyCount: formattedSlots.length - occupiedSlots.length,
       enabledCount: occupiedSlots.filter((slot) => slot.enabled).length,
+      activeEnabledCount: globalWatchingActive
+        ? occupiedSlots.filter((slot) => slot.enabled).length
+        : 0,
       watchCount: occupiedSlots.length,
       buyNowCount: occupiedSlots.filter((slot) => slot.state === "BUY_NOW").length,
       nearMissCount: occupiedSlots.filter((slot) => slot.state === "NEAR_MISS").length,

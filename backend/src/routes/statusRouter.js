@@ -2,7 +2,7 @@ const express = require("express");
 const { getNetworkDiagnostics } = require("../utils/networkDiagnostics");
 const { BACKEND_VERSION, MINIMUM_COMPATIBLE_SCRIPT_VERSION } = require("../version");
 
-function createStatusRouter({ repository, config }) {
+function createStatusRouter({ repository, runner, config }) {
   const router = express.Router();
 
   router.get("/status", (request, response) => {
@@ -24,6 +24,8 @@ function createStatusRouter({ repository, config }) {
           health: "/health",
           status: "/api/status",
           slots: "/api/slots",
+          startWatching: "/api/watching/start",
+          stopWatching: "/api/watching/stop",
           slot: "/api/slot/:slotNumber",
           addToSlot: "/api/slot/:slotNumber/watch",
           updateSlot: "/api/slot/:slotNumber",
@@ -59,7 +61,10 @@ function createStatusRouter({ repository, config }) {
       settings: repository.getSettingsSummary(),
       activityLog: repository.getActivityLog(),
       itemCatalog: repository.itemCatalog.getSummary(),
-      status: repository.getStatusSummary()
+      status: {
+        ...repository.getStatusSummary(),
+        ...runner.getRuntimeSummary()
+      }
     });
   });
 

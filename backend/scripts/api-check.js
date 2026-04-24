@@ -219,6 +219,19 @@ async function requestJson(baseUrl, route, options = {}) {
   };
 }
 
+async function requestText(baseUrl, route, options = {}) {
+  const response = await fetch(`${baseUrl}${route}`, {
+    method: options.method || "GET",
+    headers: options.headers || {}
+  });
+  const text = await response.text();
+
+  return {
+    status: response.status,
+    text
+  };
+}
+
 async function main() {
   const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "tpda-market-api-"));
   const storeFile = path.join(tempRoot, "store.json");
@@ -268,6 +281,57 @@ async function main() {
         config.minimumCompatibleScriptVersion,
       "status payload should expose the minimum compatible script version"
     );
+    assert(
+      result.payload.status?.watchingActive === false,
+      "backend should start with global watching OFF"
+    );
+    assert(
+      result.payload.status?.watcherStatus === "INACTIVE",
+      "backend should report INACTIVE watcher status on startup"
+    );
+    assert(
+      result.payload.status?.lastPollCompletedAt === null,
+      "backend should not run a market poll before Start Watching"
+    );
+
+    let textResult = await requestText(baseUrl, "/viewer");
+    assert(textResult.status === 200, "GET /viewer should return 200");
+    assert(
+      textResult.text.includes("<title>Torn Market Watcher Desktop Viewer</title>"),
+      "/viewer should return the desktop viewer HTML shell"
+    );
+    assert(
+      textResult.text.includes('href="/viewer/styles.css"') &&
+        textResult.text.includes('src="/viewer/app.js"'),
+      "/viewer should link to absolute viewer asset paths"
+    );
+    assert(
+      textResult.text.includes("Loading viewer..."),
+      "/viewer should include a visible loading shell"
+    );
+
+    textResult = await requestText(baseUrl, "/viewer/app.js");
+    assert(textResult.status === 200, "GET /viewer/app.js should return 200");
+    assert(
+      textResult.text.includes("Desktop Viewer v1") ||
+        textResult.text.includes("TornMarketDesktopViewer"),
+      "/viewer/app.js should serve the desktop viewer client script"
+    );
+
+    textResult = await requestText(baseUrl, "/viewer/styles.css");
+    assert(textResult.status === 200, "GET /viewer/styles.css should return 200");
+    assert(
+      textResult.text.includes(".status-grid"),
+      "/viewer/styles.css should serve the desktop viewer stylesheet"
+    );
+
+    result = await requestJson(baseUrl, "/viewer/health");
+    assert(result.status === 200, "GET /viewer/health should return 200");
+    assert(result.payload?.ok === true, "/viewer/health should report ok");
+    assert(
+      result.payload?.assets?.script === "/viewer/app.js",
+      "/viewer/health should expose viewer asset paths"
+    );
 
     result = await requestJson(baseUrl, "/api/slots");
     assert(result.status === 200, "GET /api/slots should return 200");
@@ -281,6 +345,12 @@ async function main() {
       result.payload.slots.every((slot) => slot.occupied === false),
       "fresh API-check store should start with 6 empty slots"
     );
+
+    result = await requestJson(baseUrl, "/api/refresh", {
+      method: "POST",
+      body: {}
+    });
+    assert(result.status === 409, "manual backend refresh should be blocked while watching is OFF");
 
     result = await requestJson(baseUrl, "/api/slot/2/watch", {
       method: "POST",
@@ -330,6 +400,22 @@ async function main() {
     assert(
       result.payload.slot.sourceMode === SOURCE_MODES.MARKET_ONLY,
       "slot 3 should persist market-only mode"
+    );
+
+    result = await requestJson(baseUrl, "/api/slots");
+    const slot2WhileStopped = result.payload.slots.find((slot) => slot.slotNumber === 2);
+    const slot3WhileStopped = result.payload.slots.find((slot) => slot.slotNumber === 3);
+    assert(slot2WhileStopped.trackerStatus === "IDLE", "slot 2 should be IDLE while watching is OFF");
+    assert(slot3WhileStopped.trackerStatus === "IDLE", "slot 3 should be IDLE while watching is OFF");
+
+    result = await requestJson(baseUrl, "/api/watching/start", {
+      method: "POST",
+      body: {}
+    });
+    assert(result.status === 200, "start watching should return 200");
+    assert(
+      result.payload.status?.watchingActive === true,
+      "start watching should enable global watching"
     );
 
     result = await requestJson(baseUrl, "/api/refresh", {
@@ -460,9 +546,25 @@ async function main() {
     );
     assert(
       Array.isArray(result.payload.slot.currentListings) &&
-        result.payload.slot.currentListings[0]?.playerName === "SellerThree",
+      result.payload.slot.currentListings[0]?.playerName === "SellerThree",
       "after switching to bazaar-only, slot 3 should show bazaar seller listings"
     );
+
+    result = await requestJson(baseUrl, "/api/watching/stop", {
+      method: "POST",
+      body: {}
+    });
+    assert(result.status === 200, "stop watching should return 200");
+    assert(
+      result.payload.status?.watchingActive === false,
+      "stop watching should disable global watching"
+    );
+
+    result = await requestJson(baseUrl, "/api/slots");
+    const slot2AfterStop = result.payload.slots.find((slot) => slot.slotNumber === 2);
+    const slot3AfterStop = result.payload.slots.find((slot) => slot.slotNumber === 3);
+    assert(slot2AfterStop.trackerStatus === "IDLE", "slot 2 should return to IDLE after stop");
+    assert(slot3AfterStop.trackerStatus === "IDLE", "slot 3 should return to IDLE after stop");
 
     result = await requestJson(baseUrl, "/api/slot/3/update", {
       method: "POST",

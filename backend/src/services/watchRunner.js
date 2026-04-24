@@ -15,13 +15,9 @@ class WatchRunner {
   }
 
   async start() {
-    await this.runPollCycle("startup");
-
-    this.intervalHandle = setInterval(() => {
-      this.runPollCycle("interval").catch((error) => {
-        this.logger.error("Unhandled poll cycle error", { message: error.message });
-      });
-    }, this.config.pollIntervalMs);
+    this.stop();
+    await this.repository.setWatchingActive(false);
+    await this.syncOccupiedSlotsToIdle();
   }
 
   stop() {
@@ -31,10 +27,112 @@ class WatchRunner {
     }
   }
 
+  isWatchingActive() {
+    return this.repository.isWatchingActive();
+  }
+
+  getRuntimeSummary() {
+    const watchingActive = this.isWatchingActive();
+    const polling = watchingActive ? this.pollInFlight : false;
+
+    return {
+      watchingActive,
+      polling,
+      watcherStatus: polling
+        ? "WATCHING"
+        : watchingActive
+          ? "WATCHING"
+          : "INACTIVE"
+    };
+  }
+
+  async syncOccupiedSlotsToIdle() {
+    const runtimeSettings = this.repository.getSettings();
+    const effectiveConfig = {
+      ...this.config,
+      ...runtimeSettings
+    };
+
+    for (const slot of this.repository.listOccupiedSlots()) {
+      const idleResult = buildIdleResult({
+        watch: slot,
+        previousResult: this.repository.getProcessed(slot.slotNumber),
+        config: effectiveConfig
+      });
+
+      await this.repository.upsertProcessed(slot.slotNumber, idleResult);
+    }
+  }
+
+  async startWatching(reason = "manual") {
+    if (this.isWatchingActive()) {
+      return this.getRuntimeSummary();
+    }
+
+    await this.repository.setWatchingActive(true);
+    await this.repository.updateMeta({
+      lastError: null
+    });
+    await this.repository.appendActivity({
+      type: "watching_started",
+      message: "Global watching was started.",
+      details: {
+        reason
+      }
+    });
+
+    await this.runPollCycle("start");
+
+    this.stop();
+    this.intervalHandle = setInterval(() => {
+      this.runPollCycle("interval").catch((error) => {
+        this.logger.error("Unhandled poll cycle error", { message: error.message });
+      });
+    }, this.config.pollIntervalMs);
+
+    return this.getRuntimeSummary();
+  }
+
+  async stopWatching(reason = "manual") {
+    const wasActive = this.isWatchingActive() || this.pollInFlight || Boolean(this.intervalHandle);
+
+    this.stop();
+    await this.repository.setWatchingActive(false);
+    await this.repository.updateMeta({
+      lastError: null
+    });
+    await this.syncOccupiedSlotsToIdle();
+
+    if (wasActive) {
+      await this.repository.appendActivity({
+        type: "watching_stopped",
+        message: "Global watching was stopped.",
+        details: {
+          reason
+        }
+      });
+    }
+
+    return this.getRuntimeSummary();
+  }
+
   async runPollCycle(reason = "manual") {
+    if (!this.isWatchingActive()) {
+      this.logger.info("Skipping poll cycle because global watching is inactive", { reason });
+      return {
+        ok: false,
+        skipped: true,
+        inactive: true
+      };
+    }
+
     if (this.pollInFlight) {
       this.logger.warn("Skipping poll cycle because a previous cycle is still running");
-      return;
+      return {
+        ok: false,
+        skipped: true,
+        inFlight: true
+      };
     }
 
     const startedAt = Date.now();
@@ -73,6 +171,13 @@ class WatchRunner {
       lastPollFailureCount: failureCount,
       lastError
     });
+
+    return {
+      ok: true,
+      successCount,
+      failureCount,
+      lastError
+    };
   }
 
   async refreshSlot(slotNumber) {
@@ -105,6 +210,17 @@ class WatchRunner {
       ...runtimeSettings
     };
 
+    if (!this.isWatchingActive()) {
+      const idleResult = buildIdleResult({
+        watch,
+        previousResult,
+        config: effectiveConfig
+      });
+
+      await this.repository.upsertProcessed(slotNumber, idleResult);
+      return idleResult;
+    }
+
     try {
       const snapshot = await this.weav3rClient.fetchSnapshot(watch.itemId, watch.sourceMode);
       const result = evaluateWatch({
@@ -117,6 +233,17 @@ class WatchRunner {
         nowIso,
         config: effectiveConfig
       });
+
+      if (!this.isWatchingActive()) {
+        const idleResult = buildIdleResult({
+          watch,
+          previousResult,
+          config: effectiveConfig
+        });
+
+        await this.repository.upsertProcessed(slotNumber, idleResult);
+        return idleResult;
+      }
 
       this.logger.info("Fetched source snapshot", {
         slotNumber: watch.slotNumber,
@@ -183,6 +310,17 @@ class WatchRunner {
         nowIso,
         config: effectiveConfig
       });
+
+      if (!this.isWatchingActive()) {
+        const idleResult = buildIdleResult({
+          watch,
+          previousResult,
+          config: effectiveConfig
+        });
+
+        await this.repository.upsertProcessed(slotNumber, idleResult);
+        return idleResult;
+      }
 
       await this.repository.upsertProcessed(slotNumber, staleResult);
       return staleResult;

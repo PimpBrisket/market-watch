@@ -79,7 +79,7 @@ function createDefaultStore(slotLimit = 6, defaultSettings = {}) {
   const timestamp = nowIso();
 
   return {
-    version: 3,
+    version: 4,
     settings: createDefaultSettings(defaultSettings),
     slots: createDefaultSlots(slotLimit, timestamp),
     processed: {},
@@ -93,6 +93,7 @@ function createDefaultStore(slotLimit = 6, defaultSettings = {}) {
       lastPollSuccessCount: 0,
       lastPollFailureCount: 0,
       lastError: null,
+      watchingActive: false,
       activityLog: []
     }
   };
@@ -358,7 +359,7 @@ function migrateStore(rawData, slotLimit, itemCatalog, defaultSettings) {
   }
 
   return {
-    version: 3,
+    version: 4,
     settings: sanitizeRuntimeSettings(
       source.settings || {},
       fallback.settings,
@@ -368,7 +369,8 @@ function migrateStore(rawData, slotLimit, itemCatalog, defaultSettings) {
     processed,
     meta: {
       ...fallback.meta,
-      ...(source.meta || {})
+      ...(source.meta || {}),
+      watchingActive: false
     }
   };
 }
@@ -412,6 +414,7 @@ class WatchRepository {
       this.itemCatalog,
       this.defaultSettings
     );
+    this.data.meta.watchingActive = false;
     await this.persist();
   }
 
@@ -533,18 +536,22 @@ class WatchRepository {
   getStatusSummary() {
     const slots = this.listSlots();
     const processed = this.listProcessed().filter(Boolean);
-    const staleCount = processed.filter((result) => result.stale).length;
+    const staleCount = this.isWatchingActive()
+      ? processed.filter((result) => result.stale).length
+      : 0;
     const occupiedCount = slots.filter((slot) => slot.occupied).length;
     const enabledCount = slots.filter((slot) => slot.occupied && slot.enabled).length;
 
     return {
-      healthy: this.data.meta.lastPollFailureCount === 0,
+      healthy: !this.isWatchingActive() || this.data.meta.lastPollFailureCount === 0,
+      watchingActive: this.isWatchingActive(),
       slotLimit: this.slotLimit,
       slotCount: slots.length,
       occupiedCount,
       emptyCount: this.slotLimit - occupiedCount,
       watchCount: occupiedCount,
       enabledCount,
+      activeEnabledCount: this.isWatchingActive() ? enabledCount : 0,
       staleCount,
       lastPollStartedAt: this.data.meta.lastPollStartedAt,
       lastPollCompletedAt: this.data.meta.lastPollCompletedAt,
@@ -555,6 +562,16 @@ class WatchRepository {
       lastError: this.data.meta.lastError,
       activityCount: this.getActivityLog().length
     };
+  }
+
+  isWatchingActive() {
+    return this.data.meta.watchingActive === true;
+  }
+
+  async setWatchingActive(active) {
+    this.data.meta.watchingActive = active === true;
+    await this.persist();
+    return this.isWatchingActive();
   }
 
   exportBackup() {
