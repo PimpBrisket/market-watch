@@ -62,6 +62,7 @@ Local TornPDA support state:
 - cached last-known-good slot payload
 
 Fresh page loads intentionally start closed even if the previous session ended open.
+When TornPDA reinjects after a page change, the script restores the last known good payload first and then force-syncs live backend state so backend watch status wins over cached UI defaults.
 
 Desktop Viewer v1 keeps the same principle:
 
@@ -124,6 +125,12 @@ Important consequence:
 - per-slot `enabled` flags do not create their own background watchers
 - enabled slots become active only when global watching is ON
 - when global watching is OFF, occupied slots render as `IDLE`
+
+TornPDA reconciliation rule:
+
+- the userscript must not treat reinjection as proof that watching stopped
+- init, menu reopen, and TornPDA-ready reinjection paths re-read backend watch state
+- if sync fails, the UI may be marked stale or disconnected, but it should keep the last known good watch state instead of falsely downgrading to stopped
 
 ## Backup Model
 

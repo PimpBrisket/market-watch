@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TornPDA Market Watcher
 // @namespace    https://weav3r.dev/
-// @version      1.8.4
+// @version      1.8.5
 // @description  Displays processed Torn market watch alerts inside TornPDA with manual controls, item-name resolution, and compact mobile UI.
 // @author       Codex
 // @match        https://www.torn.com/*
@@ -42,7 +42,7 @@
     MARKET_ONLY: "MARKET_ONLY",
     BAZAAR_ONLY: "BAZAAR_ONLY"
   };
-  const SCRIPT_VERSION_FALLBACK = "1.8.4";
+  const SCRIPT_VERSION_FALLBACK = "1.8.5";
   const MINIMUM_COMPATIBLE_BACKEND_VERSION = "1.8.1";
   const ACTIVITY_LOG_LIMIT = 40;
 
@@ -759,13 +759,7 @@
     applySlotsPayload(
       {
         ...cached.payload,
-        versions: null,
-        status: {
-          ...(cached.payload.status || {}),
-          watchingActive: false,
-          polling: false,
-          watcherStatus: "INACTIVE"
-        }
+        versions: null
       },
       cached.lastFetchAt || new Date().toISOString()
     );
@@ -797,7 +791,7 @@
         reopenedPanel.scrollTop = 0;
       }
       state.runtime.menuScrollTop = 0;
-      void maybeRestoreAndSync({ reason: "open_menu" });
+      void maybeRestoreAndSync({ reason: "open_menu", force: true });
     }
   }
 
@@ -4525,8 +4519,11 @@
     });
     render();
 
-    if (!state.ui.collapsed) {
-      void maybeRestoreAndSync({ reason: "tornpda_ready" });
+    if (state.backendUrl) {
+      void maybeRestoreAndSync({
+        reason: state.ui.collapsed ? "tornpda_ready_hidden" : "tornpda_ready",
+        force: true
+      });
     }
   });
 
@@ -4545,7 +4542,10 @@
 
   render();
 
-  if (!state.ui.collapsed && state.backendUrl) {
-    void maybeRestoreAndSync({ reason: "init_open" });
+  if (state.backendUrl) {
+    void maybeRestoreAndSync({
+      reason: state.ui.collapsed ? "init_hidden" : "init_open",
+      force: true
+    });
   }
 })();

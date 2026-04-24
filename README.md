@@ -19,7 +19,7 @@ The clients stay lightweight:
 Current release:
 
 - Backend version: `1.8.1`
-- TornPDA script version: `1.8.3`
+- TornPDA script version: `1.8.5`
 
 ## Features
 
@@ -86,6 +86,7 @@ npm run dev
 ```
 
 Global watching starts OFF every time the backend starts. Slots and preferences are still loaded, but no market polling runs until you press `Start Watching`.
+If TornPDA reloads or reinjects after a page change, it now re-syncs current backend watch state automatically so the menu does not falsely fall back to `Start Watching` while the backend is still active.
 
 ### 3. Verify the backend locally
 
@@ -114,7 +115,7 @@ In TornPDA:
 
 1. Open `Settings -> Advanced Browser Settings -> Manage Scripts`
 2. Import [tornpda-script/tornpda-market-watcher.json](/c:/Users/Anthony/Downloads/Torn/tornpda-script/tornpda-market-watcher.json)
-3. Make sure the imported script version shows `1.8.3`
+3. Make sure the imported script version shows `1.8.5`
 
 ### 6. Enter the backend base URL
 

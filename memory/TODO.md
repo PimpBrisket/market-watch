@@ -2,7 +2,7 @@
 
 ## Highest Priority Next
 
-- Run one real TornPDA phone-side validation pass using script version `1.8.3`
+- Run one real TornPDA phone-side validation pass using script version `1.8.5`
 - Confirm:
   - `Open market` lands correctly
   - `Open Bazaar` lands correctly

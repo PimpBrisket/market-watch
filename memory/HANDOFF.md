@@ -7,7 +7,7 @@ The project now has a third client layer: Desktop Viewer v1. It remains in the s
 Current versions:
 
 - Backend `1.8.1`
-- TornPDA script `1.8.3`
+- TornPDA script `1.8.5`
 
 ## What Was Added In The Final Pass
 
@@ -35,6 +35,7 @@ Current versions:
   - no listings found
   - fetch failed
   - stale data
+- TornPDA reinjection now re-syncs backend global watching state instead of falsely showing stopped after navigation
 - repo cleanup updates:
   - stronger `.gitignore`
   - generic example URLs instead of a personal LAN IP
@@ -109,6 +110,7 @@ Covered by local userscript harness checks in this session:
 - compact mode remains usable
 - timing strip renders
 - notification toggle persists
+- reinjection no longer forces cached watch state back to inactive
 
 ## TornPDA UI Stability Fix
 
@@ -148,6 +150,19 @@ The fix centralizes control in the backend:
 - `Stop Watching` from TornPDA calls backend stop and disables all slot activity
 - per-slot enabled toggles stay as preferences until global watching is ON
 - desktop viewer timing cards now show `Not scheduled` when the backend is stopped
+
+## TornPDA Re-Sync Fix
+
+After page navigation or reinjection, TornPDA could falsely show `Start Watching` even while the backend and desktop viewer still showed watching ON.
+
+That is now fixed by:
+
+- preserving cached backend watch state instead of forcing it to `INACTIVE`
+- force-syncing backend slot and status payloads on userscript init when a backend URL exists
+- force-syncing again when TornPDA fires the platform-ready reinjection event
+- force-syncing on `Open Menu`
+
+If the backend cannot be reached, the script should keep the last known good watch state visible and show a stale or disconnected condition instead of falsely implying that the backend stopped.
 
 ## Desktop Viewer White-Screen Fix
 
@@ -192,7 +207,7 @@ Do one final validation pass:
 4. confirm Bazaar and Market listings look correct once watching is started
 5. TornPDA:
 6. import `tornpda-script/tornpda-market-watcher.json`
-7. confirm version `1.8.3`
+7. confirm version `1.8.5`
 8. enter base URL `http://YOUR-LAN-IP:3000`
 9. test add, edit, delete
 10. confirm global watching starts OFF

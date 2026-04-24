@@ -7,7 +7,7 @@ As of 2026-04-23, the project includes a new Desktop Viewer v1 in the same repo 
 Current versions:
 
 - Backend: `1.8.1`
-- TornPDA script: `1.8.3`
+- TornPDA script: `1.8.5`
 
 ## Confirmed Working
 
@@ -42,6 +42,7 @@ Current versions:
 - global Start Watching and Stop Watching now control all backend polling
 - enabled slot toggles now behave as preferences unless global watching is ON
 - desktop `Next Check` and related timing labels now show `Not scheduled` while stopped
+- TornPDA now re-syncs backend global watching state automatically after navigation, refresh, or reinjection
 
 ## Final Architecture Status
 
@@ -150,6 +151,25 @@ Covered by local userscript harness validation in this session:
 - notification toggle persists across reloads
 - compact mode still renders source labels and listing controls cleanly
 - timing strip renders `Next Check`, `Next Alert`, and `Next Notification`
+- cached slot restore no longer forces the watch UI back to `INACTIVE`
+- userscript init, TornPDA-ready reinjection, and `Open Menu` now force a fresh backend state sync when a backend URL is configured
+
+## TornPDA Watching-State Re-Sync Fix
+
+After the backend-controlled global watching rollout, TornPDA could still look stopped after a page refresh or page navigation even while the backend remained active.
+
+Root cause:
+
+- cached slot restore was forcing the local watcher state back to inactive defaults
+- reinjection and menu reopen did not always force a live backend read
+
+This is now fixed by:
+
+- keeping backend global watching state authoritative
+- preserving the last known backend watch state during cached restore
+- force-syncing backend slot or status state on userscript init when a backend URL is configured
+- force-syncing again on TornPDA reinjection and on `Open Menu`
+- preserving the last known good visible state if the sync fails instead of falsely showing stopped
 
 ## Last Regression Fix
 
