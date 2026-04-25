@@ -6,8 +6,8 @@ As of 2026-04-24, the project includes a new Desktop Viewer v1 in the same repo 
 
 Current versions:
 
-- Backend: `1.8.6`
-- TornPDA script: `1.8.6`
+- Backend: `1.8.7`
+- TornPDA script: `1.8.7`
 
 ## Confirmed Working
 
@@ -128,6 +128,24 @@ Desktop Viewer v1 is now denser and more useful for active monitoring:
 - a top-level `Alerts` button opens a compact inbox with the last 10 alert entries and live additions while watching
 - desktop notifications now use the same compact alert format and respect permission state
 - the viewer now has a small filter menu for common watch states and source types
+- a dedicated `Compact Mode` now condenses watched items into dense clickable rows for one-screen monitoring
+- Compact Mode has its own `Edit View` controls so item name, source, quantity, prices, comparison, alert label, last checked, status, and extra-listing count can be toggled independently of Normal Mode
+- compact layout choices persist across reloads without affecting backend watch data or the normal desktop layout
+
+## Desktop Viewer Panel Stability Fix
+
+The first live-refresh side-panel pass exposed two usability problems:
+
+- the native view dropdown could close itself while the desktop viewer refreshed
+- the page could still scroll behind the side panel instead of keeping scroll inside the panel
+
+This is now fixed by:
+
+- deferring full desktop viewer re-renders while the side-panel dropdown is actively in use
+- preserving the selected panel view through refreshes while the panel stays open
+- locking page scroll whenever the side panel is open
+- making the panel content its own scroll container with contained overscroll behavior
+- removing the page scroll lock again when the panel is minimized or closed
 
 ## Watcher Session Stats
 

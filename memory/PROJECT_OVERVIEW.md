@@ -61,8 +61,8 @@ The desktop viewer follows the same rule. It is a consumer of backend state, not
 
 ## Current Versions
 
-- Backend: `1.8.6`
-- Script: `1.8.6`
+- Backend: `1.8.7`
+- Script: `1.8.7`
 
 ## Current Next Milestone
 

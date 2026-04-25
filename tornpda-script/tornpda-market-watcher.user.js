@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TornPDA Market Watcher
 // @namespace    https://weav3r.dev/
-// @version      1.8.6
+// @version      1.8.7
 // @description  Displays processed Torn market watch alerts inside TornPDA with manual controls, item-name resolution, and compact mobile UI.
 // @author       Codex
 // @match        https://www.torn.com/*
@@ -42,7 +42,7 @@
     MARKET_ONLY: "MARKET_ONLY",
     BAZAAR_ONLY: "BAZAAR_ONLY"
   };
-  const SCRIPT_VERSION_FALLBACK = "1.8.6";
+  const SCRIPT_VERSION_FALLBACK = "1.8.7";
   const MINIMUM_COMPATIBLE_BACKEND_VERSION = "1.8.1";
   const ACTIVITY_LOG_LIMIT = 40;
 

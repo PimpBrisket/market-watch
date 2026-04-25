@@ -85,6 +85,32 @@
     ALERTS: "LATEST_ALERTS",
     INFO: "WATCHER_INFO"
   };
+  const DEFAULT_COMPACT_FIELDS = {
+    itemName: true,
+    sourceLabel: true,
+    quantity: true,
+    singlePrice: true,
+    totalCost: true,
+    targetPrice: true,
+    targetComparison: true,
+    alertLabel: true,
+    lastChecked: false,
+    status: false,
+    extraListingCount: true
+  };
+  const COMPACT_FIELD_OPTIONS = [
+    { key: "itemName", label: "Item name" },
+    { key: "sourceLabel", label: "Source label (Market/Bazaar)" },
+    { key: "quantity", label: "Quantity" },
+    { key: "singlePrice", label: "Single price" },
+    { key: "totalCost", label: "Total cost" },
+    { key: "targetPrice", label: "Target price" },
+    { key: "targetComparison", label: "Target comparison" },
+    { key: "alertLabel", label: "Alert label" },
+    { key: "lastChecked", label: "Last checked time" },
+    { key: "status", label: "Status" },
+    { key: "extraListingCount", label: "Extra listing count" }
+  ];
 
   const state = {
     appRoot: null,
@@ -114,6 +140,11 @@
         typeof Notification === "undefined" ? "unsupported" : Notification.permission,
       hydrated: false,
       seenEventIds: loadSeenAlertIds()
+    },
+    renderControl: {
+      pending: false,
+      deferredTimer: null,
+      interactionUntilMs: 0
     },
     panelResizeObserver: null,
     panelElement: null
@@ -238,6 +269,9 @@
       alertsInboxOpen: stored?.alertsInboxOpen === true,
       alertsClearedAt: stored?.alertsClearedAt || null,
       desktopNotificationsEnabled: stored?.desktopNotificationsEnabled === true,
+      compactModeEnabled: stored?.compactModeEnabled === true,
+      compactEditMode: false,
+      compactFields: sanitizeCompactFields(stored?.compactFields),
       panel: {
         open: stored?.panel?.open === true,
         minimized: stored?.panel?.minimized === true,
@@ -262,6 +296,8 @@
         alertsInboxOpen: state.ui.alertsInboxOpen,
         alertsClearedAt: state.ui.alertsClearedAt,
         desktopNotificationsEnabled: state.notifications.enabled === true,
+        compactModeEnabled: state.ui.compactModeEnabled === true,
+        compactFields: state.ui.compactFields,
         panel: {
           open: state.ui.panel.open === true,
           minimized: state.ui.panel.minimized === true,
@@ -270,6 +306,71 @@
         }
       })
     );
+  }
+
+  function sanitizeCompactFields(value) {
+    const source = value && typeof value === "object" ? value : {};
+
+    return Object.keys(DEFAULT_COMPACT_FIELDS).reduce((accumulator, key) => {
+      accumulator[key] =
+        typeof source[key] === "boolean" ? source[key] : DEFAULT_COMPACT_FIELDS[key];
+      return accumulator;
+    }, {});
+  }
+
+  function scheduleDeferredRender() {
+    if (typeof window === "undefined" || state.renderControl.deferredTimer) {
+      return;
+    }
+
+    const delay = Math.max(150, state.renderControl.interactionUntilMs - Date.now() + 50);
+
+    state.renderControl.deferredTimer = window.setTimeout(() => {
+      state.renderControl.deferredTimer = null;
+
+      if (!state.renderControl.pending) {
+        return;
+      }
+
+      render();
+    }, delay);
+  }
+
+  function setPanelInteractionLock(durationMs = 4000) {
+    state.renderControl.interactionUntilMs = Date.now() + durationMs;
+    scheduleDeferredRender();
+  }
+
+  function clearPanelInteractionLock() {
+    state.renderControl.interactionUntilMs = 0;
+
+    if (state.renderControl.pending) {
+      render(true);
+    }
+  }
+
+  function shouldDeferRender(force = false) {
+    if (force || !state.ui.panel.open) {
+      return false;
+    }
+
+    const activeElement =
+      typeof document !== "undefined" ? document.activeElement : null;
+    const panelSelectHasFocus = Boolean(
+      activeElement?.matches?.('[data-action="change-panel-view"]')
+    );
+
+    return panelSelectHasFocus || Date.now() < state.renderControl.interactionUntilMs;
+  }
+
+  function syncScrollLock() {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const locked = state.ui.panel.open && !state.ui.panel.minimized;
+    document.body.classList.toggle("panel-scroll-locked", locked);
+    document.documentElement.classList.toggle("panel-scroll-locked", locked);
   }
 
   function loadSeenAlertIds() {
@@ -392,6 +493,138 @@
     }
 
     return "--";
+  }
+
+  function compactToneClass(slot) {
+    if (slot?.trackerStatus === "ERROR" || slot?.trackerStatus === "STALE") {
+      return "bad";
+    }
+
+    if (slot?.state === "BUY_NOW") {
+      return "good";
+    }
+
+    if (slot?.state === "NEAR_MISS") {
+      return "warn";
+    }
+
+    return "neutral";
+  }
+
+  function compactAlertLabel(slot) {
+    if (slot?.state === "BUY_NOW") {
+      return "ALERT";
+    }
+
+    if (slot?.state === "NEAR_MISS") {
+      return "NEAR MISS";
+    }
+
+    if (slot?.lowestAboveTarget !== null && slot?.lowestAboveTarget !== undefined) {
+      return "ABOVE TARGET";
+    }
+
+    return "LIVE";
+  }
+
+  function buildCompactFieldValues(slot) {
+    const listing = slot?.notification?.listing || currentBestListing(slot);
+    const listedPrice =
+      slot?.notification?.price ??
+      listing?.price ??
+      slot?.lowestPrice ??
+      slot?.lowestAboveTarget ??
+      null;
+    const quantity = Math.max(1, Number(listing?.quantity) || 1);
+    const extraListings = notificationExtraCount(slot?.notification, slot);
+    const targetPrice = slot?.targetPrice;
+
+    return {
+      itemName: slot?.itemName || "Item",
+      sourceLabel: `[${sourceShortLabel(slot?.sourceMode)}]`,
+      quantity: `${quantity}x`,
+      singlePrice:
+        listedPrice !== null && listedPrice !== undefined ? formatMoney(listedPrice) : null,
+      totalCost:
+        quantity >= 2 && Number.isFinite(Number(listedPrice))
+          ? `(${formatMoney(Number(listedPrice) * quantity)})`
+          : null,
+      targetPrice:
+        targetPrice !== null && targetPrice !== undefined ? `Target: ${formatMoney(targetPrice)}` : null,
+      targetComparison:
+        targetPrice !== null &&
+        targetPrice !== undefined &&
+        listedPrice !== null &&
+        listedPrice !== undefined
+          ? formatPriceComparison(targetPrice, listedPrice, 1)
+          : null,
+      alertLabel: compactAlertLabel(slot),
+      lastChecked: slot?.lastChecked ? `Checked ${formatCompactTime(slot.lastChecked)}` : null,
+      status: slot?.trackerStatusLabel || slot?.trackerStatus || "IDLE",
+      extraListingCount: extraListings > 0 ? `+${extraListings} listings` : null
+    };
+  }
+
+  function buildCompactSegments(slot, compactFields) {
+    const fields = compactFields || DEFAULT_COMPACT_FIELDS;
+    const values = buildCompactFieldValues(slot);
+    const segments = [];
+
+    if (fields.sourceLabel && values.sourceLabel) {
+      segments.push({ key: "sourceLabel", text: values.sourceLabel, tone: "source" });
+    }
+
+    if (fields.quantity && values.quantity) {
+      segments.push({ key: "quantity", text: values.quantity, tone: "emphasis" });
+    }
+
+    if (fields.itemName && values.itemName) {
+      segments.push({ key: "itemName", text: values.itemName, tone: "main" });
+    }
+
+    if (fields.singlePrice && values.singlePrice) {
+      const priceText =
+        fields.totalCost && values.totalCost
+          ? `${values.singlePrice} ${values.totalCost}`
+          : values.singlePrice;
+      segments.push({ key: "price", text: priceText, tone: "price" });
+    } else if (fields.totalCost && values.totalCost) {
+      segments.push({ key: "totalCost", text: values.totalCost, tone: "price" });
+    }
+
+    if (fields.targetPrice && values.targetPrice) {
+      segments.push({ key: "targetPrice", text: values.targetPrice, tone: "target" });
+    }
+
+    if (fields.targetComparison && values.targetComparison) {
+      segments.push({ key: "targetComparison", text: values.targetComparison, tone: "target" });
+    }
+
+    if (fields.alertLabel && values.alertLabel) {
+      segments.push({ key: "alertLabel", text: values.alertLabel, tone: "alert" });
+    }
+
+    if (fields.status && values.status) {
+      segments.push({ key: "status", text: values.status, tone: "status" });
+    }
+
+    if (fields.lastChecked && values.lastChecked) {
+      segments.push({ key: "lastChecked", text: values.lastChecked, tone: "muted" });
+    }
+
+    if (fields.extraListingCount && values.extraListingCount) {
+      segments.push({
+        key: "extraListingCount",
+        text: values.extraListingCount,
+        tone: "muted"
+      });
+    }
+
+    if (!segments.length) {
+      segments.push({ key: "itemName", text: values.itemName, tone: "main" });
+    }
+
+    return segments;
   }
 
   function describeSlotDataState(slot) {
@@ -998,6 +1231,7 @@
     }
 
     persistUiState();
+    syncScrollLock();
     render();
 
     if (slot && (state.ui.panel.view === PANEL_VIEWS.MARKET || state.ui.panel.view === PANEL_VIEWS.BAZAAR)) {
@@ -1009,6 +1243,7 @@
     state.ui.panel.minimized = true;
     state.ui.panel.open = false;
     persistUiState();
+    syncScrollLock();
     render();
   }
 
@@ -1016,6 +1251,7 @@
     state.ui.panel.open = false;
     state.ui.panel.minimized = false;
     persistUiState();
+    syncScrollLock();
     render();
   }
 
@@ -1027,6 +1263,7 @@
     state.ui.panel.open = true;
     state.ui.panel.minimized = false;
     persistUiState();
+    syncScrollLock();
     render();
   }
 
@@ -1330,6 +1567,56 @@
     `;
   }
 
+  function renderCompactViewEditor() {
+    if (!state.ui.compactModeEnabled || !state.ui.compactEditMode) {
+      return "";
+    }
+
+    return `
+      <div class="compact-editor">
+        <div class="compact-editor-head">
+          <strong>Edit Compact View</strong>
+          <span class="panel-subtitle">Choose which fields stay visible in compact rows.</span>
+        </div>
+        <div class="compact-editor-grid">
+          ${COMPACT_FIELD_OPTIONS.map(
+            (option) => `
+              <label class="compact-editor-option">
+                <input
+                  type="checkbox"
+                  data-compact-field="${escapeHtml(option.key)}"
+                  ${state.ui.compactFields[option.key] ? "checked" : ""}
+                />
+                <span>${escapeHtml(option.label)}</span>
+              </label>
+            `
+          ).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCompactWatchedSlot(slot) {
+    const tone = compactToneClass(slot);
+    const segments = buildCompactSegments(slot, state.ui.compactFields);
+
+    return `
+      <article class="compact-slot-card ${escapeHtml(tone)}" data-slot-select="${slot.slotNumber}">
+        <div class="compact-slot-row">
+          ${segments
+            .map(
+              (segment) => `
+                <span class="compact-segment ${escapeHtml(segment.tone)} compact-${escapeHtml(segment.key)}">
+                  ${escapeHtml(segment.text)}
+                </span>
+              `
+            )
+            .join("")}
+        </div>
+      </article>
+    `;
+  }
+
   function renderPanelListings(slot, sourceMode) {
     const cacheKey = `${slot.slotNumber}:${sourceMode}`;
     const entry = state.listingCache[cacheKey];
@@ -1620,10 +1907,53 @@
     return state.requestState[actionKey] === true || state.syncInFlight;
   }
 
-  function render() {
+  function toggleCompactMode() {
+    state.ui.compactModeEnabled = !state.ui.compactModeEnabled;
+    state.ui.compactEditMode = false;
+
+    if (state.ui.compactModeEnabled) {
+      state.ui.panel.open = false;
+      state.ui.panel.minimized = false;
+    }
+
+    persistUiState();
+    syncScrollLock();
+    render();
+  }
+
+  function toggleCompactEditMode() {
+    if (!state.ui.compactModeEnabled) {
+      return;
+    }
+
+    state.ui.compactEditMode = !state.ui.compactEditMode;
+    render();
+  }
+
+  function setCompactField(fieldKey, enabled) {
+    if (!Object.prototype.hasOwnProperty.call(DEFAULT_COMPACT_FIELDS, fieldKey)) {
+      return;
+    }
+
+    state.ui.compactFields[fieldKey] = enabled;
+    persistUiState();
+    render();
+  }
+
+  function render(force = false) {
     if (!state.appRoot) {
       return;
     }
+
+    syncScrollLock();
+
+    if (shouldDeferRender(force)) {
+      state.renderControl.pending = true;
+      scheduleDeferredRender();
+      return;
+    }
+
+    state.renderControl.pending = false;
 
     const occupiedSlots = getOccupiedSlots();
     const filteredSlots = filterSlots(occupiedSlots, state.ui.filter);
@@ -1633,10 +1963,12 @@
     const runtimeStatus = currentRuntimeStatus();
     const activityLog = state.statusPayload?.activityLog || state.slotsPayload?.activityLog || [];
     const inboxEntries = buildAlertInboxEntries(activityLog, occupiedSlots);
+    const compactModeEnabled = state.ui.compactModeEnabled === true;
 
     if (!selectedSlot && state.ui.panel.open) {
       state.ui.panel.open = false;
       state.ui.panel.minimized = false;
+      syncScrollLock();
     }
 
     if (selectedSlot && !state.ui.panel.view) {
@@ -1645,6 +1977,7 @@
     }
 
     state.appRoot.innerHTML = `
+      <div class="app-shell ${compactModeEnabled ? "compact-mode" : "normal-mode"}">
       <header class="viewer-header">
         <div class="viewer-title">
           <h1>Desktop Viewer</h1>
@@ -1669,6 +2002,16 @@
           <button class="button secondary" data-action="toggle-desktop-notifications">
             Notifications: ${escapeHtml(state.notifications.enabled ? "On" : "Off")}
           </button>
+          <button class="button secondary ${compactModeEnabled ? "active" : ""}" data-action="toggle-compact-mode">
+            ${compactModeEnabled ? "Compact Mode: On" : "Compact Mode"}
+          </button>
+          ${
+            compactModeEnabled
+              ? `<button class="button secondary ${state.ui.compactEditMode ? "active" : ""}" data-action="toggle-compact-edit">
+                  ${state.ui.compactEditMode ? "Close Edit View" : "Edit View"}
+                </button>`
+              : ""
+          }
           <button
             class="button secondary"
             data-action="start-watching"
@@ -1731,12 +2074,16 @@
       <main class="viewer-main ${state.ui.panel.open ? "panel-open" : ""}" ${
         state.ui.panel.open ? `style="margin-right:${escapeHtml(state.ui.panel.width + 24)}px;"` : ""
       }>
-        <section class="panel watched-panel">
+        <section class="panel watched-panel ${compactModeEnabled ? "compact-watched-panel" : ""}">
           <div class="panel-head">
             <div>
               <h2>Watched Slots</h2>
               <div class="panel-subtitle">
-                Only currently occupied slots appear here so the dashboard stays dense and readable.
+                ${
+                  compactModeEnabled
+                    ? "Compact Mode keeps occupied watches dense, filterable, and clickable for quick monitoring."
+                    : "Only currently occupied slots appear here so the dashboard stays dense and readable."
+                }
               </div>
             </div>
             <div class="panel-tools">
@@ -1749,26 +2096,35 @@
               ${renderFilterMenu()}
             </div>
           </div>
+          ${renderCompactViewEditor()}
           ${
             !occupiedSlots.length
               ? `<div class="empty-state">No watched items yet.</div>`
               : !filteredSlots.length
                 ? `<div class="empty-state">No watched items match the current filter.</div>`
-                : `<div class="slot-grid">${filteredSlots.map((slot) => renderWatchedSlotCard(slot)).join("")}</div>`
+                : compactModeEnabled
+                  ? `<div class="compact-slot-list">${filteredSlots
+                      .map((slot) => renderCompactWatchedSlot(slot))
+                      .join("")}</div>`
+                  : `<div class="slot-grid">${filteredSlots.map((slot) => renderWatchedSlotCard(slot)).join("")}</div>`
           }
         </section>
 
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h2>Active Alerts</h2>
-              <div class="panel-subtitle">
-                Current active opportunities stay here. Use the inbox for recent alert history.
-              </div>
-            </div>
-          </div>
-          ${renderCurrentAlerts(occupiedSlots)}
-        </section>
+        ${
+          compactModeEnabled
+            ? ""
+            : `<section class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h2>Active Alerts</h2>
+                    <div class="panel-subtitle">
+                      Current active opportunities stay here. Use the inbox for recent alert history.
+                    </div>
+                  </div>
+                </div>
+                ${renderCurrentAlerts(occupiedSlots)}
+              </section>`
+        }
       </main>
 
       ${renderSidePanel(selectedSlot, inboxEntries)}
@@ -1776,6 +2132,7 @@
 
       <div class="footer-note">
         Desktop Viewer v1 stays monitoring-focused: no charts, no predictors, and no heavy analytics yet.
+      </div>
       </div>
     `;
 
@@ -1810,9 +2167,26 @@
       });
     }
 
+    state.appRoot.querySelectorAll("[data-compact-field]").forEach((input) => {
+      input.addEventListener("change", () => {
+        setCompactField(input.getAttribute("data-compact-field"), input.checked);
+      });
+    });
+
     const panelViewSelect = state.appRoot.querySelector('[data-action="change-panel-view"]');
     if (panelViewSelect) {
+      ["mousedown", "touchstart", "focus"].forEach((eventName) => {
+        panelViewSelect.addEventListener(eventName, () => {
+          setPanelInteractionLock();
+        });
+      });
+
+      panelViewSelect.addEventListener("blur", () => {
+        clearPanelInteractionLock();
+      });
+
       panelViewSelect.addEventListener("change", () => {
+        clearPanelInteractionLock();
         setPanelView(panelViewSelect.value);
       });
     }
@@ -1841,6 +2215,8 @@
       "toggle-desktop-notifications": () => {
         void toggleDesktopNotifications();
       },
+      "toggle-compact-mode": toggleCompactMode,
+      "toggle-compact-edit": toggleCompactEditMode,
       "start-watching": () => {
         void requestWatcherAction(
           "startWatching",
@@ -1920,6 +2296,7 @@
       document.addEventListener("click", handleDocumentClick);
     }
 
+    syncScrollLock();
     render();
     syncData();
 
@@ -1949,6 +2326,10 @@
     __test: {
       formatPriceComparison,
       formatAlertHeadline,
+      sanitizeCompactFields,
+      buildCompactFieldValues,
+      buildCompactSegments,
+      compactToneClass,
       filterSlots,
       buildAlertInboxEntries,
       createActiveAlertForSlot,

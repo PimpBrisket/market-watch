@@ -23,7 +23,7 @@ const catalog = new ItemCatalog({
 });
 
 const config = {
-  backendVersion: "1.8.6",
+  backendVersion: "1.8.7",
   minimumCompatibleScriptVersion: "1.8.0",
   minimumCompatibleBackendVersion: "1.8.1",
   corsOrigin: "*",

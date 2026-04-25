@@ -6,8 +6,8 @@ The project now has a third client layer: Desktop Viewer v1. It remains in the s
 
 Current versions:
 
-- Backend `1.8.6`
-- TornPDA script `1.8.6`
+- Backend `1.8.7`
+- TornPDA script `1.8.7`
 
 ## What Was Added In The Final Pass
 
@@ -148,6 +148,23 @@ Desktop Viewer v1 is intentionally a monitoring-oriented foundation, not a full 
 - temporary refresh failures keep the last known good dashboard visible and surface a connection or stale state instead of blanking the UI
 - global watching timers now come from backend status rather than local UI inference
 - desktop alert inbox and browser notifications are driven by backend alert activity
+- Compact Mode can replace the normal watched-slot cards with dense clickable rows
+- Compact Mode has its own persistent `Edit View` field toggles and does not change the normal desktop layout
+
+## Desktop Viewer Side-Panel Interaction Fix
+
+After the side-panel upgrade, two desktop-specific interaction issues showed up:
+
+- the native panel-view dropdown could close itself because the viewer was re-rendering during active interaction
+- scroll could bleed into the page behind the panel, especially when the panel was open for a while
+
+The current fix does this:
+
+- defers full viewer re-renders while the panel dropdown is focused or actively being opened
+- keeps the selected panel view stable across background refreshes
+- locks document scroll while the side panel is open
+- makes the panel content the primary scroll container with contained overscroll
+- removes the scroll lock when the panel is minimized or closed, then reapplies it when restored
 
 ## Global Watching Fix
 
@@ -217,7 +234,7 @@ Do one final validation pass:
 4. confirm Bazaar and Market listings look correct once watching is started
 5. TornPDA:
 6. import `tornpda-script/tornpda-market-watcher.json`
-7. confirm version `1.8.6`
+7. confirm version `1.8.7`
 8. enter base URL `http://YOUR-LAN-IP:3000`
 9. test add, edit, delete
 10. confirm global watching starts OFF

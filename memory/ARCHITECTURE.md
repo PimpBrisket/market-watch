@@ -274,7 +274,8 @@ Desktop Viewer v1 is served by the backend at `/viewer`.
 The layout is intentionally desktop-first:
 
 - top bar for connection, version, and timer status
-- main grid of 6 slot cards
+- main watched-slot area for occupied watches only
+- optional Compact Mode for dense one-screen rows with a separate persistent field-visibility config
 - right-side detail panel for the selected slot
 - active alerts panel near the dashboard instead of a raw debug wall
 

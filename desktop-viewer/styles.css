@@ -29,6 +29,13 @@ body {
   font-family: "Trebuchet MS", "Gill Sans", "Verdana", sans-serif;
 }
 
+html.panel-scroll-locked,
+body.panel-scroll-locked {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   padding: 24px;
 }
@@ -181,6 +188,12 @@ body {
   color: var(--text);
   box-shadow: none;
   border: 1px solid var(--border);
+}
+
+.button.secondary.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: rgba(13, 94, 168, 0.35);
 }
 
 .button.slim {
@@ -379,6 +392,161 @@ body {
   font-weight: 700;
 }
 
+.compact-mode .viewer-header,
+.compact-mode .panel-head {
+  margin-bottom: 12px;
+}
+
+.compact-mode .viewer-title p {
+  max-width: 620px;
+  font-size: 13px;
+}
+
+.compact-mode .status-grid {
+  margin-bottom: 14px;
+  gap: 14px;
+}
+
+.compact-mode .status-card,
+.compact-mode .panel {
+  padding: 14px;
+}
+
+.compact-mode .status-card .value {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.compact-editor {
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(13, 94, 168, 0.06);
+  border: 1px solid rgba(13, 94, 168, 0.12);
+}
+
+.compact-editor-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.compact-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+
+.compact-editor-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.compact-editor-option input {
+  margin: 0;
+}
+
+.compact-slot-list {
+  display: grid;
+  gap: 8px;
+}
+
+.compact-slot-card {
+  border-radius: 14px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.compact-slot-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(13, 94, 168, 0.28);
+}
+
+.compact-slot-card.good {
+  border-color: rgba(31, 111, 67, 0.22);
+  background: rgba(31, 111, 67, 0.08);
+}
+
+.compact-slot-card.warn {
+  border-color: rgba(138, 91, 0, 0.22);
+  background: rgba(138, 91, 0, 0.08);
+}
+
+.compact-slot-card.bad {
+  border-color: rgba(143, 47, 53, 0.24);
+  background: rgba(143, 47, 53, 0.08);
+}
+
+.compact-slot-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  line-height: 1.3;
+}
+
+.compact-segment {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.compact-segment.source,
+.compact-segment.alert,
+.compact-segment.status {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.compact-segment.source {
+  background: rgba(13, 94, 168, 0.12);
+  color: var(--accent);
+}
+
+.compact-segment.alert {
+  background: rgba(31, 111, 67, 0.14);
+  color: var(--good);
+}
+
+.compact-slot-card.warn .compact-segment.alert {
+  background: rgba(138, 91, 0, 0.14);
+  color: var(--warn);
+}
+
+.compact-slot-card.bad .compact-segment.alert,
+.compact-slot-card.bad .compact-segment.status {
+  background: rgba(143, 47, 53, 0.14);
+  color: var(--bad);
+}
+
+.compact-segment.status {
+  background: rgba(96, 113, 125, 0.16);
+  color: #4f606d;
+}
+
+.compact-segment.main,
+.compact-segment.emphasis,
+.compact-segment.price {
+  font-weight: 700;
+}
+
+.compact-segment.target,
+.compact-segment.muted {
+  color: var(--muted);
+}
+
 .alert-list {
   display: grid;
   gap: 12px;
@@ -427,11 +595,15 @@ body {
   max-width: min(80vw, 900px);
   min-height: 320px;
   resize: horizontal;
-  overflow: auto;
+  overflow: hidden;
   z-index: 40;
   border-radius: 22px;
   padding: 16px;
   background: var(--panel-strong);
+  display: flex;
+  flex-direction: column;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 .side-panel-header {
@@ -468,6 +640,11 @@ body {
 .side-panel-content {
   display: grid;
   gap: 14px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
 }
 
 .detail-listings table {
@@ -544,6 +721,7 @@ body {
 
   .slot-grid,
   .meta-grid,
+  .compact-editor-grid,
   .health-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -573,6 +751,7 @@ body {
   .status-grid,
   .slot-grid,
   .meta-grid,
+  .compact-editor-grid,
   .health-grid {
     grid-template-columns: 1fr;
   }

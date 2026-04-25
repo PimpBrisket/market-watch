@@ -14,12 +14,12 @@ The backend does the important work:
 The clients stay lightweight:
 
 - TornPDA: mobile UI, connection testing, slot setup, compact tracking, local restore of last known good state, in-app or supported device notifications
-- Desktop Viewer v1: desktop monitoring dashboard, selected-slot detail panel, source-specific listing tables, top status bar, and active alert visibility
+- Desktop Viewer v1: desktop monitoring dashboard, compact mode, selected-slot detail panel, source-specific listing tables, top status bar, and active alert visibility
 
 Current release:
 
-- Backend version: `1.8.6`
-- TornPDA script version: `1.8.6`
+- Backend version: `1.8.7`
+- TornPDA script version: `1.8.7`
 
 ## Features
 
@@ -45,6 +45,7 @@ Current release:
 - Desktop alert inbox with last-10 alert history and live additions while watching
 - Desktop top status bar for backend connection, versions, timing info, and notification status
 - Desktop browser notifications with permission-aware fallback behavior
+- Desktop Compact Mode with persistent compact-field toggles and an `Edit View` layout editor
 - Dedicated `/viewer/health` diagnostic page
 
 ## Source Modes
@@ -117,7 +118,7 @@ In TornPDA:
 
 1. Open `Settings -> Advanced Browser Settings -> Manage Scripts`
 2. Import [tornpda-script/tornpda-market-watcher.json](/c:/Users/Anthony/Downloads/Torn/tornpda-script/tornpda-market-watcher.json)
-3. Make sure the imported script version shows `1.8.6`
+3. Make sure the imported script version shows `1.8.7`
 
 ### 6. Enter the backend base URL
 
@@ -136,6 +137,9 @@ Do not enter:
 Desktop Viewer v1:
 
 - `/viewer` shows only occupied watched slots so the main dashboard stays dense
+- `Compact Mode` switches the watched-slot area into a denser desktop monitoring layout
+- `Edit View` in Compact Mode lets you toggle item name, source, quantity, single price, total cost, target price, target comparison, alert label, last checked, status, and extra listing count
+- compact layout preferences persist across reloads without overriding backend watch data
 - the page now starts with a visible `Loading viewer...` shell instead of a blank white screen
 - when global watching is OFF, the viewer shows `Idle` / `Not scheduled` instead of a live polling countdown
 - click any watched slot to open the resizable side detail panel on the right
